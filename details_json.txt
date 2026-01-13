@@ -1,0 +1,277 @@
+{
+  "hemoglobin": {
+    "display_name": "Hemoglobin (Hb)",
+    "category": "Complete Blood Count",
+    "unit": "g/dL",
+    "function": "Carries oxygen from the lungs to all parts of the body",
+    "normal_range": {
+      "male": { "min": 13, "max": 17 },
+      "female": { "min": 12, "max": 15 }
+    },
+    "severity_rules": {
+      "low": { "severity": "Medium" },
+      "high": { "severity": "Medium" }
+    },
+    "low": {
+      "causes": ["Iron deficiency", "Blood loss", "Poor nutrition"],
+      "need": ["Reduced oxygen delivery", "Fatigue and weakness"],
+      "lifestyle": ["Increase iron-rich foods", "Eat leafy vegetables", "Maintain balanced nutrition"],
+      "trend_hint": "Persistently low values may indicate anemia"
+    },
+    "high": {
+      "causes": ["Dehydration", "Smoking", "High altitude exposure"],
+      "need": ["Increased blood thickness", "Higher clot risk"],
+      "trend_hint": "Repeated high values may require medical evaluation"
+    },
+    "when_to_consult": "If abnormal values persist across multiple tests",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+
+  "rbc_count": {
+    "display_name": "Red Blood Cell Count (RBC)",
+    "category": "Complete Blood Count",
+    "unit": "million/µL",
+    "function": "Transports oxygen and carbon dioxide in the blood",
+    "normal_range": {
+      "male": { "min": 4.5, "max": 5.9 },
+      "female": { "min": 4.1, "max": 5.1 }
+    },
+    "severity_rules": {
+      "low": { "severity": "Medium" },
+      "high": { "severity": "Medium" }
+    },
+    "low": {
+      "causes": ["Anemia", "Vitamin deficiency", "Bone marrow issues"],
+      "need": ["Reduced oxygen transport", "Tiredness and dizziness"],
+      "lifestyle": ["Eat iron and vitamin B12 rich foods", "Maintain balanced diet"],
+      "trend_hint": "Consistently low RBC may indicate chronic anemia"
+    },
+    "high": {
+      "causes": ["Dehydration", "Smoking", "High altitude living"],
+      "need": ["Thicker blood", "Increased clot risk"],
+      "trend_hint": "Repeated high levels may strain circulation"
+    },
+    "when_to_consult": "If abnormal RBC levels persist",
+    "confidence_note": "Educational information only"
+  },
+
+  "wbc_count": {
+    "display_name": "White Blood Cell Count (WBC)",
+    "category": "Complete Blood Count",
+    "unit": "cells/µL",
+    "function": "Helps the body fight infections",
+    "normal_range": { "min": 4000, "max": 11000 },
+    "severity_rules": {
+      "low": { "severity": "Medium" },
+      "high": { "severity": "Medium" }
+    },
+    "low": {
+      "causes": ["Viral infections", "Bone marrow suppression"],
+      "need": ["Weakened immunity", "Higher infection risk"],
+      "lifestyle": ["Maintain hygiene", "Eat nutritious food", "Get adequate rest"],
+      "trend_hint": "Low WBC over time increases infection risk"
+    },
+    "high": {
+      "causes": ["Bacterial infection", "Inflammation"],
+      "need": ["Body fighting infection"],
+      "trend_hint": "Persistent elevation may indicate chronic inflammation"
+    },
+    "when_to_consult": "If fever or infection symptoms persist",
+    "confidence_note": "Educational information only"
+  },
+
+  "platelet_count": {
+    "display_name": "Platelet Count",
+    "category": "Complete Blood Count",
+    "unit": "/µL",
+    "function": "Helps in blood clotting and prevents bleeding",
+    "normal_range": { "min": 150000, "max": 450000 },
+    "severity_rules": {
+      "low": { "severity": "High" },
+      "high": { "severity": "Medium" }
+    },
+    "low": {
+      "causes": ["Viral infections", "Vitamin deficiency", "Autoimmune disorders"],
+      "need": ["Increased bleeding risk", "Delayed clotting"],
+      "lifestyle": ["Avoid injuries", "Eat vitamin-rich foods"],
+      "trend_hint": "Consistently low platelets increase bleeding risk"
+    },
+    "high": {
+      "causes": ["Inflammation", "Iron deficiency"],
+      "need": ["Higher clotting tendency"],
+      "trend_hint": "Persistently high platelets may increase thrombosis risk"
+    },
+    "when_to_consult": "If bleeding or bruising is noticed",
+    "confidence_note": "Educational information only"
+  },
+
+  "blood_glucose_fasting": {
+    "display_name": "Fasting Blood Glucose",
+    "category": "Blood Sugar",
+    "unit": "mg/dL",
+    "function": "Measures blood sugar level after fasting",
+    "normal_range": { "min": 70, "max": 99 },
+    "severity_rules": {
+      "low": { "severity": "Medium" },
+      "high": { "severity": "High" }
+    },
+    "low": {
+      "causes": ["Skipping meals", "Excess insulin"],
+      "need": ["Low energy", "Dizziness"],
+      "lifestyle": ["Eat regular meals", "Avoid skipping food"],
+      "trend_hint": "Repeated low values may indicate hypoglycemia"
+    },
+    "high": {
+      "causes": ["Diabetes", "Poor diet"],
+      "need": ["Risk of long-term complications"],
+      "trend_hint": "Persistent elevation indicates poor glucose control"
+    },
+    "when_to_consult": "If abnormal levels persist",
+    "confidence_note": "Educational information only"
+  },
+
+  "serum_creatinine": {
+    "display_name": "Serum Creatinine",
+    "category": "Kidney Function Test",
+    "unit": "mg/dL",
+    "function": "Indicates kidney filtration efficiency",
+    "normal_range": {
+      "male": { "min": 0.7, "max": 1.3 },
+      "female": { "min": 0.6, "max": 1.1 }
+    },
+    "severity_rules": {
+      "high": { "severity": "High" }
+    },
+    "high": {
+      "causes": ["Kidney dysfunction", "Dehydration"],
+      "need": ["Waste buildup in blood"],
+      "trend_hint": "Increasing levels may indicate declining kidney function"
+    },
+    "when_to_consult": "If levels rise or remain elevated",
+    "confidence_note": "Educational information only"
+  },
+
+  "urine_ph": {
+    "display_name": "Urine pH",
+    "category": "Urine Analysis",
+    "unit": "",
+    "function": "Indicates acidity or alkalinity of urine",
+    "normal_range": { "min": 4.5, "max": 8.0 },
+    "severity_rules": {
+      "low": { "severity": "Low" },
+      "high": { "severity": "Low" }
+    },
+    "low": {
+      "causes": ["Dehydration", "High protein diet"],
+      "need": ["Acidic urine"],
+      "lifestyle": ["Increase water intake", "Eat fruits and vegetables"],
+      "trend_hint": "Persistently acidic urine may affect kidney health"
+    },
+    "high": {
+      "causes": ["UTI", "Vegetarian diet"],
+      "need": ["Alkaline urine"],
+      "trend_hint": "Repeated alkaline urine may indicate infection"
+    },
+    "when_to_consult": "If symptoms like burning urination occur",
+    "confidence_note": "Educational information only"
+  },
+
+  "urine_protein": {
+    "display_name": "Urine Protein",
+    "category": "Urine Analysis",
+    "unit": "",
+    "function": "Detects protein leakage in urine",
+    "normal_range": "Negative / Trace",
+    "severity_rules": {
+      "high": { "severity": "High" }
+    },
+    "high": {
+      "causes": ["Dehydration", "Kidney stress"],
+      "need": ["Possible kidney involvement"],
+      "trend_hint": "Persistent proteinuria suggests kidney damage"
+    },
+    "when_to_consult": "If protein is detected repeatedly",
+    "confidence_note": "Educational information only"
+  },
+
+  "urine_glucose": {
+    "display_name": "Urine Glucose",
+    "category": "Urine Analysis",
+    "unit": "",
+    "function": "Detects sugar presence in urine",
+    "normal_range": "Negative",
+    "severity_rules": {
+      "high": { "severity": "High" }
+    },
+    "high": {
+      "causes": ["High blood sugar", "Diabetes"],
+      "need": ["Poor blood sugar control"],
+      "trend_hint": "Repeated glucose in urine indicates diabetes risk"
+    },
+    "when_to_consult": "If glucose appears in urine frequently",
+    "confidence_note": "Educational information only"
+  },
+	
+"urine_specific_gravity": {
+  "display_name": "Urine Specific Gravity",
+  "category": "Urine Analysis",
+  "unit": "ratio",
+
+  "function": "Measures the concentration of substances dissolved in urine and reflects the body’s hydration status and kidney concentrating ability",
+
+  "normal_range": {
+    "min": 1.005,
+    "max": 1.030
+  },
+
+  "severity_rules": {
+    "low": {
+      "threshold": "< normal_min",
+      "severity": "Low"
+    },
+    "high": {
+      "threshold": "> normal_max",
+      "severity": "Medium"
+    }
+  },
+
+  "low": {
+    "causes": [
+      "Excess fluid intake",
+      "Kidney concentrating issues",
+      "Diuretic use"
+    ],
+    "need": [
+      "Diluted urine",
+      "Possible hydration imbalance"
+    ],
+    "lifestyle": [
+      "Avoid excessive water intake",
+      "Maintain balanced hydration"
+    ],
+    "trend_hint": "Persistently low values may indicate kidney concentrating impairment"
+  },
+
+  "high": {
+    "causes": [
+      "Dehydration",
+      "Fluid loss due to sweating, vomiting, or diarrhea"
+    ],
+    "need": [
+      "Concentrated urine",
+      "Low body water levels"
+    ],
+    "lifestyle": [
+      "Increase fluid intake",
+      "Monitor hydration regularly"
+    ],
+    "trend_hint": "Repeated high values often reflect chronic dehydration"
+  },
+
+  "when_to_consult": "If abnormal values persist across multiple urine tests or are accompanied by symptoms like reduced urination or fatigue",
+
+  "confidence_note": "This information is intended for educational purposes and does not replace professional medical advice"
+}
+
+
+}
