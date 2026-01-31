@@ -22,4 +22,4 @@ const LifestyleTips: React.FC = () => {
   );
 };
 
-export default LifestyleTips; // ✅ default export
+export default LifestyleTips; 
