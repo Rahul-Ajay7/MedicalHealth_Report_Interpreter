@@ -1,4 +1,4 @@
-// app/components/Navbar.tsx
+"use client";
 import React from "react";
 
 const Navbar: React.FC = () => {

@@ -1,5 +1,5 @@
 "use client";
-// app/components/LifestyleTips.tsx
+
 import React from "react";
 import { Leaf } from "lucide-react";
 

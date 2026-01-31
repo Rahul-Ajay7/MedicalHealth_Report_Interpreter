@@ -2,7 +2,7 @@
 import UploadReport from "./components/UploadReport";
 import AnalysisResult from "./components/AnalysisResult";
 import LifestyleTips from "./components/LifestyleTips";
-
+import Navbar from "./components/Navbar";
 
 export default function HomePage() {
   return (
