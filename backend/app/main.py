@@ -1,0 +1,23 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from app.routes.upload import router as upload_router
+from app.routes.analyze import router as analyze_router
+from app.routes.history import router as history_router
+
+app = FastAPI(title="Medical Report Interpreter")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(upload_router, prefix="/upload", tags=["Upload"])
+app.include_router(analyze_router, prefix="/analyze", tags=["Analyze"])
+app.include_router(history_router, prefix="/history", tags=["History"])
+
+@app.get("/")
+def root():
+    return {"status": "API is running!"}
