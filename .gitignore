@@ -34,3 +34,28 @@ Thumbs.db
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+
+# -----------------------------
+# Python cache / compiled files
+# -----------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# -----------------------------
+# Virtual environment
+# -----------------------------
+venv/
+.venv/
+
+# -----------------------------
+# Uploads folder (user files)
+# -----------------------------
+uploads/
+
+# -----------------------------
+# Local test files (optional)
+# -----------------------------
+app/services/test_ocr.py
