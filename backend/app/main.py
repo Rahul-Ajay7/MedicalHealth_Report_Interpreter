@@ -9,14 +9,15 @@ app = FastAPI(title="Medical Report Interpreter")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-app.include_router(upload_router, prefix="/upload", tags=["Upload"])
-app.include_router(analyze_router, prefix="/analyze", tags=["Analyze"])
-app.include_router(history_router, prefix="/history", tags=["History"])
+
+app.include_router(upload_router)
+app.include_router(analyze_router)
+app.include_router(history_router)
 
 @app.get("/")
 def root():

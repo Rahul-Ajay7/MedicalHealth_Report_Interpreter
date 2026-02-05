@@ -34,3 +34,21 @@ Thumbs.db
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+# Python (global)
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+
+# Environments
+.env
+.env.*
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
