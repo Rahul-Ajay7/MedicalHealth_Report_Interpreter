@@ -1,51 +1,51 @@
 # app/services/nlp.py
 
-MEDICAL_DATA = {
-    "hemoglobin": {
-        "display_name": "Hemoglobin (Hb)",
-        "unit": "g/dL",
-        "low": {
-            "impact": ["Fatigue and weakness"],
-            "lifestyle": ["Increase iron-rich foods"],
-            "otc_support": {
-                "safe_options": ["Iron multivitamin"],
-                "note": "Follow label instructions"
-            },
-            "prescription_required": {
-                "instruction": "Consult a doctor for prescription therapy."
-            }
-        }
-    }
-}
+from typing import Dict
 
-def generate_explanation(param_key: str, value: float, status: str):
-    info = MEDICAL_DATA.get(param_key)
+
+def generate_explanation(
+    analysis_result: Dict,
+    medical_data: Dict
+) -> str:
+    """
+    Generates ONLY:
+    - cause
+    - consequence
+    for abnormal lab values.
+    """
+
+    status = analysis_result.get("status")
+    if status == "normal":
+        return ""
+
+    param_key = analysis_result.get("param_key")
+    value = analysis_result.get("value")
+    unit = analysis_result.get("unit")
+
+    info = medical_data.get(param_key)
     if not info:
-        return "No medical data available."
+        return ""
 
     condition = info.get(status)
     if not condition:
-        return "Value is within normal range."
+        return ""
 
-    explanation = []
-    explanation.append(
-        f"Your {info['display_name']} is {value} {info['unit']}, which is considered {status}."
-    )
+    parts = [
+        f"{info['display_name']} is {value} {unit}, which is {status}."
+    ]
 
-    if "impact" in condition:
-        explanation.append("This may lead to " + ", ".join(condition["impact"]) + ".")
-
-    if "lifestyle" in condition:
-        explanation.append("Lifestyle advice: " + ", ".join(condition["lifestyle"]) + ".")
-
-    if "otc_support" in condition:
-        explanation.append(
-            "Over-the-counter options include: "
-            + ", ".join(condition["otc_support"]["safe_options"])
+    if "causes" in condition:
+        parts.append(
+            "Possible causes include "
+            + ", ".join(condition["causes"])
             + "."
         )
 
-    if "prescription_required" in condition:
-        explanation.append(condition["prescription_required"]["instruction"])
+    if "impact" in condition:
+        parts.append(
+            "This may result in "
+            + ", ".join(condition["impact"])
+            + "."
+        )
 
-    return " ".join(explanation)
+    return " ".join(parts)
