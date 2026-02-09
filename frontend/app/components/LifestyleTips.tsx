@@ -1,25 +1,34 @@
 "use client";
+import { useReport } from "@/context/ReportContext";
 
-import React from "react";
-import { Leaf } from "lucide-react";
+export default function LifestyleTips() {
+  const { report } = useReport();
 
-const LifestyleTips: React.FC = () => {
   return (
-    <div className="bg-white p-6 rounded-xl shadow">
-      <h3 className="font-semibold mb-3">Lifestyle Suggestions</h3>
-      <ul className="space-y-2 text-sm">
-        <li className="flex gap-2">
-          <Leaf className="text-green-500" /> Reduce sugar intake, increase vegetables
-        </li>
-        <li className="flex gap-2">
-          <Leaf className="text-green-500" /> 20–30 minutes daily exercise
-        </li>
-        <li className="flex gap-2">
-          <Leaf className="text-green-500" /> Sleep 7–9 hours daily
-        </li>
-      </ul>
+    <div className="bg-white p-6 rounded-2xl shadow-sm min-h-[220px]">
+      <h3 className="font-semibold mb-4">Lifestyle Suggestions</h3>
+
+      {!report ? (
+        /* EMPTY STATE */
+        <div className="flex items-center justify-center h-[140px] text-sm text-gray-400 italic">
+          Upload and analyze a report to see lifestyle suggestions
+        </div>
+      ) : (
+        /* DATA STATE */
+        <ul className="space-y-3">
+          {report.lifestyle.map((tip, i) => (
+            <li key={i} className="flex gap-2">
+              <span className="text-green-500">✔</span>
+              <div>
+                <p className="font-medium">{tip.title}</p>
+                <p className="text-sm text-gray-500">
+                  {tip.description}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
-};
-
-export default LifestyleTips; 
+}

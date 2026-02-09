@@ -1,83 +1,66 @@
 "use client";
-import React from "react";
-import { Loader2 } from "lucide-react";
+import { useReport } from "@/context/ReportContext";
 
-const AnalysisResult: React.FC = () => {
-  // Mock data for demonstration
-  const results = [
-    {
-      name: "Glucose",
-      status: "Abnormal",
-      severity: "High",
-      recommendation: "May indicate pre-diabetes",
-      color: "red",
-      percentage: 80, // for a visual bar
-    },
-    {
-      name: "Hemoglobin",
-      status: "Normal",
-      severity: "Low",
-      recommendation: "Healthy level",
-      color: "green",
-      percentage: 50,
-    },
-  ];
+export default function AnalysisResult() {
+  const { report } = useReport();
+
+  const getStatus = (v: number, min: number, max: number) =>
+    v < min || v > max ? "Abnormal" : "Normal";
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
-      <h3 className="text-xl font-bold mb-4 text-gray-800">
-        Health Impact & Severity
-      </h3>
+    <div className="bg-white p-6 rounded-2xl shadow-sm min-h-[260px]">
+      <h3 className="font-semibold mb-4">Extracted Parameters</h3>
 
-      {/* Loading indicator */}
-      <div className="flex flex-col items-center justify-center text-center mb-6">
-        <Loader2 className="animate-spin text-green-500 w-12 h-12" />
-        <p className="mt-3 text-gray-500">Analyzing your report. Please wait...</p>
-      </div>
+      {/* EMPTY STATE */}
+      {!report && (
+        <div className="flex items-center justify-center h-[180px] text-sm text-gray-400">
+          Upload and analyze a report to view extracted parameters
+        </div>
+      )}
 
-      {/* Analysis results */}
-      <div className="space-y-4">
-        {results.map((item) => (
-          <div
-            key={item.name}
-            className="p-4 border border-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
-          >
-            <div className="flex justify-between items-center mb-2">
-              <h4 className="font-semibold text-gray-700">{item.name}</h4>
-              <span
-                className={`text-sm font-medium ${
-                  item.color === "red"
-                    ? "text-red-600"
-                    : item.color === "green"
-                    ? "text-green-600"
-                    : "text-yellow-600"
-                }`}
-              >
-                {item.status}
-              </span>
-            </div>
+      {/* TABLE */}
+      {report && (
+        <table className="w-full text-sm border-separate border-spacing-y-3">
+          <thead className="text-gray-400">
+            <tr>
+              <th className="text-left px-2">Parameter</th>
+              <th className="px-2">Value</th>
+              <th className="px-2">Unit</th>
+              <th className="px-2">Status</th>
+            </tr>
+          </thead>
 
-            <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-              <div
-                className={`h-2 rounded-full ${
-                  item.color === "red"
-                    ? "bg-red-500"
-                    : item.color === "green"
-                    ? "bg-green-500"
-                    : "bg-yellow-400"
-                }`}
-                style={{ width: `${item.percentage}%` }}
-              />
-            </div>
-
-            <p className="text-sm text-gray-500">
-              <strong>Recommendation:</strong> {item.recommendation}
-            </p>
-          </div>
-        ))}
-      </div>
+          <tbody>
+            {report.parameters.map((p, i) => {
+              const status = getStatus(p.value, p.min, p.max);
+              return (
+                <tr key={i} className="bg-slate-50 rounded-lg">
+                  <td className="px-2 py-3 font-medium rounded-l-lg">
+                    {p.name}
+                  </td>
+                  <td className="px-2 py-3 text-center">
+                    {p.value}
+                  </td>
+                  <td className="px-2 py-3 text-center">
+                    {p.unit}
+                  </td>
+                  <td className="px-2 py-3 text-center rounded-r-lg">
+                    <span
+                      className={`px-3 py-1 text-xs rounded-full text-white ${
+                        status === "Abnormal"
+                          ? "bg-red-500"
+                          : "bg-green-500"
+                      }`}
+                    >
+                      {status}
+                    </span>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
     </div>
   );
-};
-
-export default AnalysisResult;
+}

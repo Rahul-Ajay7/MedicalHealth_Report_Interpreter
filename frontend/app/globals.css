@@ -1,3 +1,56 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --foreground-rgb: 51, 65, 85; /* slate-700 */
+  --background-start-rgb: 240, 247, 255; /* soft blue bg */
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-start-rgb));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer components {
+  /* Custom Scrollbar for the Chat Window */
+  .chat-scrollbar::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .chat-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .chat-scrollbar::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 10px;
+  }
+
+  /* Status Badge Base Styles */
+  .status-badge {
+    @apply px-3 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider shadow-sm;
+  }
+}
+
+/* Animation for the "Analyzing" Bar */
+@keyframes loading-progress {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(0%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-analyze {
+  animation: loading-progress 2s infinite linear;
+}
+
+/* Card Hover Effects */
+.glass-card {
+  @apply bg-white border border-white/20 transition-all duration-300;
+}
+
+.glass-card:hover {
+  @apply shadow-md transform -translate-y-1;
+}

@@ -1,22 +1,34 @@
 "use client";
-import React from "react";
 
-const Navbar: React.FC = () => {
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+export default function Navbar() {
+  const pathname = usePathname();
+
+  const linkClass = (path: string) =>
+    `px-4 py-2 rounded-lg text-sm font-medium transition ${
+      pathname === path
+        ? "bg-blue-500 text-white"
+        : "text-slate-600 hover:bg-blue-100"
+    }`;
+
   return (
-    <nav className="w-full bg-white shadow rounded-full px-8 py-3 flex justify-between items-center">
-      <div className="flex gap-6 text-gray-700 font-medium">
-        <span className="text-blue-600">Home</span>
-        <span>Upload Report</span>
-        <span>Report History</span>
-        <span>Profile</span>
-      </div>
+    <nav className="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
+      {/* Logo */}
+      <h1 className="font-bold text-lg text-blue-600">
+        HealthAI
+      </h1>
 
-      <div className="flex items-center gap-3">
-        <span className="text-sm text-gray-600">Welcome, User!</span>
-        <div className="w-8 h-8 bg-gray-300 rounded-full" />
+      {/* Links */}
+      <div className="flex gap-3">
+        <Link href="/" className={linkClass("/")}>
+          Home
+        </Link>
+        <Link href="/history" className={linkClass("/history")}>
+          History
+        </Link>
       </div>
     </nav>
   );
-};
-
-export default Navbar; // ✅ must be default
+}

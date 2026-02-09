@@ -1,19 +1,33 @@
-// app/layout.tsx
-import "./globals.css"; // must be relative to layout.tsx
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { ReportProvider } from "@/context/ReportContext";
+import Navbar from "@/components/Navbar"; // ✅ ADD
 
-import Navbar from "./components/Navbar";
+const inter = Inter({ subsets: ["latin"] });
 
-export const metadata = {
-  title: "Medical Report Interpreter",
-  description: "Analyze your health reports",
+export const metadata: Metadata = {
+  title: "Health Report Interpreter",
+  description: "Analyze blood reports and chat with an AI health assistant",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
-      <body className="bg-gray-50 text-gray-900">
-        <Navbar />
-        <div className="max-w-5xl mx-auto p-6">{children}</div>
+      <body className={`${inter.className} antialiased text-slate-700`}>
+        <ReportProvider>
+          
+          <Navbar />
+
+          {/* Page Content */}
+          <div className="bg-slate-50 min-h-screen">
+            {children}
+          </div>
+        </ReportProvider>
       </body>
     </html>
   );

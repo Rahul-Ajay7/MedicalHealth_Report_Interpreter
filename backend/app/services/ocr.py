@@ -4,22 +4,23 @@ from PIL import Image
 import pytesseract
 from pdf2image import convert_from_path
 import pdfplumber
-
 import cv2
 import numpy as np
 
-
 # -----------------------------
-# CONFIG (Update for your PC)
+# CONFIG (Environment-based)
 # -----------------------------
-TESSERACT_PATH = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-POPPLER_PATH = r"C:\poppler\poppler-25.12.0\Library\bin"
+TESSERACT_CMD = os.getenv("TESSERACT_CMD")     # e.g. /usr/bin/tesseract
+POPPLER_PATH = os.getenv("POPPLER_PATH")       # e.g. /usr/bin
 
 
 def _set_tesseract_path():
-    """Ensure pytesseract knows where tesseract.exe is."""
-    if os.path.exists(TESSERACT_PATH):
-        pytesseract.pytesseract.tesseract_cmd = TESSERACT_PATH
+    """
+    Ensure pytesseract knows where tesseract executable is.
+    If not set, system PATH will be used.
+    """
+    if TESSERACT_CMD:
+        pytesseract.pytesseract.tesseract_cmd = TESSERACT_CMD
 
 
 def _preprocess_image(pil_img: Image.Image) -> Image.Image:
@@ -27,7 +28,7 @@ def _preprocess_image(pil_img: Image.Image) -> Image.Image:
     Improve OCR accuracy:
     - grayscale
     - denoise
-    - threshold
+    - adaptive threshold
     """
     img = np.array(pil_img)
 
@@ -37,10 +38,12 @@ def _preprocess_image(pil_img: Image.Image) -> Image.Image:
     img = cv2.GaussianBlur(img, (3, 3), 0)
 
     img = cv2.adaptiveThreshold(
-        img, 255,
+        img,
+        255,
         cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
         cv2.THRESH_BINARY,
-        31, 2
+        31,
+        2
     )
 
     return Image.fromarray(img)
@@ -49,30 +52,30 @@ def _preprocess_image(pil_img: Image.Image) -> Image.Image:
 def _ocr_image(pil_img: Image.Image) -> str:
     _set_tesseract_path()
     processed = _preprocess_image(pil_img)
-    config = r"--oem 3 --psm 6"
+    config = "--oem 3 --psm 6"
     text = pytesseract.image_to_string(processed, lang="eng", config=config)
     return text.strip()
 
 
 def _extract_text_from_digital_pdf(pdf_path: str) -> str:
     """
-    Extract selectable text from PDF (no OCR).
-    If PDF is scanned, this will return empty/very small text.
+    Extract selectable text from digital PDFs (fast).
     """
     texts = []
     with pdfplumber.open(pdf_path) as pdf:
         for page in pdf.pages:
-            t = page.extract_text() or ""
-            texts.append(t)
+            texts.append(page.extract_text() or "")
     return "\n".join(texts).strip()
 
 
 def _ocr_pdf(pdf_path: str) -> str:
-    """Convert PDF pages to images then OCR each page."""
+    """
+    Convert PDF pages to images, then OCR.
+    """
     pages: List[Image.Image] = convert_from_path(
         pdf_path,
         dpi=300,
-        poppler_path=POPPLER_PATH if os.path.exists(POPPLER_PATH) else None
+        poppler_path=POPPLER_PATH
     )
 
     all_text = []
@@ -86,9 +89,7 @@ def _ocr_pdf(pdf_path: str) -> str:
 def extract_text_from_file(file_path: str) -> str:
     """
     Main OCR entrypoint.
-    Supports:
-    - PDF
-    - PNG/JPG/JPEG
+    Supports PDF and image files.
     """
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"File not found: {file_path}")
@@ -96,18 +97,15 @@ def extract_text_from_file(file_path: str) -> str:
     ext = os.path.splitext(file_path)[1].lower()
 
     if ext == ".pdf":
-        # Try digital extraction first
         digital_text = _extract_text_from_digital_pdf(file_path)
 
-        # If digital text exists, use it (fast + accurate)
+        # If PDF contains real text, skip OCR
         if digital_text and len(digital_text) > 30:
             return digital_text
 
-        # Else fallback to OCR
         return _ocr_pdf(file_path)
 
     if ext in [".png", ".jpg", ".jpeg"]:
-        img = Image.open(file_path)
-        return _ocr_image(img)
+        return _ocr_image(Image.open(file_path))
 
     raise ValueError(f"Unsupported file type: {ext}")

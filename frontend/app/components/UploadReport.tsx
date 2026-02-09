@@ -1,49 +1,115 @@
 "use client";
-import React from "react";
-import { UploadCloud } from "lucide-react";
 
-const UploadReport: React.FC = () => {
+import { useState } from "react";
+import { analyzeReport } from "@/services/api";
+import { useReport } from "@/context/ReportContext";
+
+export default function UploadReport() {
+  const [file, setFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
+  const { setReport } = useReport();
+
+  const handleAnalyze = async () => {
+    if (!file) return;
+    setLoading(true);
+    const data = await analyzeReport(file);
+    setReport(data);
+    setLoading(false);
+  };
+
+  const fileBadge = () => {
+    if (!file) return "FILE";
+    if (file.type.includes("pdf")) return "PDF";
+    if (file.type.startsWith("image/")) return "IMG";
+    return "FILE";
+  };
+
   return (
-    <div className="bg-white p-6 rounded-xl shadow w-full">
-      <h3 className="font-semibold mb-3">Extracted Parameters</h3>
+    <div className="bg-white rounded-2xl shadow-sm p-6 h-[420px] flex flex-col">
+      <h3 className="text-lg font-semibold mb-4">
+        Upload & Analyze Report
+      </h3>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="text-gray-500">
-                <th className="text-left">Parameter</th>
-                <th>Value</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Hemoglobin</td>
-                <td className="text-center">16.5 g/dL</td>
-                <td className="text-green-600">Normal</td>
-              </tr>
-              <tr>
-                <td>Glucose</td>
-                <td className="text-center">180 mg/dL</td>
-                <td className="text-red-600">Abnormal</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      {/* Upload Box */}
+      <label
+        className="
+          flex-1
+          flex
+          flex-col
+          items-center
+          justify-center
+          border-2
+          border-dashed
+          border-blue-200
+          rounded-xl
+          cursor-pointer
+          hover:bg-blue-50
+          transition
+        "
+      >
+        <div className="flex flex-col items-center">
+          <div className="w-14 h-14 flex items-center justify-center rounded-lg bg-blue-100 text-blue-600 font-bold mb-3">
+            {fileBadge()}
+          </div>
 
-        <div className="border-2 border-dashed rounded-lg flex flex-col items-center justify-center p-4">
-          <UploadCloud className="w-10 h-10 text-gray-400" />
-          <p className="text-sm text-gray-500 mt-2">
+          <p className="text-sm text-gray-600 text-center">
             Drag & Drop or Click to Upload
+            <br />
+            <span className="text-xs text-gray-400">
+              (PDF / JPG / PNG)
+            </span>
           </p>
-          <button className="mt-4 bg-green-500 text-white px-4 py-2 rounded">
-            Analyze Report
-          </button>
         </div>
+
+        <input
+          type="file"
+          accept="application/pdf,image/png,image/jpeg,image/jpg"
+          className="hidden"
+          onChange={(e) => setFile(e.target.files?.[0] || null)}
+        />
+      </label>
+
+      {/* File Info + Preview (fixed space, no jump) */}
+      <div className="mt-4 min-h-[80px] text-sm text-gray-600">
+        {file && (
+          <>
+            <p>
+              <span className="font-medium">File name:</span>{" "}
+              {file.name}
+            </p>
+            <p className="text-green-600">Upload status: Uploaded</p>
+
+            {file.type.startsWith("image/") && (
+              <img
+                src={URL.createObjectURL(file)}
+                alt="Report preview"
+                className="mt-2 max-h-24 mx-auto rounded-lg border"
+              />
+            )}
+          </>
+        )}
       </div>
+
+      {/* Action Button */}
+      <button
+        onClick={handleAnalyze}
+        disabled={!file || loading}
+        className="
+          mt-3
+          bg-green-500
+          hover:bg-green-600
+          active:bg-green-700
+          disabled:bg-gray-300
+          text-white
+          px-6
+          py-2
+          rounded-lg
+          transition
+          duration-150
+        "
+      >
+        {loading ? "Analyzing..." : "Analyze Report"}
+      </button>
     </div>
   );
-};
-
-export default UploadReport;
+}
