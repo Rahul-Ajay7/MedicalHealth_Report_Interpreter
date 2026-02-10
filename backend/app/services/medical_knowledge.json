@@ -4,27 +4,22 @@
     "category": "Complete Blood Count",
     "unit": "g/dL",
     "function": "Carries oxygen from the lungs to all parts of the body",
-
     "normal_range": {
       "male": { "min": 13, "max": 17 },
       "female": { "min": 12, "max": 15 }
     },
-
     "severity_rules": {
       "low": { "severity": "Medium" },
       "high": { "severity": "Medium" }
     },
-
     "low": {
       "causes": ["Iron deficiency", "Blood loss", "Poor nutrition"],
       "impact": ["Reduced oxygen delivery", "Fatigue and weakness"],
-
       "lifestyle": [
         "Increase iron-rich foods",
         "Include leafy vegetables",
         "Maintain balanced nutrition"
       ],
-
       "otc_support": {
         "safe_options": [
           "Iron-containing multivitamin supplements",
@@ -32,357 +27,408 @@
         ],
         "note": "Follow label instructions for over-the-counter supplements."
       },
-
       "prescription_required": {
         "conditions": ["Moderate to severe anemia"],
         "instruction": "Consult a doctor for prescription therapy."
       },
-
       "trend_hint": "Persistently low values may indicate anemia"
     },
-
     "high": {
       "causes": ["Dehydration", "Smoking", "High altitude exposure"],
       "impact": ["Increased blood thickness", "Higher clot risk"],
-
       "lifestyle": [
         "Stay adequately hydrated",
         "Avoid smoking"
       ],
-
       "medical_attention": "Repeated high values require medical evaluation"
     },
-
     "when_to_consult": "If abnormal values persist across multiple tests",
     "confidence_note": "Educational information only, not a medical diagnosis"
   },
-
   "rbc_count": {
     "display_name": "Red Blood Cell Count (RBC)",
     "category": "Complete Blood Count",
     "unit": "million/µL",
     "function": "Transports oxygen and carbon dioxide in the blood",
-
     "normal_range": {
       "male": { "min": 4.5, "max": 5.9 },
       "female": { "min": 4.1, "max": 5.1 }
     },
-
     "severity_rules": {
       "low": { "severity": "Medium" },
       "high": { "severity": "Medium" }
     },
-
     "low": {
       "causes": ["Anemia", "Vitamin B12 deficiency", "Bone marrow issues"],
       "impact": ["Tiredness", "Dizziness"],
-
       "lifestyle": [
         "Consume iron-rich foods",
         "Increase vitamin B12 intake"
       ],
-
       "otc_support": {
         "safe_options": [
           "Vitamin B12 supplements",
           "Iron-containing multivitamins"
         ]
       },
-
       "prescription_required": {
         "conditions": ["Chronic or severe anemia"],
         "instruction": "Doctor evaluation required."
       },
-
       "trend_hint": "Consistently low RBC may indicate chronic anemia"
     },
-
     "high": {
       "causes": ["Dehydration", "Smoking", "High altitude living"],
       "impact": ["Increased clot risk"],
-
       "lifestyle": ["Hydration", "Avoid smoking"]
     },
-
     "when_to_consult": "If abnormal RBC levels persist",
     "confidence_note": "Educational information only"
   },
-
   "wbc_count": {
     "display_name": "White Blood Cell Count (WBC)",
     "category": "Complete Blood Count",
     "unit": "cells/µL",
     "function": "Helps the body fight infections",
-
     "normal_range": { "min": 4000, "max": 11000 },
-
     "severity_rules": {
       "low": { "severity": "Medium" },
       "high": { "severity": "Medium" }
     },
-
     "low": {
       "causes": ["Viral infections", "Immune suppression"],
       "impact": ["Higher infection risk"],
-
       "lifestyle": [
         "Maintain hygiene",
         "Eat nutritious foods",
         "Adequate rest"
       ],
-
       "otc_support": {
         "safe_options": [
           "General immunity-supporting multivitamins"
         ]
       }
     },
-
     "high": {
       "causes": ["Bacterial infection", "Inflammation"],
       "impact": ["Active immune response"]
     },
-
     "when_to_consult": "If fever or infection symptoms persist",
     "confidence_note": "Educational information only"
   },
-
   "platelet_count": {
     "display_name": "Platelet Count",
     "category": "Complete Blood Count",
     "unit": "/µL",
     "function": "Helps blood clotting and prevents bleeding",
-
     "normal_range": { "min": 150000, "max": 450000 },
-
     "severity_rules": {
       "low": { "severity": "High" },
       "high": { "severity": "Medium" }
     },
-
     "low": {
       "causes": ["Viral infections", "Vitamin deficiency"],
       "impact": ["Bleeding risk"],
-
       "lifestyle": [
         "Avoid injuries",
         "Eat vitamin-rich foods"
       ],
-
       "prescription_required": {
         "conditions": ["Very low platelet count"],
         "instruction": "Immediate medical consultation required."
       }
     },
-
     "high": {
       "causes": ["Inflammation", "Iron deficiency"],
       "impact": ["Increased clotting tendency"]
     },
-
     "when_to_consult": "If bleeding or bruising is noticed",
     "confidence_note": "Educational information only"
   },
-
   "blood_glucose_fasting": {
     "display_name": "Fasting Blood Glucose",
     "category": "Blood Sugar",
     "unit": "mg/dL",
     "function": "Measures blood sugar after fasting",
-
     "normal_range": { "min": 70, "max": 99 },
-
     "severity_rules": {
       "low": { "severity": "Medium" },
       "high": { "severity": "High" }
     },
-
     "low": {
       "causes": ["Skipping meals", "Excess insulin"],
       "impact": ["Dizziness", "Low energy"],
-
       "lifestyle": [
         "Eat regular meals",
         "Avoid prolonged fasting"
       ]
     },
-
     "high": {
       "causes": ["Diabetes", "Poor diet"],
       "impact": ["Long-term organ damage"],
-
       "lifestyle": [
         "Limit sugar intake",
         "Regular physical activity"
       ],
-
       "prescription_required": {
         "conditions": ["Diabetes diagnosis"],
         "instruction": "Consult doctor for medication."
       }
     },
-
     "when_to_consult": "If abnormal levels persist",
     "confidence_note": "Educational information only"
   },
-
+  "hba1c": {
+    "display_name": "Hemoglobin A1c",
+    "category": "Blood Sugar",
+    "unit": "%",
+    "function": "Reflects average blood sugar levels over 2-3 months",
+    "normal_range": { "min": 4.0, "max": 5.6 },
+    "severity_rules": { "high": { "severity": "High" } },
+    "high": {
+      "causes": ["Poor glucose management", "Prediabetes", "Diabetes"],
+      "impact": ["Increased risk of diabetic complications"],
+      "lifestyle": ["Low glycemic index diet", "Regular aerobic exercise"]
+    },
+    "when_to_consult": "Levels above 5.7% indicate prediabetes; above 6.5% indicate diabetes",
+    "confidence_note": "Educational information only"
+  },
   "serum_creatinine": {
     "display_name": "Serum Creatinine",
     "category": "Kidney Function Test",
     "unit": "mg/dL",
     "function": "Indicates kidney filtration efficiency",
-
     "normal_range": {
       "male": { "min": 0.7, "max": 1.3 },
       "female": { "min": 0.6, "max": 1.1 }
     },
-
-    "severity_rules": {
-      "high": { "severity": "High" }
-    },
-
+    "severity_rules": { "high": { "severity": "High" } },
     "high": {
       "causes": ["Kidney dysfunction", "Dehydration"],
       "impact": ["Waste buildup in blood"],
-
-      "lifestyle": [
-        "Stay hydrated",
-        "Limit excess protein intake"
-      ],
-
+      "lifestyle": [ "Stay hydrated", "Limit excess protein intake" ],
       "prescription_required": {
         "conditions": ["Chronic kidney disease"],
         "instruction": "Nephrologist consultation required."
       }
     },
-
     "when_to_consult": "If levels remain elevated",
     "confidence_note": "Educational information only"
   },
-
+  "bun": {
+    "display_name": "Blood Urea Nitrogen (BUN)",
+    "category": "Kidney Function Test",
+    "unit": "mg/dL",
+    "function": "Measures urea nitrogen in the blood",
+    "normal_range": { "min": 7, "max": 20 },
+    "high": { "causes": ["Kidney injury", "High protein diet", "Dehydration"] }
+  },
+  "total_cholesterol": {
+    "display_name": "Total Cholesterol",
+    "category": "Lipid Profile",
+    "unit": "mg/dL",
+    "function": "Total amount of cholesterol in blood",
+    "normal_range": { "max": 200 },
+    "high": { "impact": ["Atherosclerosis risk"], "lifestyle": ["Aerobic exercise", "Reduce trans fats"] }
+  },
+  "ldl_cholesterol": {
+    "display_name": "LDL (Bad) Cholesterol",
+    "category": "Lipid Profile",
+    "unit": "mg/dL",
+    "normal_range": { "max": 100 },
+    "high": { "impact": ["Increased risk of heart attack"] }
+  },
+  "hdl_cholesterol": {
+    "display_name": "HDL (Good) Cholesterol",
+    "category": "Lipid Profile",
+    "unit": "mg/dL",
+    "normal_range": { "min": 40 },
+    "low": { "impact": ["Reduced protection for heart"] }
+  },
+  "triglycerides": {
+    "display_name": "Triglycerides",
+    "category": "Lipid Profile",
+    "unit": "mg/dL",
+    "normal_range": { "max": 150 },
+    "high": { "causes": ["High sugar intake", "Excess alcohol", "Inactivity"] }
+  },
+  "alt_sgpt": {
+    "display_name": "ALT (SGPT)",
+    "category": "Liver Function Test",
+    "unit": "U/L",
+    "function": "Enzyme primarily for liver damage detection",
+    "normal_range": { "min": 7, "max": 55 },
+    "high": { "causes": ["Fatty liver", "Hepatitis"], "lifestyle": ["Weight management"] }
+  },
+  "ast_sgot": {
+    "display_name": "AST (SGOT)",
+    "category": "Liver Function Test",
+    "unit": "U/L",
+    "normal_range": { "min": 8, "max": 48 }
+  },
+  "total_bilirubin": {
+    "display_name": "Total Bilirubin",
+    "category": "Liver Function Test",
+    "unit": "mg/dL",
+    "normal_range": { "min": 0.1, "max": 1.2 },
+    "high": { "impact": ["Jaundice"] }
+  },
+  "tsh": {
+    "display_name": "Thyroid Stimulating Hormone (TSH)",
+    "category": "Thyroid Function",
+    "unit": "mIU/L",
+    "normal_range": { "min": 0.4, "max": 4.0 },
+    "high": { "trend_hint": "May indicate Hypothyroidism" },
+    "low": { "trend_hint": "May indicate Hyperthyroidism" }
+  },
+  "crp_hs": {
+    "display_name": "High-Sensitivity C-Reactive Protein (hs-CRP)",
+    "category": "Inflammatory Marker",
+    "unit": "mg/L",
+    "function": "Detects low levels of inflammation",
+    "normal_range": { "max": 1.0 },
+    "high": { "impact": ["Cardiovascular risk factor"] }
+  },
+  "troponin_i": {
+    "display_name": "Troponin I",
+    "category": "Cardiac Enzyme",
+    "unit": "ng/mL",
+    "function": "Released when heart muscle is damaged",
+    "normal_range": { "max": 0.04 },
+    "severity_rules": { "high": { "severity": "High" } },
+    "high": { "causes": ["Myocardial infarction (Heart Attack)"], "medical_attention": "Emergency evaluation required" }
+  },
+  "testosterone_total": {
+    "display_name": "Total Testosterone",
+    "category": "Hormones",
+    "unit": "ng/dL",
+    "normal_range": { "male": { "min": 300, "max": 1000 }, "female": { "min": 15, "max": 70 } }
+  },
+  "estradiol": {
+    "display_name": "Estradiol (E2)",
+    "category": "Hormones",
+    "unit": "pg/mL",
+    "function": "Key form of estrogen; regulates reproductive health"
+  },
+  "serum_vitamin_d": {
+    "display_name": "25-Hydroxy Vitamin D",
+    "category": "Vitamin Profile",
+    "unit": "ng/mL",
+    "normal_range": { "min": 30, "max": 100 },
+    "low": { "lifestyle": ["Sun exposure", "Vitamin D rich foods"] }
+  },
+  "serum_vitamin_b12": {
+    "display_name": "Vitamin B12",
+    "category": "Vitamin Profile",
+    "unit": "pg/mL",
+    "normal_range": { "min": 200, "max": 900 }
+  },
+  "serum_potassium": {
+    "display_name": "Potassium",
+    "category": "Electrolytes",
+    "unit": "mEq/L",
+    "normal_range": { "min": 3.6, "max": 5.2 }
+  },
+  "serum_sodium": {
+    "display_name": "Sodium",
+    "category": "Electrolytes",
+    "unit": "mEq/L",
+    "normal_range": { "min": 135, "max": 145 }
+  },
   "urine_ph": {
     "display_name": "Urine pH",
     "category": "Urine Analysis",
     "unit": "",
-
     "function": "Indicates urine acidity or alkalinity",
-
     "normal_range": { "min": 4.5, "max": 8.0 },
-
-    "severity_rules": {
-      "low": { "severity": "Low" },
-      "high": { "severity": "Low" }
-    },
-
+    "severity_rules": { "low": { "severity": "Low" }, "high": { "severity": "Low" } },
     "low": {
       "causes": ["Dehydration", "High protein diet"],
       "impact": ["Acidic urine"],
-
-      "lifestyle": [
-        "Increase water intake",
-        "Eat fruits and vegetables"
-      ]
+      "lifestyle": ["Increase water intake", "Eat fruits and vegetables"]
     },
-
     "high": {
       "causes": ["UTI", "Vegetarian diet"],
       "impact": ["Alkaline urine"]
     },
-
     "when_to_consult": "If urinary symptoms occur",
     "confidence_note": "Educational information only"
   },
-
   "urine_protein": {
     "display_name": "Urine Protein",
     "category": "Urine Analysis",
     "unit": "",
-
     "function": "Detects protein leakage in urine",
-
     "normal_range": "Negative / Trace",
-
-    "severity_rules": {
-      "high": { "severity": "High" }
-    },
-
+    "severity_rules": { "high": { "severity": "High" } },
     "high": {
       "causes": ["Kidney stress", "Dehydration"],
       "impact": ["Possible kidney damage"],
-
       "prescription_required": {
         "conditions": ["Persistent proteinuria"],
         "instruction": "Doctor evaluation required."
       }
     },
-
     "when_to_consult": "If protein is repeatedly detected",
     "confidence_note": "Educational information only"
   },
-
   "urine_glucose": {
     "display_name": "Urine Glucose",
     "category": "Urine Analysis",
     "unit": "",
-
     "function": "Detects sugar in urine",
-
     "normal_range": "Negative",
-
-    "severity_rules": {
-      "high": { "severity": "High" }
-    },
-
+    "severity_rules": { "high": { "severity": "High" } },
     "high": {
       "causes": ["High blood sugar", "Diabetes"],
       "impact": ["Poor glucose control"],
-
       "prescription_required": {
         "conditions": ["Diabetes"],
         "instruction": "Consult doctor for treatment."
       }
     },
-
     "when_to_consult": "If glucose appears frequently",
     "confidence_note": "Educational information only"
   },
-
   "urine_specific_gravity": {
     "display_name": "Urine Specific Gravity",
     "category": "Urine Analysis",
     "unit": "ratio",
-
     "function": "Reflects hydration status and kidney concentrating ability",
-
-    "normal_range": {
-      "min": 1.005,
-      "max": 1.030
-    },
-
-    "severity_rules": {
-      "low": { "severity": "Low" },
-      "high": { "severity": "Medium" }
-    },
-
+    "normal_range": { "min": 1.005, "max": 1.030 },
+    "severity_rules": { "low": { "severity": "Low" }, "high": { "severity": "Medium" } },
     "low": {
       "causes": ["Excess fluid intake", "Kidney issues"],
       "impact": ["Diluted urine"],
-
-      "lifestyle": [
-        "Avoid excessive water intake"
-      ]
+      "lifestyle": ["Avoid excessive water intake"]
     },
-
     "high": {
       "causes": ["Dehydration"],
       "impact": ["Concentrated urine"],
-
-      "lifestyle": [
-        "Increase fluid intake"
-      ]
+      "lifestyle": ["Increase fluid intake"]
     },
-
     "when_to_consult": "If abnormal values persist",
     "confidence_note": "Educational information only"
+  },
+  "urine_ketones": {
+    "display_name": "Urine Ketones",
+    "category": "Urine Analysis",
+    "unit": "",
+    "normal_range": "Negative",
+    "high": { "causes": ["DKA", "Starvation", "Keto Diet"] }
+  },
+  "urine_leukocytes": {
+    "display_name": "Urine Leukocyte Esterase",
+    "category": "Urine Analysis",
+    "unit": "",
+    "normal_range": "Negative",
+    "high": { "impact": ["Potential infection/UTI"] }
+  },
+  "urine_nitrite": {
+    "display_name": "Urine Nitrite",
+    "category": "Urine Analysis",
+    "unit": "",
+    "normal_range": "Negative",
+    "high": { "impact": ["Highly specific for bacterial UTI"] }
   }
 }
