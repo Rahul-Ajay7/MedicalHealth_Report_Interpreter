@@ -4,7 +4,7 @@ import os
 
 from app.services.ocr import extract_text_from_file
 from app.services.parser import parse_report_text
-from app.services.analyzer import load_parameter_config, analyze_parameters
+from app.services.analyzer import analyze_parameters
 
 router = APIRouter(prefix="/analyze", tags=["Analyze"])
 
@@ -33,20 +33,9 @@ def analyze_report(file_id: str, gender: str):
     # 2️⃣ Parser
     parsed_values = parse_report_text(raw_text)
 
-    # 3️⃣ Analyzer
-    config_path = os.path.join("app", "services", "medical_knowledge.json")
-
-    if not os.path.exists(config_path):
-        raise HTTPException(
-            status_code=500,
-            detail=f"Knowledge file missing: {config_path}"
-        )
-
-    parameter_config = load_parameter_config(config_path)
-
+    # 3️⃣ Analyzer (NORMAL_RANGES based)
     final_results = analyze_parameters(
         parsed_values,
-        parameter_config,
         gender=gender
     )
 

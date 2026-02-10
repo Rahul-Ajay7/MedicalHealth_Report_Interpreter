@@ -79,3 +79,12 @@ CORS_ORIGINS = os.getenv(
 # ===============================
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 LOG_FILE = os.getenv("LOG_FILE", "logs/app.log")
+
+# ===============================
+# LLM_Chat
+# ===============================
+
+LLM_BASE_URL = os.getenv("LLM_BASE_URL")
+LLM_CHAT_ENDPOINT = os.getenv("LLM_CHAT_ENDPOINT")
+LLM_MODEL = os.getenv("LLM_MODEL")
+LLM_TIMEOUT = int(os.getenv("LLM_TIMEOUT", 60))
