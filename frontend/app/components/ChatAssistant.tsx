@@ -17,7 +17,7 @@ export default function ChatAssistant() {
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  // auto-scroll to latest message
+  // Auto-scroll ONLY inside message panel
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -26,11 +26,9 @@ export default function ChatAssistant() {
     if (!input.trim()) return;
 
     const userMsg: Message = { role: "user", content: input };
-
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
 
-    // mock assistant reply (replace with backend later)
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
@@ -44,14 +42,14 @@ export default function ChatAssistant() {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm w-full max-w-[90%] h-[100%] flex flex-col">
-      {/* Header */}
-      <div className="border-b px-4 py-3 font-semibold text-slate-800">
+    <div className="bg-white rounded-2xl shadow-sm w-full max-w-[95%] h-[746px] flex flex-col">
+      {/* Header (fixed height) */}
+      <div className="border-b px-4 py-3 font-semibold text-slate-800 shrink-0">
         AI Health Assistant
       </div>
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3 text-sm">
+      {/* Messages (ONLY this scrolls) */}
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 py-3 space-y-3 text-sm">
         {messages.map((msg, idx) => (
           <div
             key={idx}
@@ -67,8 +65,8 @@ export default function ChatAssistant() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input */}
-      <div className="border-t p-3 flex gap-2">
+      {/* Input (fixed height) */}
+      <div className="border-t p-3 flex gap-2 shrink-0">
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}

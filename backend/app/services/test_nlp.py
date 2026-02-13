@@ -3,7 +3,7 @@ from app.services.nlp import generate_explanation
 # Fake analyzer output (what analyzer.py returns)
 analyzer_results = [
     {
-        "parameter_key": "hemoglobin",
+        "param_key": "hemoglobin",
         "display_name": "Hemoglobin (Hb)",
         "value": 10.8,
         "unit": "g/dL",
@@ -12,7 +12,7 @@ analyzer_results = [
         "gender": "male"
     },
     {
-        "parameter_key": "hemoglobin",
+        "param_key": "hemoglobin",
         "display_name": "Hemoglobin (Hb)",
         "value": 14.5,
         "unit": "g/dL",
@@ -21,6 +21,7 @@ analyzer_results = [
         "gender": "male"
     }
 ]
+
 
 # Fake medical knowledge (later load from JSON file)
 MEDICAL_DATA = {

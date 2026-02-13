@@ -17,7 +17,7 @@ fake_explanations = [
 ]
 
 answer = llm.answer_question(
-    question="Is this dangerous?",
+    question="can you explanin haemoglobin?",
     report_summary=fake_report,
     explanations=fake_explanations
 )

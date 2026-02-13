@@ -5,4 +5,4 @@ router = APIRouter()
 
 @router.get("/history")
 def test_upload():
-    return {"message": "Upload route works"}
+    return {"message": "history route works"}
