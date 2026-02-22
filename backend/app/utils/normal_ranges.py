@@ -49,6 +49,42 @@ NORMAL_RANGES = {
         "unit": "g/dL",
         "normal_range": {"min": 32, "max": 36}
     },
+    "neutrophils": {
+        "unit": "%",
+        "normal_range": {"min": 40, "max": 70}
+    },
+
+    "lymphocytes": {
+        "unit": "%",
+        "normal_range": {"min": 20, "max": 40}
+    },
+
+    "monocytes": {
+        "unit": "%",
+        "normal_range": {"min": 2, "max": 8}
+    },
+
+    "eosinophils": {
+        "unit": "%",
+        "normal_range": {"min": 1, "max": 6}
+    },
+
+    "basophils": {
+        "unit": "%",
+        "normal_range": {"min": 0, "max": 1}
+    },
+
+    "rdw": {
+        "unit": "%",
+        "normal_range": {"min": 11.5, "max": 14.5}
+    },
+
+    "mpv": {
+        "unit": "fL",
+        "normal_range": {"min": 7.5, "max": 12}
+    },
+
+
 
     # ---------------- BLOOD: SUGAR ----------------
     "fasting_blood_glucose": {
