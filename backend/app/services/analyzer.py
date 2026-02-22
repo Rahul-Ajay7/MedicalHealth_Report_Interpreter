@@ -1,61 +1,76 @@
-from typing import Dict, Any, List
-from app.utils.normal_ranges import NORMAL_RANGES
+from typing import Dict, Any
+from app.utils.normal_ranges import NORMAL_RANGES   # 🔥 import from here
 
 
-def _status_from_value(value: float, r: Dict[str, float]) -> str:
-    if value < r["min"]:
+# -------- STATUS CHECK ----------
+def get_status(value, normal_range):
+
+    if value is None or not normal_range:
+        return "unknown"
+
+    # expected = negative cases (urine protein etc)
+    if "expected" in normal_range:
+        expected = normal_range.get("expected")
+        if str(value).lower() == expected:
+            return "normal"
+        return "abnormal"
+
+    min_val = normal_range.get("min")
+    max_val = normal_range.get("max")
+
+    if min_val is not None and value < min_val:
         return "low"
-    if value > r["max"]:
+
+    if max_val is not None and value > max_val:
         return "high"
+
     return "normal"
 
 
-def _get_range(normal_range, gender):
-    if not normal_range:
+# -------- GENDER RANGE ----------
+def get_gender_range(ref_range, gender):
+
+    if not ref_range:
         return None
 
-    if "min" in normal_range and "max" in normal_range:
-        return normal_range
+    # if male/female specific
+    if "male" in ref_range or "female" in ref_range:
+        return ref_range.get(gender.lower())
 
-    if gender in normal_range:
-        return normal_range[gender]
-
-    return None
+    return ref_range
 
 
-def analyze_parameters(
-    parsed_values: Dict[str, Dict[str, Any]],
-    gender: str = "male"
-) -> List[Dict[str, Any]]:
+# -------- MAIN ANALYSER ----------
+def analyze_parameters(parsed_values: Dict[str, Dict[str, Any]], gender="male") -> Dict[str, Any]:
 
-    results: List[Dict[str, Any]] = []
+    final_results = {}
     gender = gender.lower()
 
     for param_key, data in parsed_values.items():
+
         value = data.get("value")
         unit = data.get("unit", "")
 
-        ref = NORMAL_RANGES.get(param_key)
+        ref_data = NORMAL_RANGES.get(param_key)
 
-        status = "unknown"
-        severity = "Unknown"
-        normal_range = None
+        if not ref_data:
+            continue
 
-        if ref:
-            unit = unit or ref.get("unit", "")
-            normal_range = _get_range(ref.get("normal_range"), gender)
+        ref_unit = ref_data.get("unit", "")
+        if not unit:
+            unit = ref_unit
 
-            if normal_range and value is not None:
-                status = _status_from_value(float(value), normal_range)
-                severity = "Normal" if status == "normal" else "Medium"
+        ref_range = ref_data.get("normal_range")
+        normal_range = get_gender_range(ref_range, gender)
 
-        results.append({
-            "param_key": param_key,
+        status = get_status(value, normal_range)
+
+        final_results[param_key] = {
             "value": value,
             "unit": unit,
             "status": status,
-            "severity": severity,
             "normal_range": normal_range
-        })
+        }
 
-    return results
+    print("\nFINAL ANALYSIS:", final_results)
+    return final_results

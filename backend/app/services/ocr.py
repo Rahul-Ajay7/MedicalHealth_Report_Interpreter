@@ -7,71 +7,84 @@ import pdfplumber
 import cv2
 import numpy as np
 
-# -----------------------------
-# CONFIG (Environment-based)
-# -----------------------------
-TESSERACT_CMD = os.getenv("TESSERACT_CMD")     # e.g. /usr/bin/tesseract
-POPPLER_PATH = os.getenv("POPPLER_PATH")       # e.g. /usr/bin
+TESSERACT_CMD = os.getenv("TESSERACT_CMD")
+POPPLER_PATH = os.getenv("POPPLER_PATH")
 
 
+# ---------------- SET TESSERACT ----------------
 def _set_tesseract_path():
-    """
-    Ensure pytesseract knows where tesseract executable is.
-    If not set, system PATH will be used.
-    """
     if TESSERACT_CMD:
         pytesseract.pytesseract.tesseract_cmd = TESSERACT_CMD
 
 
+# ---------------- IMAGE PREPROCESS ----------------
 def _preprocess_image(pil_img: Image.Image) -> Image.Image:
-    """
-    Improve OCR accuracy:
-    - grayscale
-    - denoise
-    - adaptive threshold
-    """
     img = np.array(pil_img)
 
     if len(img.shape) == 3:
         img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
 
-    img = cv2.GaussianBlur(img, (3, 3), 0)
+    # improve contrast
+    img = cv2.convertScaleAbs(img, alpha=1.7, beta=10)
 
+    # noise remove
+    img = cv2.medianBlur(img, 3)
+
+    # threshold
     img = cv2.adaptiveThreshold(
-        img,
-        255,
+        img, 255,
         cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
         cv2.THRESH_BINARY,
-        31,
-        2
+        31, 2
     )
 
     return Image.fromarray(img)
 
 
+# ---------------- OCR IMAGE ----------------
 def _ocr_image(pil_img: Image.Image) -> str:
     _set_tesseract_path()
     processed = _preprocess_image(pil_img)
-    config = "--oem 3 --psm 6"
-    text = pytesseract.image_to_string(processed, lang="eng", config=config)
-    return text.strip()
+
+    custom_config = r'--oem 3 --psm 6'
+    text = pytesseract.image_to_string(processed, lang="eng", config=custom_config)
+
+    return text
 
 
+# ---------------- TABLE EXTRACTION ----------------
+def _extract_tables_from_pdf(pdf_path: str) -> str:
+    """
+    Extract tables using pdfplumber (best for lab reports)
+    """
+    table_texts = []
+
+    with pdfplumber.open(pdf_path) as pdf:
+        for page in pdf.pages:
+            tables = page.extract_tables()
+            for table in tables:
+                for row in table:
+                    clean_row = [str(cell).strip() for cell in row if cell]
+                    if clean_row:
+                        table_texts.append(" | ".join(clean_row))
+
+    return "\n".join(table_texts)
+
+
+# ---------------- DIGITAL TEXT ----------------
 def _extract_text_from_digital_pdf(pdf_path: str) -> str:
-    """
-    Extract selectable text from digital PDFs (fast).
-    """
     texts = []
     with pdfplumber.open(pdf_path) as pdf:
         for page in pdf.pages:
-            texts.append(page.extract_text() or "")
-    return "\n".join(texts).strip()
+            txt = page.extract_text()
+            if txt:
+                texts.append(txt)
+
+    return "\n".join(texts)
 
 
+# ---------------- OCR FULL PDF ----------------
 def _ocr_pdf(pdf_path: str) -> str:
-    """
-    Convert PDF pages to images, then OCR.
-    """
     pages: List[Image.Image] = convert_from_path(
         pdf_path,
         dpi=300,
@@ -79,33 +92,70 @@ def _ocr_pdf(pdf_path: str) -> str:
     )
 
     all_text = []
-    for idx, page in enumerate(pages, start=1):
+
+    for i, page in enumerate(pages):
+        print(f"🔍 OCR processing page {i+1}...")
         page_text = _ocr_image(page)
-        all_text.append(f"\n--- PAGE {idx} ---\n{page_text}")
+        all_text.append(page_text)
 
-    return "\n".join(all_text).strip()
+    return "\n".join(all_text)
 
 
+# ---------------- MAIN UNIVERSAL FUNCTION ----------------
 def extract_text_from_file(file_path: str) -> str:
-    """
-    Main OCR entrypoint.
-    Supports PDF and image files.
-    """
+
     if not os.path.exists(file_path):
-        raise FileNotFoundError(f"File not found: {file_path}")
+        raise FileNotFoundError(file_path)
 
     ext = os.path.splitext(file_path)[1].lower()
 
+    final_text_parts = []
+
+    # -------- PDF HANDLING --------
     if ext == ".pdf":
-        digital_text = _extract_text_from_digital_pdf(file_path)
+        print("📄 Processing PDF:", file_path)
 
-        # If PDF contains real text, skip OCR
-        if digital_text and len(digital_text) > 30:
-            return digital_text
+        # 1️⃣ TABLE extraction
+        try:
+            table_text = _extract_tables_from_pdf(file_path)
+            if table_text.strip():
+                print("✅ Tables extracted")
+                final_text_parts.append("\n---TABLE DATA---\n" + table_text)
+        except Exception as e:
+            print("⚠ Table extraction failed:", e)
 
-        return _ocr_pdf(file_path)
+        # 2️⃣ Digital text
+        try:
+            digital_text = _extract_text_from_digital_pdf(file_path)
+            if digital_text.strip():
+                print("✅ Digital text extracted")
+                final_text_parts.append("\n---DIGITAL TEXT---\n" + digital_text)
+        except Exception as e:
+            print("⚠ Digital text failed:", e)
 
-    if ext in [".png", ".jpg", ".jpeg"]:
-        return _ocr_image(Image.open(file_path))
+        # 3️⃣ OCR (always run — IMPORTANT)
+        try:
+            print("🧠 Running OCR on full PDF...")
+            ocr_text = _ocr_pdf(file_path)
+            if ocr_text.strip():
+                final_text_parts.append("\n---OCR TEXT---\n" + ocr_text)
+        except Exception as e:
+            print("❌ OCR failed:", e)
 
-    raise ValueError(f"Unsupported file type: {ext}")
+    # -------- IMAGE HANDLING --------
+    elif ext in [".png", ".jpg", ".jpeg"]:
+        print("🖼 Processing image:", file_path)
+        img_text = _ocr_image(Image.open(file_path))
+        final_text_parts.append(img_text)
+
+    else:
+        raise ValueError("Unsupported file type")
+
+    final_text = "\n".join(final_text_parts)
+
+    # ---------------- PRINT OCR TEXT IN TERMINAL ----------------
+    print("\n================ OCR OUTPUT START ================\n")
+    print(final_text)
+    print("\n================ OCR OUTPUT END ==================\n")
+
+    return final_text
