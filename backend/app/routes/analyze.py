@@ -42,6 +42,5 @@ def analyze_report(file_id: str, gender: str):
     return {
         "file_id": file_id,
         "gender": gender,
-        "parsed_values": parsed_values,
         "final_results": final_results
     }

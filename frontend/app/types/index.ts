@@ -1,18 +1,29 @@
-export interface ReportValue {
-  name: string;
-  value: number;
-  unit: string;
-  min: number;
-  max: number;
-}
+"use client";
 
-export interface LifestyleSuggestion {
-  title: string;
-  description: string;
-}
+import { createContext, useContext, useState } from "react";
+import type { ReportResponse } from "@/types";
 
-export interface ReportResponse {
-  parameters: ReportValue[];
-  lifestyle: LifestyleSuggestion[];
-  summary: string;
-}
+type ReportContextType = {
+  report: ReportResponse | null;
+  setReport: (r: ReportResponse | null) => void;
+};
+
+const ReportContext = createContext<ReportContextType | null>(null);
+
+export const ReportProvider = ({ children }: { children: React.ReactNode }) => {
+  const [report, setReport] = useState<ReportResponse | null>(null);
+
+  return (
+    <ReportContext.Provider value={{ report, setReport }}>
+      {children}
+    </ReportContext.Provider>
+  );
+};
+
+export const useReport = () => {
+  const ctx = useContext(ReportContext);
+  if (!ctx) {
+    throw new Error("useReport must be used inside ReportProvider");
+  }
+  return ctx;
+};
