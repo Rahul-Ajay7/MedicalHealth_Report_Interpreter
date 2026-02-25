@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from typing import List, Dict
 
 from app.services.llm_chat import PatientChatLLM
-from app.services.nlp import generate_explanation
+
 
 router = APIRouter(prefix="/chat", tags=["Chat"])
 
@@ -25,7 +25,7 @@ def chat_with_patient(data: ChatRequest):
     explanations = []
 
     for r in data.analyzed_results:
-        text = generate_explanation(r, data.medical_data)
+        text = generate_nlp_explanation(r, data.medical_data)
         if text:
             explanations.append(text)
 

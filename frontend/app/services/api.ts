@@ -46,13 +46,22 @@ export async function analyzeReport(
   const report: ReportResponse = {
     file_id: data.file_id,
     gender: data.gender,
+
+    // raw analyzer output
     analysis: data.analysis,
+
+    // ✅ NLP explanations (array of strings)
+    nlp_explanation: data.nlp_explanation ?? [],
+
+    // recommendations
     recommendations: data.recommendations || {
       lifestyle_tips: [],
       non_prescription: [],
       doctor_consultation: [],
     },
-    parameters, // attach for frontend table
+
+    // table-ready params
+    parameters,
   };
 
   return report;

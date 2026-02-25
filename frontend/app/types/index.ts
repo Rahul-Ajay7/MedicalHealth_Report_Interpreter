@@ -6,17 +6,29 @@ export type NormalRange = {
   max: number;
 };
 
-export type ParameterStatus = "normal" | "low" | "high" | "unknown";
+export type ParameterStatus =
+  | "normal"
+  | "low"
+  | "high"
+  | "abnormal"
+  | "unknown";
 
 /* ---------------- ANALYZER OUTPUT ---------------- */
 export interface ReportParameter {
   value: number | string;
   unit: string;
   status: ParameterStatus;
-  normal_range: NormalRange;
+  normal_range: NormalRange | null;
 }
 
 export type AnalysisResults = Record<string, ReportParameter>;
+
+/* ---------------- NLP OUTPUT ---------------- */
+/**
+ * Each string is a generated explanation
+ * for an abnormal parameter.
+ */
+export type NLPExplanation = string[];
 
 /* ---------------- RECOMMENDATIONS ---------------- */
 export interface LifestyleTip {
@@ -50,7 +62,16 @@ export interface ReportParameterWithName extends ReportParameter {
 export interface ReportResponse {
   file_id: string;
   gender: "male" | "female";
-  analysis: AnalysisResults; // matches your backend output
+
+  /** Raw analyzer output */
+  analysis: AnalysisResults;
+
+  /** NLP explanations (abnormal parameters only) */
+  nlp_explanation: NLPExplanation;
+
+  /** Rule-based recommendations */
   recommendations: Recommendations;
-  parameters?: ReportParameterWithName[]; // for frontend table rendering
+
+  /** Flattened parameters for UI table */
+  parameters: ReportParameterWithName[];
 }

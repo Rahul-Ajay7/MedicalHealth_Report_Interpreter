@@ -51,10 +51,12 @@
   "category": "White Blood Cell Differential",
   "unit": "%",
   "function": "Primary immune cells that fight bacterial infections and respond to inflammation",
+
   "normal_range": {
     "male": { "min": 40, "max": 70 },
     "female": { "min": 40, "max": 70 }
   },
+
   "severity_rules": {
     "low": { "severity": "Medium" },
     "high": { "severity": "Medium" }
@@ -113,7 +115,7 @@
   },
 
   "when_to_consult": "If abnormal neutrophil levels persist across multiple blood tests",
-  "confidence_note": "This information is for educational purposes only and does not replace professional medical advice"
+  "confidence_note": "Educational information only, not a medical diagnosis"
 },
 
   "rbc_count": {
@@ -156,6 +158,22 @@
     "when_to_consult": "If abnormal RBC levels persist",
     "confidence_note": "Educational information only"
   },
+  "lymphocytes": {
+  "display_name": "Lymphocytes",
+  "category": "White Blood Cell Differential",
+  "unit": "%",
+  "low": {
+    "causes": [
+      "Acute infections",
+      "Stress",
+      "Steroid use"
+    ],
+    "impact": [
+      "Reduced immune defense"
+    ],
+    "trend_hint": "Persistently low lymphocytes may indicate immune suppression"
+  }
+},
   "wbc_count": {
     "display_name": "White Blood Cell Count (WBC)",
     "category": "Complete Blood Count",
