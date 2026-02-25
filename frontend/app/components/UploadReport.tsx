@@ -14,16 +14,23 @@ export default function UploadReport() {
   const { setReport } = useReport();
 
   const handleAnalyze = async () => {
-    if (!file) return;
+    if (!file || loading) return;
 
     try {
       setLoading(true);
+
+      // 1️⃣ Upload file
       const uploadRes = await uploadReport(file);
-      const result = await analyzeReport(uploadRes.file_id, gender);
-      setReport(result);
+
+      // 2️⃣ Analyze report
+      const analyzeRes = await analyzeReport(uploadRes.file_id, gender);
+
+      // 3️⃣ Store FULL response (includes final_results + recommendations)
+      setReport(analyzeRes);
+
       setAnalyzed(true);
     } catch (err) {
-      console.error(err);
+      console.error("Analyze error:", err);
       alert("Analysis failed. Please check backend logs.");
     } finally {
       setLoading(false);
@@ -35,13 +42,16 @@ export default function UploadReport() {
     setAnalyzed(false);
   };
 
-  // Helper to show file badge
   const fileBadge = () => {
     if (!file) return <FileText size={24} />;
-    return <span className="text-xs font-medium">{file.name.slice(0, 3)}...</span>;
+    return (
+      <span className="text-xs font-medium">
+        {file.name.slice(0, 4)}…
+      </span>
+    );
   };
 
-  /* ---------------- COLLAPSED LEFT + BUTTON ---------------- */
+  /* ---------------- COLLAPSED STATE ---------------- */
   if (analyzed) {
     return (
       <div className="flex items-center justify-center">
@@ -63,12 +73,14 @@ export default function UploadReport() {
 
       {/* Gender Selection */}
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-2">Gender</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Gender
+        </label>
         <div className="grid grid-cols-2 gap-3">
           <button
             type="button"
             onClick={() => setGender("male")}
-            className={`flex items-center justify-center gap-2 py-2.5 rounded-lg border text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            className={`py-2.5 rounded-lg border text-sm font-medium transition ${
               gender === "male"
                 ? "bg-blue-600 text-white border-blue-600"
                 : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
@@ -76,10 +88,11 @@ export default function UploadReport() {
           >
             ♂ Male
           </button>
+
           <button
             type="button"
             onClick={() => setGender("female")}
-            className={`flex items-center justify-center gap-2 py-2.5 rounded-lg border text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-pink-500 ${
+            className={`py-2.5 rounded-lg border text-sm font-medium transition ${
               gender === "female"
                 ? "bg-pink-600 text-white border-pink-600"
                 : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
@@ -90,7 +103,7 @@ export default function UploadReport() {
         </div>
       </div>
 
-      {/* Upload Box */}
+      {/* Upload Area */}
       <label className="flex-1 flex flex-col items-center justify-center py-5 border-2 border-dashed border-blue-200 rounded-xl cursor-pointer hover:bg-blue-50 transition">
         <div className="flex flex-col items-center">
           <div className="w-14 h-14 flex items-center justify-center rounded-lg bg-blue-100 text-blue-600 font-bold mb-3">

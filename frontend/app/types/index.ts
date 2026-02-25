@@ -1,29 +1,56 @@
-"use client";
+// src/types/index.ts
 
-import { createContext, useContext, useState } from "react";
-import type { ReportResponse } from "@/types";
-
-type ReportContextType = {
-  report: ReportResponse | null;
-  setReport: (r: ReportResponse | null) => void;
+/* ---------------- BASIC TYPES ---------------- */
+export type NormalRange = {
+  min: number;
+  max: number;
 };
 
-const ReportContext = createContext<ReportContextType | null>(null);
+export type ParameterStatus = "normal" | "low" | "high" | "unknown";
 
-export const ReportProvider = ({ children }: { children: React.ReactNode }) => {
-  const [report, setReport] = useState<ReportResponse | null>(null);
+/* ---------------- ANALYZER OUTPUT ---------------- */
+export interface ReportParameter {
+  value: number | string;
+  unit: string;
+  status: ParameterStatus;
+  normal_range: NormalRange;
+}
 
-  return (
-    <ReportContext.Provider value={{ report, setReport }}>
-      {children}
-    </ReportContext.Provider>
-  );
-};
+export type AnalysisResults = Record<string, ReportParameter>;
 
-export const useReport = () => {
-  const ctx = useContext(ReportContext);
-  if (!ctx) {
-    throw new Error("useReport must be used inside ReportProvider");
-  }
-  return ctx;
-};
+/* ---------------- RECOMMENDATIONS ---------------- */
+export interface LifestyleTip {
+  parameter: string;
+  status: "low" | "high";
+  tips: string[];
+}
+
+export interface NonPrescriptionSupport {
+  parameter: string;
+  options: string[];
+}
+
+export interface DoctorConsultation {
+  parameter: string;
+  instruction?: string;
+}
+
+export interface Recommendations {
+  lifestyle_tips: LifestyleTip[];
+  non_prescription: NonPrescriptionSupport[];
+  doctor_consultation: DoctorConsultation[];
+}
+
+/* ---------------- PARAMETERS FOR TABLE ---------------- */
+export interface ReportParameterWithName extends ReportParameter {
+  name: string;
+}
+
+/* ---------------- FULL REPORT RESPONSE ---------------- */
+export interface ReportResponse {
+  file_id: string;
+  gender: "male" | "female";
+  analysis: AnalysisResults; // matches your backend output
+  recommendations: Recommendations;
+  parameters?: ReportParameterWithName[]; // for frontend table rendering
+}

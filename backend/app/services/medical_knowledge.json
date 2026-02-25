@@ -45,6 +45,77 @@
     "when_to_consult": "If abnormal values persist across multiple tests",
     "confidence_note": "Educational information only, not a medical diagnosis"
   },
+
+  "neutrophils": {
+  "display_name": "Neutrophils",
+  "category": "White Blood Cell Differential",
+  "unit": "%",
+  "function": "Primary immune cells that fight bacterial infections and respond to inflammation",
+  "normal_range": {
+    "male": { "min": 40, "max": 70 },
+    "female": { "min": 40, "max": 70 }
+  },
+  "severity_rules": {
+    "low": { "severity": "Medium" },
+    "high": { "severity": "Medium" }
+  },
+
+  "low": {
+    "causes": [
+      "Viral infections",
+      "Bone marrow suppression",
+      "Vitamin B12 or folate deficiency",
+      "Certain medications (chemotherapy, antibiotics)"
+    ],
+    "impact": [
+      "Weakened immune response",
+      "Increased risk of infections"
+    ],
+    "lifestyle": [
+      "Maintain good personal hygiene",
+      "Ensure adequate rest and sleep",
+      "Consume a balanced diet rich in vitamins"
+    ],
+    "otc_support": {
+      "safe_options": [
+        "Vitamin B12 supplements",
+        "Folate supplements"
+      ],
+      "note": "Over-the-counter supplements may help only in mild deficiency cases."
+    },
+    "prescription_required": {
+      "conditions": [
+        "Severe neutropenia",
+        "Recurrent or serious infections"
+      ],
+      "instruction": "Consult a doctor for further evaluation and treatment."
+    },
+    "trend_hint": "Persistently low neutrophil levels may indicate immune suppression"
+  },
+
+  "high": {
+    "causes": [
+      "Bacterial infections",
+      "Inflammation or tissue injury",
+      "Physical or emotional stress",
+      "Smoking"
+    ],
+    "impact": [
+      "Ongoing infection or inflammation",
+      "Possible immune system overactivity"
+    ],
+    "lifestyle": [
+      "Stay well hydrated",
+      "Avoid smoking",
+      "Follow a healthy, anti-inflammatory diet"
+    ],
+    "medical_attention": "If neutrophil levels remain elevated, medical evaluation is recommended"
+  },
+
+  "when_to_consult": "If abnormal neutrophil levels persist across multiple blood tests",
+  "confidence_note": "This information is for educational purposes only and does not replace professional medical advice"
+},
+
   "rbc_count": {
     "display_name": "Red Blood Cell Count (RBC)",
     "category": "Complete Blood Count",
