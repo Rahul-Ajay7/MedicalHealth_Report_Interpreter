@@ -66,3 +66,25 @@ export async function analyzeReport(
 
   return report;
 }
+
+// src/services/api.ts
+
+export async function askLLMChat(payload: {
+  file_id: string;
+  question: string;
+}) {
+  const res = await fetch("http://localhost:8000/chat/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(err);
+  }
+
+  return res.json(); // { answer: string }
+}

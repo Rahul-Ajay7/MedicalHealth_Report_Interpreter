@@ -1,12 +1,11 @@
 import requests
-from typing import List, Dict
+from typing import Dict, Any, List
 from app.config import (
     LLM_BASE_URL,
     LLM_CHAT_ENDPOINT,
     LLM_MODEL,
     LLM_TIMEOUT
 )
-
 
 SENSITIVE_KEYWORDS = [
     "am i dying",
@@ -24,70 +23,99 @@ class PatientChatLLM:
         self.url = f"{LLM_BASE_URL}{LLM_CHAT_ENDPOINT}"
         self.model = LLM_MODEL
 
+    # ---------------- SAFETY CHECKS ----------------
+
     def _is_sensitive_question(self, question: str) -> bool:
         q = question.lower()
         return any(k in q for k in SENSITIVE_KEYWORDS)
 
-    def _max_severity(self, report_summary: List[Dict]) -> str:
-        priority = {"Normal": 0, "Medium": 1, "High": 2, "Critical": 3}
+    def _derive_severity(self, analysis: Dict[str, Any]) -> str:
+        """
+        Derive overall severity from lab statuses
+        """
+        priority = {
+            "normal": 0,
+            "low": 1,
+            "high": 1,
+            "critical": 2
+        }
+
         max_level = 0
 
-        for r in report_summary:
-            sev = r.get("severity", "Normal")
-            max_level = max(max_level, priority.get(sev, 0))
+        for _, data in analysis.items():
+            status = data.get("status", "normal").lower()
+            max_level = max(max_level, priority.get(status, 0))
 
-        for k, v in priority.items():
-            if v == max_level:
-                return k
-
+        if max_level == 2:
+            return "High"
+        if max_level == 1:
+            return "Medium"
         return "Normal"
+
+    # ---------------- MAIN ENTRY ----------------
 
     def answer_question(
         self,
         question: str,
-        report_summary: List[Dict],
-        explanations: List[str]
+        report_summary: Dict[str, Any],
+        explanations: List[str],
+        recommendations: Dict[str, Any],
+        gender: str | None = None
     ) -> str:
 
-        severity = self._max_severity(report_summary)
+        severity = self._derive_severity(report_summary)
         sensitive = self._is_sensitive_question(question)
 
         # ---------------- SYSTEM PROMPT ----------------
         system_prompt = (
             "You are a medical report assistant.\n"
-            "Answer questions using the provided report context.\n"
-            "Do NOT provide diagnosis, dosage, or treatment plans.\n"
-            "Use calm, simple, and reassuring language.\n"
-            "You may mention medicine names WITHOUT dosage if relevant.\n"
-            "Never predict death, survival, or timelines.\n"
+            "You help patients understand lab reports.\n"
+            "Do NOT provide diagnosis, prescriptions, or dosages.\n"
+            "Do NOT predict death, survival, or timelines.\n"
+            "Use calm, factual, patient-friendly language.\n"
+            "Base answers strictly on the provided data.\n"
         )
 
         # ---------------- HARD GUARDRAILS ----------------
-        if sensitive and severity == "Medium":
+        if sensitive and severity == "Normal":
             system_prompt += (
-                "\nIMPORTANT RULES:\n"
-                "- The report findings are NOT life-threatening.\n"
-                "- Do NOT mention doctors, hospitals, or emergency care.\n"
-                "- Reassure using report facts only.\n"
+                "\nIMPORTANT:\n"
+                "- Findings are within normal or safe ranges.\n"
+                "- Reassure calmly using report values only.\n"
+                "- Do NOT suggest urgent care.\n"
             )
 
-        if sensitive and severity in ["High", "Critical"]:
+        elif sensitive and severity == "Medium":
             system_prompt += (
-                "\nIMPORTANT RULES:\n"
-                "- Some findings are serious.\n"
-                "- You may suggest medical evaluation carefully.\n"
-                "- Do NOT create fear or predict outcomes.\n"
+                "\nIMPORTANT:\n"
+                "- Some values are mildly abnormal.\n"
+                "- Reassure without minimizing.\n"
+                "- Suggest routine medical follow-up only if appropriate.\n"
+            )
+
+        elif sensitive and severity == "High":
+            system_prompt += (
+                "\nIMPORTANT:\n"
+                "- Some findings require medical attention.\n"
+                "- Recommend consulting a doctor carefully.\n"
+                "- Do NOT induce panic or urgency.\n"
             )
 
         # ---------------- USER PROMPT ----------------
         user_prompt = f"""
-Report summary:
+Patient gender:
+{gender}
+
+Lab Analysis:
 {report_summary}
 
-Generated explanations:
+NLP Findings Explanation:
 {explanations}
 
-Patient question:
+Lifestyle & Medical Recommendations:
+{recommendations}
+
+Patient Question:
 {question}
 """
 

@@ -1,38 +1,49 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import List, Dict
 
 from app.services.llm_chat import PatientChatLLM
-
+from app.state.chat_sessions import CHAT_SESSIONS
 
 router = APIRouter(prefix="/chat", tags=["Chat"])
-
 llm = PatientChatLLM()
 
 
+# ----------- Schemas -----------
+
 class ChatRequest(BaseModel):
+    file_id: str
     question: str
-    analyzed_results: List[Dict]
-    medical_data: Dict
 
 
 class ChatResponse(BaseModel):
     answer: str
 
 
+# ----------- Chat Route -----------
+
 @router.post("/", response_model=ChatResponse)
-def chat_with_patient(data: ChatRequest):
-    explanations = []
+async def chat_with_llm(data: ChatRequest):
+    session = CHAT_SESSIONS.get(data.file_id)
 
-    for r in data.analyzed_results:
-        text = generate_nlp_explanation(r, data.medical_data)
-        if text:
-            explanations.append(text)
+    if not session:
+        raise HTTPException(
+            status_code=404,
+            detail="Chat session not found. Please analyze report first."
+        )
 
-    answer = llm.answer_question(
-        question=data.question,
-        report_summary=data.analyzed_results,
-        explanations=explanations
-    )
+    try:
+        answer = llm.answer_question(
+            question=data.question,
+            report_summary=session["analysis"],
+            explanations=session["nlp_explanation"],
+            recommendations=session.get("recommendations", {}),
+            gender=session.get("gender")
+        )
 
-    return {"answer": answer}
+        return ChatResponse(answer=answer)
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"LLM response failed: {str(e)}"
+        )
