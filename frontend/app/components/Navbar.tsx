@@ -15,6 +15,7 @@ export default function Navbar() {
 
   return (
     <nav className="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
+      
       {/* Logo */}
       <h1 className="font-bold text-lg text-blue-600">
         HealthAI
@@ -22,12 +23,16 @@ export default function Navbar() {
 
       {/* Links */}
       <div className="flex gap-3">
-        <Link href="/" className={linkClass("/")}>
+        
+        {/* ✅ FIXED: Home now points to /dashboard */}
+        <Link href="/dashboard" className={linkClass("/dashboard")}>
           Home
         </Link>
+
         <Link href="/history" className={linkClass("/history")}>
           History
         </Link>
+
       </div>
     </nav>
   );

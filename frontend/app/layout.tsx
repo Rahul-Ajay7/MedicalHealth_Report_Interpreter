@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ReportProvider } from "@/context/ReportContext";
-import Navbar from "@/components/Navbar"; 
+import LayoutWrapper from "@/components/LayoutWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,12 +20,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} antialiased text-slate-700`}>
         <ReportProvider>
-          <Navbar />
-
-          {/* Page Content */}
-          <div className="bg-slate-50 min-h-screen">
+          <LayoutWrapper>
             {children}
-          </div>
+          </LayoutWrapper>
         </ReportProvider>
       </body>
     </html>
