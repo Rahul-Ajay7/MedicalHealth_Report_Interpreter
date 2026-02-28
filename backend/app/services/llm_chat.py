@@ -17,42 +17,44 @@ SENSITIVE_KEYWORDS = [
     "will i survive"
 ]
 
+GENERAL_EDU_KEYWORDS = [
+    "what happens if",
+    "what causes",
+    "what is",
+    "can you explain",
+    "difference between",
+    "high",
+    "low"
+]
+
 
 class PatientChatLLM:
     def __init__(self):
         self.url = f"{LLM_BASE_URL}{LLM_CHAT_ENDPOINT}"
         self.model = LLM_MODEL
 
-    # ---------------- SAFETY CHECKS ----------------
+    # ---------------- CLASSIFIERS ----------------
 
     def _is_sensitive_question(self, question: str) -> bool:
         q = question.lower()
         return any(k in q for k in SENSITIVE_KEYWORDS)
 
+    def _is_general_question(self, question: str) -> bool:
+        """
+        Detects educational / counterfactual questions
+        """
+        q = question.lower()
+        return any(k in q for k in GENERAL_EDU_KEYWORDS)
+
     def _derive_severity(self, analysis: Dict[str, Any]) -> str:
-        """
-        Derive overall severity from lab statuses
-        """
-        priority = {
-            "normal": 0,
-            "low": 1,
-            "high": 1,
-            "critical": 2
-        }
+        priority = {"normal": 0, "low": 1, "high": 1, "critical": 2}
+        return (
+            "High" if any(v.get("status") == "critical" for v in analysis.values())
+            else "Medium" if any(v.get("status") in ["low", "high"] for v in analysis.values())
+            else "Normal"
+        )
 
-        max_level = 0
-
-        for _, data in analysis.items():
-            status = data.get("status", "normal").lower()
-            max_level = max(max_level, priority.get(status, 0))
-
-        if max_level == 2:
-            return "High"
-        if max_level == 1:
-            return "Medium"
-        return "Normal"
-
-    # ---------------- MAIN ENTRY ----------------
+    # ---------------- MAIN ----------------
 
     def answer_question(
         self,
@@ -65,57 +67,59 @@ class PatientChatLLM:
 
         severity = self._derive_severity(report_summary)
         sensitive = self._is_sensitive_question(question)
+        general = self._is_general_question(question)
 
         # ---------------- SYSTEM PROMPT ----------------
         system_prompt = (
-            "You are a medical report assistant.\n"
-            "You help patients understand lab reports.\n"
-            "Do NOT provide diagnosis, prescriptions, or dosages.\n"
-            "Do NOT predict death, survival, or timelines.\n"
-            "Use calm, factual, patient-friendly language.\n"
-            "Base answers strictly on the provided data.\n"
+            "You are a medical lab report assistant.\n"
+            "You explain lab parameters in an educational, non-diagnostic way.\n"
+            "You do NOT give diagnoses, prescriptions, or dosages.\n"
+            "You do NOT predict death or timelines.\n"
+            "If the user asks a general medical question, answer generally.\n"
+            "If the question refers to the report, use the report.\n"
+            "Always clarify whether you are speaking generally or about this report.\n"
         )
 
-        # ---------------- HARD GUARDRAILS ----------------
-        if sensitive and severity == "Normal":
+        # ---------------- SAFETY GUARDRAILS ----------------
+        if sensitive:
             system_prompt += (
                 "\nIMPORTANT:\n"
-                "- Findings are within normal or safe ranges.\n"
-                "- Reassure calmly using report values only.\n"
-                "- Do NOT suggest urgent care.\n"
-            )
-
-        elif sensitive and severity == "Medium":
-            system_prompt += (
-                "\nIMPORTANT:\n"
-                "- Some values are mildly abnormal.\n"
-                "- Reassure without minimizing.\n"
-                "- Suggest routine medical follow-up only if appropriate.\n"
-            )
-
-        elif sensitive and severity == "High":
-            system_prompt += (
-                "\nIMPORTANT:\n"
-                "- Some findings require medical attention.\n"
-                "- Recommend consulting a doctor carefully.\n"
-                "- Do NOT induce panic or urgency.\n"
+                "- Use calm reassurance.\n"
+                "- Encourage consulting a doctor if appropriate.\n"
+                "- Do NOT create fear.\n"
             )
 
         # ---------------- USER PROMPT ----------------
-        user_prompt = f"""
+        if general:
+            user_prompt = f"""
+Patient gender:
+{gender}
+
+Relevant lab context (for reference only):
+{report_summary}
+
+Patient question (GENERAL MEDICAL EDUCATION):
+{question}
+
+Answer by:
+- Explaining BOTH high and low levels if relevant
+- Clearly stating this is general information
+"""
+        else:
+            user_prompt = f"""
 Patient gender:
 {gender}
 
 Lab Analysis:
 {report_summary}
 
-NLP Findings Explanation:
+NLP Explanation:
 {explanations}
 
-Lifestyle & Medical Recommendations:
+Recommendations:
 {recommendations}
 
-Patient Question:
+Patient question (ABOUT THIS REPORT):
 {question}
 """
 
@@ -125,14 +129,10 @@ Patient Question:
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}
             ],
-            "temperature": 0.2
+            "temperature": 0.25
         }
 
-        response = requests.post(
-            self.url,
-            json=payload,
-            timeout=LLM_TIMEOUT
-        )
+        response = requests.post(self.url, json=payload, timeout=LLM_TIMEOUT)
         response.raise_for_status()
 
         return response.json()["choices"][0]["message"]["content"]
