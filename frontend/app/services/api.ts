@@ -67,13 +67,21 @@ export async function analyzeReport(
   return report;
 }
 
-// src/services/api.ts
+/* ---------------- CHAT ---------------- */
+
+// Matches the updated ChatResponse from chat_route.py
+export type ChatResponse = {
+  answer:        string;   // full answer + disclaimer appended
+  flagged:       boolean;  // true for emergency / sensitive / blocked
+  question_type: string;   // "emergency" | "sensitive" | "blocked" | "what_if" | "report_based"
+  response_time: number;   // seconds the LLM took to respond
+};
 
 export async function askLLMChat(payload: {
   file_id: string;
   question: string;
-}) {
-  const res = await fetch("http://localhost:8000/chat/", {
+}): Promise<ChatResponse> {
+  const res = await fetch(`${API_BASE}/chat/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -86,5 +94,5 @@ export async function askLLMChat(payload: {
     throw new Error(err);
   }
 
-  return res.json(); // { answer: string }
+  return res.json();
 }

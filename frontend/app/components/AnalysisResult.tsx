@@ -7,13 +7,14 @@ export default function AnalysisResult() {
   const { report } = useReport();
   const parameters: ReportParameterWithName[] = report?.parameters || [];
 
-  const normalCount = parameters.filter((p) => p.status === "normal").length;
+  const normalCount   = parameters.filter((p) => p.status === "normal").length;
   const abnormalCount = parameters.filter((p) => p.status !== "normal").length;
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col h-full">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col h-[520px]">
+
+      {/* ── Header: fixed height, never scrolls ── */}
+      <div className="flex items-center justify-between mb-4 flex-shrink-0">
         <div>
           <h3 className="text-base font-semibold text-slate-800">Extracted Parameters</h3>
           {parameters.length > 0 && (
@@ -34,10 +35,10 @@ export default function AnalysisResult() {
         )}
       </div>
 
-      {/* Content */}
+      {/* ── Scrollable area: takes remaining height ── */}
       <div className="flex-1 overflow-y-auto min-h-0">
         {!report && (
-          <div className="flex flex-col items-center justify-center h-40 gap-3">
+          <div className="flex flex-col items-center justify-center h-full gap-3">
             <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center">
               <Activity size={22} className="text-slate-400" />
             </div>
@@ -49,7 +50,8 @@ export default function AnalysisResult() {
 
         {parameters.length > 0 && (
           <table className="w-full text-sm">
-            <thead>
+            {/* Sticky header stays visible while scrolling */}
+            <thead className="sticky top-0 bg-white z-10">
               <tr className="text-xs uppercase tracking-wide text-slate-400 border-b border-slate-100">
                 <th className="text-left pb-3 font-medium">Parameter</th>
                 <th className="pb-3 text-center font-medium">Value</th>
@@ -64,13 +66,11 @@ export default function AnalysisResult() {
                   <td className="py-3 text-center text-slate-600">{p.value}</td>
                   <td className="py-3 text-center text-slate-400 text-xs">{p.unit}</td>
                   <td className="py-3 text-center">
-                    <span
-                      className={`inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full ${
-                        p.status === "normal"
-                          ? "bg-green-50 text-green-700"
-                          : "bg-red-50 text-red-600"
-                      }`}
-                    >
+                    <span className={`inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full ${
+                      p.status === "normal"
+                        ? "bg-green-50 text-green-700"
+                        : "bg-red-50 text-red-600"
+                    }`}>
                       {p.status === "normal" ? "Normal" : "Abnormal"}
                     </span>
                   </td>
