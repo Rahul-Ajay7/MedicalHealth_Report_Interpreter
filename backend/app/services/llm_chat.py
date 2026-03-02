@@ -270,22 +270,16 @@ class PatientChatLLM:
         gender: Optional[str],
     ) -> str:
         return (
-            f"Patient question (general educational question about a lab value):\n"
+            f"Patient question (GENERAL EDUCATIONAL question):\n"
             f"{question}\n\n"
             "CRITICAL INSTRUCTIONS:\n"
-            "- Answer in 3-4 sentences MAXIMUM. Be concise.\n"
-            "- COMPLETELY IGNORE the patient's actual report values below.\n"
-            "- Do NOT mention any lab value the patient did not ask about.\n"
-            "- Do NOT bring up neutrophils, RBC, WBC, or anything else unless specifically asked.\n"
-            "- Answer EXACTLY what was asked:\n"
-            "    If asked about HIGH platelet count → explain HIGH only.\n"
-            "    If asked about LOW haemoglobin → explain LOW only.\n"
-            "    Never mention the opposite or redirect.\n"
-            "- Give simple info: what it means, 2-3 common causes maximum.\n"
-            "- No supplement names, no dosages.\n"
-            "- End with one short sentence: 'Please discuss this with your doctor.'\n\n"
-            f"Background (IGNORE completely — do not use in answer):\n"
-            f"{report_summary}"
+            "- This is GENERAL EDUCATION, not medical advice.\n"
+            "- Answer in 3–4 sentences maximum.\n"
+            "- Explain only what was asked.\n"
+            "- NO diagnosis, NO treatment, NO supplements.\n"
+            "- DO NOT suggest consulting a doctor.\n"
+            "- Use simple, neutral language.\n\n"
+            f"Background (IGNORE):\n{report_summary}"
         )
 
     def _build_report_prompt(
@@ -296,17 +290,15 @@ class PatientChatLLM:
         recommendations: Dict[str, Any],
     ) -> str:
         return (
-            f"Patient question about their specific report:\n{question}\n\n"
+            f"Patient question about their report:\n{question}\n\n"
             f"Lab Analysis:\n{report_summary}\n\n"
             f"NLP Explanations:\n{chr(10).join(explanations)}\n\n"
-            f"Recommendations:\n{recommendations}\n\n"
-            "CRITICAL INSTRUCTIONS:\n"
-            "- Answer in 3-4 sentences MAXIMUM. Be concise and direct.\n"
-            "- Answer ONLY the specific question asked — nothing more.\n"
-            "- Do NOT volunteer information about lab values they did not ask about.\n"
-            "- Keep tone calm, simple, and non-alarmist.\n"
-            "- No dosages ever.\n"
-            "- End with one short sentence reminding them to consult their doctor."
+            "INSTRUCTIONS:\n"
+            "- Answer in 3–4 sentences.\n"
+            "- Be calm and factual.\n"
+            "- Explain only what was asked.\n"
+            "- Do NOT suggest consulting a doctor unless clearly serious or urgent.\n"
+            "- NO dosages or treatment advice."
         )
 
     # ─────────────────────────────────────────────────────────────────────────
