@@ -41,6 +41,7 @@ def get_gender_range(ref_range, gender):
 
 
 # -------- MAIN ANALYSER ----------
+# -------- MAIN ANALYSER ----------
 def analyze_parameters(parsed_values: Dict[str, Dict[str, Any]], gender="male") -> Dict[str, Any]:
 
     final_results = {}
@@ -52,7 +53,6 @@ def analyze_parameters(parsed_values: Dict[str, Dict[str, Any]], gender="male") 
         unit = data.get("unit", "")
 
         ref_data = NORMAL_RANGES.get(param_key)
-
         if not ref_data:
             continue
 
@@ -64,6 +64,9 @@ def analyze_parameters(parsed_values: Dict[str, Dict[str, Any]], gender="male") 
         normal_range = get_gender_range(ref_range, gender)
 
         status = get_status(value, normal_range)
+
+        # 🔥 FORCE NORMALIZATION HERE
+        status = str(status).lower().strip()
 
         final_results[param_key] = {
             "value": value,

@@ -1,6 +1,6 @@
 # app/services/nlp.py
 
-from typing import Dict
+from typing import Dict, List
 
 
 def generate_explanation(
@@ -14,7 +14,7 @@ def generate_explanation(
     for abnormal lab values.
     """
 
-    status = analysis_result.get("status")
+    status = str(analysis_result.get("status", "")).lower()
     if status == "normal":
         return ""
 
@@ -49,3 +49,34 @@ def generate_explanation(
         )
 
     return " ".join(parts)
+
+
+def generate_nlp_explanations(
+    analysis_results: Dict,
+    medical_data: Dict
+) -> List[str]:
+    """
+    Adapter that converts analyzer output
+    into per-parameter NLP explanations.
+    """
+
+    explanations = []
+
+    for param_key, data in analysis_results.items():
+
+        analysis_result = {
+            "param_key": param_key,
+            "value": data.get("value"),
+            "unit": data.get("unit"),
+            "status": data.get("status"),
+        }
+
+        explanation = generate_explanation(
+            analysis_result=analysis_result,
+            medical_data=medical_data
+        )
+
+        if explanation:
+            explanations.append(explanation)
+
+    return explanations
