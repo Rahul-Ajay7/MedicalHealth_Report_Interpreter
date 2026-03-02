@@ -6,7 +6,11 @@ import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, Activity, Loader2, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-interface User { username: string; password: string; }
+interface User {
+  username: string;
+  email: string;
+  password: string;
+}
 
 function PasswordStrength({ password }: { password: string }) {
   if (!password) return null;
@@ -23,7 +27,7 @@ function PasswordStrength({ password }: { password: string }) {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-1.5 pt-0.5">
       <div className="flex gap-1">
-        {[1,2,3,4].map((i) => (
+        {[1, 2, 3, 4].map((i) => (
           <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= score ? cfg.bar : "bg-slate-200"}`} />
         ))}
       </div>
@@ -33,25 +37,30 @@ function PasswordStrength({ password }: { password: string }) {
 }
 
 export default function Signup() {
-  const [username, setUsername]         = useState('');
-  const [password, setPassword]         = useState('');
-  const [confirm,  setConfirm]          = useState('');
+  const [username,     setUsername]     = useState('');
+  const [email,        setEmail]        = useState('');
+  const [password,     setPassword]     = useState('');
+  const [confirm,      setConfirm]      = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm,  setShowConfirm]  = useState(false);
-  const [error,  setError]              = useState('');
-  const [loading, setLoading]           = useState(false);
+  const [error,        setError]        = useState('');
+  const [loading,      setLoading]      = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
-    if (password.length < 6)  return setError("Password must be at least 6 characters.");
-    if (password !== confirm)  return setError("Passwords do not match.");
+
+    if (password.length < 6) return setError("Password must be at least 6 characters.");
+    if (password !== confirm) return setError("Passwords do not match.");
+
     const users: User[] = JSON.parse(localStorage.getItem("users") || "[]");
     if (users.find((u) => u.username === username)) return setError("Username already taken.");
+    if (users.find((u) => u.email === email))       return setError("Email already registered.");
+
     setLoading(true);
     await new Promise((r) => setTimeout(r, 700));
-    users.push({ username, password });
+    users.push({ username, email, password });
     localStorage.setItem("users", JSON.stringify(users));
     router.push("/login");
   };
@@ -64,7 +73,6 @@ export default function Signup() {
 
       {/* ══ DARK LEFT PANEL ══ */}
       <div className="hidden lg:block absolute inset-y-0 left-0 w-[58%] bg-[#0B1F1A] z-0 overflow-hidden">
-
         <div className="absolute -top-20 -left-20 w-[420px] h-[420px] rounded-full border border-teal-500/10" />
         <div className="absolute -top-8  -left-8  w-[280px] h-[280px] rounded-full border border-teal-500/15" />
         <div className="absolute bottom-[-80px] left-[30%] w-[360px] h-[360px] rounded-full border border-teal-400/8" />
@@ -73,7 +81,6 @@ export default function Signup() {
         <div className="absolute bottom-[15%] left-[5%]  w-48 h-48 rounded-full bg-teal-400/8  blur-[60px]" />
 
         <div className="relative z-10 h-full flex flex-col justify-between px-14 py-12 pr-28">
-
           {/* Logo */}
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-teal-500 flex items-center justify-center shadow-lg shadow-teal-500/30">
@@ -98,7 +105,6 @@ export default function Signup() {
               </p>
             </div>
 
-            {/* Perk list */}
             <div className="space-y-3.5">
               {[
                 "Instant CBC & metabolic panel analysis",
@@ -130,7 +136,7 @@ export default function Signup() {
       />
 
       {/* ══ FORM ══ */}
-      <div className="relative z-20 flex flex-1 items-center justify-end pr-10 lg:pr-16 xl:pr-24">
+      <div className="relative z-20 flex flex-1 items-center justify-end pr-10 lg:pr-16 xl:pr-24 py-10">
         <motion.div
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
@@ -165,6 +171,19 @@ export default function Signup() {
               />
             </div>
 
+            {/* Email */}
+            <div className="space-y-1.5">
+              <label className="text-sm font-semibold text-slate-700">Email</label>
+              <Input
+                type="email"
+                placeholder="Enter Email ID"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="h-12 bg-white border-slate-200 text-slate-800 placeholder:text-slate-400 rounded-xl focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 shadow-sm transition-all"
+              />
+            </div>
+
             {/* Password */}
             <div className="space-y-1.5">
               <label className="text-sm font-semibold text-slate-700">Password</label>
@@ -185,7 +204,7 @@ export default function Signup() {
               <PasswordStrength password={password} />
             </div>
 
-            {/* Confirm */}
+            {/* Confirm Password */}
             <div className="space-y-1.5">
               <label className="text-sm font-semibold text-slate-700">Confirm Password</label>
               <div className="relative">
@@ -208,7 +227,9 @@ export default function Signup() {
                 <AnimatePresence>
                   {confirmMatch && (
                     <motion.div
-                      initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0, opacity: 0 }}
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0, opacity: 0 }}
                       className="absolute right-10 top-1/2 -translate-y-1/2"
                     >
                       <CheckCircle2 size={15} className="text-teal-500" />
@@ -222,7 +243,9 @@ export default function Signup() {
             <AnimatePresence>
               {error && (
                 <motion.div
-                  initial={{ opacity: 0, y: -6, height: 0 }} animate={{ opacity: 1, y: 0, height: "auto" }} exit={{ opacity: 0, height: 0 }}
+                  initial={{ opacity: 0, y: -6, height: 0 }}
+                  animate={{ opacity: 1, y: 0, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
                   className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-600 text-xs font-medium px-3.5 py-2.5 rounded-xl overflow-hidden"
                 >
                   <div className="w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
