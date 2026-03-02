@@ -361,6 +361,415 @@
   "when_to_consult": "If abnormal levels persist across multiple tests or symptoms like excessive thirst and urination appear",
   "confidence_note": "Educational information only, not a medical diagnosis"
 },
+"hematocrit": {
+  "display_name": "Hematocrit (HCT)",
+  "category": "Complete Blood Count",
+  "unit": "%",
+  "function": "Percentage of blood volume composed of red blood cells",
+  "normal_range": {
+    "male": { "min": 40, "max": 50 },
+    "female": { "min": 36, "max": 44 }
+  },
+  "severity_rules": {
+    "low": { "severity": "Medium" },
+    "high": { "severity": "Medium" }
+  },
+  "low": {
+    "causes": [
+      "Anemia",
+      "Blood loss",
+      "Nutritional deficiencies",
+      "Chronic kidney disease"
+    ],
+    "impact": [
+      "Reduced oxygen-carrying capacity",
+      "Fatigue",
+      "Shortness of breath"
+    ],
+    "lifestyle": [
+      "Iron-rich diet if deficient",
+      "Balanced nutrition"
+    ],
+    "trend_hint": "Declining hematocrit suggests worsening anemia"
+  },
+  "high": {
+    "causes": [
+      "Dehydration",
+      "Polycythemia",
+      "Chronic hypoxia",
+      "Smoking"
+    ],
+    "impact": [
+      "Increased blood viscosity",
+      "Higher clot risk"
+    ],
+    "lifestyle": [
+      "Adequate hydration",
+      "Smoking cessation"
+    ],
+    "trend_hint": "Persistently high levels may indicate polycythemia"
+  },
+  "prescription_required": {
+    "conditions": [
+      "Severe anemia",
+      "Suspected polycythemia"
+    ],
+    "instruction": "Medical evaluation required for persistent abnormalities."
+  },
+  "when_to_consult": "If symptomatic or persistent abnormal values occur",
+  "confidence_note": "Educational information only, not a medical diagnosis"
+},
+"mcv": {
+  "display_name": "Mean Corpuscular Volume (MCV)",
+  "category": "Complete Blood Count",
+  "unit": "fL",
+  "function": "Measures average size of red blood cells",
+  "normal_range": { "min": 80, "max": 100 },
+  "severity_rules": {
+    "low": { "severity": "Low" },
+    "high": { "severity": "Low" }
+  },
+  "low": {
+    "causes": [
+      "Iron deficiency anemia",
+      "Thalassemia"
+    ],
+    "impact": [
+      "Microcytic anemia"
+    ],
+    "lifestyle": [
+      "Increase iron intake if deficient"
+    ],
+    "trend_hint": "Low MCV suggests microcytic anemia"
+  },
+  "high": {
+    "causes": [
+      "Vitamin B12 deficiency",
+      "Folate deficiency",
+      "Alcohol use",
+      "Liver disease"
+    ],
+    "impact": [
+      "Macrocytic anemia"
+    ],
+    "lifestyle": [
+      "Balanced diet with B12 and folate"
+    ],
+    "trend_hint": "High MCV suggests macrocytic anemia"
+  },
+  "when_to_consult": "If anemia symptoms or persistent abnormal MCV occur",
+  "confidence_note": "Educational information only, not a medical diagnosis"
+},
+"mch": {
+  "display_name": "Mean Corpuscular Hemoglobin (MCH)",
+  "category": "Complete Blood Count",
+  "unit": "pg",
+  "function": "Measures average amount of hemoglobin per red blood cell",
+  "normal_range": { "min": 27, "max": 33 },
+  "severity_rules": {
+    "low": { "severity": "Low" },
+    "high": { "severity": "Low" }
+  },
+  "low": {
+    "causes": [
+      "Iron deficiency anemia"
+    ],
+    "impact": [
+      "Hypochromic anemia"
+    ],
+    "trend_hint": "Low MCH often parallels low MCV"
+  },
+  "high": {
+    "causes": [
+      "Macrocytic anemia"
+    ],
+    "impact": [
+      "Large red cells with increased hemoglobin content"
+    ],
+    "trend_hint": "High MCH usually seen with high MCV"
+  },
+  "when_to_consult": "If anemia suspected",
+  "confidence_note": "Educational information only, not a medical diagnosis"
+},
+"mchc": {
+  "display_name": "Mean Corpuscular Hemoglobin Concentration (MCHC)",
+  "category": "Complete Blood Count",
+  "unit": "g/dL",
+  "function": "Measures average concentration of hemoglobin in red blood cells",
+  "normal_range": { "min": 32, "max": 36 },
+  "severity_rules": {
+    "low": { "severity": "Low" },
+    "high": { "severity": "Low" }
+  },
+  "low": {
+    "causes": [
+      "Iron deficiency anemia"
+    ],
+    "impact": [
+      "Pale red blood cells"
+    ],
+    "trend_hint": "Low MCHC suggests hypochromia"
+  },
+  "high": {
+    "causes": [
+      "Hereditary spherocytosis",
+      "Hemolysis"
+    ],
+    "impact": [
+      "Increased hemoglobin concentration in RBCs"
+    ],
+    "trend_hint": "High MCHC may indicate hemolytic disorder"
+  },
+  "when_to_consult": "If persistent abnormal results",
+  "confidence_note": "Educational information only, not a medical diagnosis"
+},
+"neutrophils": {
+  "display_name": "Neutrophils",
+  "category": "Complete Blood Count",
+  "unit": "%",
+  "function": "White blood cells responsible for fighting bacterial infections",
+  "normal_range": { "min": 40, "max": 70 },
+  "severity_rules": {
+    "low": { "severity": "Medium" },
+    "high": { "severity": "Medium" }
+  },
+  "low": {
+    "causes": [
+      "Viral infection",
+      "Bone marrow suppression",
+      "Chemotherapy"
+    ],
+    "impact": [
+      "Increased infection risk"
+    ],
+    "trend_hint": "Severe neutropenia increases infection risk"
+  },
+  "high": {
+    "causes": [
+      "Bacterial infection",
+      "Inflammation",
+      "Stress response"
+    ],
+    "impact": [
+      "Acute infection indicator"
+    ],
+    "trend_hint": "High neutrophils suggest bacterial process"
+  },
+  "when_to_consult": "If fever or recurrent infections occur",
+  "confidence_note": "Educational information only, not a medical diagnosis"
+},
+"lymphocytes": {
+  "display_name": "Lymphocytes",
+  "category": "Complete Blood Count",
+  "unit": "%",
+  "function": "White blood cells responsible for adaptive immune response and viral defense",
+  "normal_range": { "min": 20, "max": 40 },
+  "severity_rules": {
+    "low": { "severity": "Medium" },
+    "high": { "severity": "Medium" }
+  },
+  "low": {
+    "causes": [
+      "Acute infection",
+      "Immunodeficiency",
+      "Steroid therapy",
+      "Bone marrow suppression"
+    ],
+    "impact": [
+      "Reduced immune defense",
+      "Increased infection susceptibility"
+    ],
+    "trend_hint": "Persistently low lymphocytes may indicate immune suppression"
+  },
+  "high": {
+    "causes": [
+      "Viral infection",
+      "Chronic inflammation",
+      "Lymphoproliferative disorders"
+    ],
+    "impact": [
+      "Active immune response",
+      "Possible chronic infection or hematologic disorder"
+    ],
+    "trend_hint": "Marked elevation warrants further evaluation"
+  },
+  "when_to_consult": "If recurrent infections or persistent abnormal counts occur",
+  "confidence_note": "Educational information only, not a medical diagnosis"
+},
+"monocytes": {
+  "display_name": "Monocytes",
+  "category": "Complete Blood Count",
+  "unit": "%",
+  "function": "White blood cells involved in chronic inflammation and tissue repair",
+  "normal_range": { "min": 2, "max": 8 },
+  "severity_rules": {
+    "low": { "severity": "Low" },
+    "high": { "severity": "Low" }
+  },
+  "low": {
+    "causes": [
+      "Bone marrow suppression",
+      "Acute stress"
+    ],
+    "impact": [
+      "Usually clinically insignificant"
+    ],
+    "trend_hint": "Isolated low monocytes rarely significant"
+  },
+  "high": {
+    "causes": [
+      "Chronic infection",
+      "Autoimmune disease",
+      "Recovery phase of infection"
+    ],
+    "impact": [
+      "Chronic inflammatory response"
+    ],
+    "trend_hint": "Persistent monocytosis may require evaluation"
+  },
+  "when_to_consult": "If persistent elevation with symptoms",
+  "confidence_note": "Educational information only, not a medical diagnosis"
+},
+"eosinophils": {
+  "display_name": "Eosinophils",
+  "category": "Complete Blood Count",
+  "unit": "%",
+  "function": "White blood cells involved in allergic reactions and parasitic infections",
+  "normal_range": { "min": 1, "max": 6 },
+  "severity_rules": {
+    "low": { "severity": "Low" },
+    "high": { "severity": "Medium" }
+  },
+  "low": {
+    "causes": [
+      "Stress response",
+      "Steroid therapy"
+    ],
+    "impact": [
+      "Usually clinically insignificant"
+    ],
+    "trend_hint": "Low eosinophils rarely require action"
+  },
+  "high": {
+    "causes": [
+      "Allergic disorders",
+      "Asthma",
+      "Parasitic infection",
+      "Drug reactions"
+    ],
+    "impact": [
+      "Allergic inflammation",
+      "Tissue damage if markedly elevated"
+    ],
+    "trend_hint": "Persistent eosinophilia warrants evaluation"
+  },
+  "when_to_consult": "If associated with allergy symptoms or unexplained elevation",
+  "confidence_note": "Educational information only, not a medical diagnosis"
+},
+"basophils": {
+  "display_name": "Basophils",
+  "category": "Complete Blood Count",
+  "unit": "%",
+  "function": "White blood cells involved in inflammatory and allergic responses",
+  "normal_range": { "min": 0, "max": 1 },
+  "severity_rules": {
+    "low": { "severity": "Low" },
+    "high": { "severity": "Low" }
+  },
+  "low": {
+    "causes": [
+      "Acute infection",
+      "Stress response"
+    ],
+    "impact": [
+      "Usually clinically insignificant"
+    ],
+    "trend_hint": "Low basophils rarely clinically meaningful"
+  },
+  "high": {
+    "causes": [
+      "Chronic inflammation",
+      "Allergic disorders",
+      "Myeloproliferative disorders"
+    ],
+    "impact": [
+      "Allergic or chronic inflammatory state"
+    ],
+    "trend_hint": "Persistent basophilia requires evaluation"
+  },
+  "when_to_consult": "If persistent elevation or abnormal CBC findings",
+  "confidence_note": "Educational information only, not a medical diagnosis"
+},
+"rdw": {
+  "display_name": "Red Cell Distribution Width (RDW)",
+  "category": "Complete Blood Count",
+  "unit": "%",
+  "function": "Measures variation in red blood cell size (anisocytosis)",
+  "normal_range": { "min": 11.5, "max": 14.5 },
+  "severity_rules": {
+    "low": { "severity": "Low" },
+    "high": { "severity": "Medium" }
+  },
+  "low": {
+    "causes": [
+      "Usually not clinically significant"
+    ],
+    "impact": [
+      "Minimal diagnostic relevance"
+    ],
+    "trend_hint": "Low RDW rarely concerning"
+  },
+  "high": {
+    "causes": [
+      "Iron deficiency anemia",
+      "Vitamin B12 deficiency",
+      "Folate deficiency",
+      "Mixed anemia"
+    ],
+    "impact": [
+      "Significant size variability of RBCs"
+    ],
+    "trend_hint": "High RDW with abnormal MCV helps classify anemia"
+  },
+  "when_to_consult": "If anemia suspected or persistent abnormal values occur",
+  "confidence_note": "Educational information only, not a medical diagnosis"
+},
+"mpv": {
+  "display_name": "Mean Platelet Volume (MPV)",
+  "category": "Complete Blood Count",
+  "unit": "fL",
+  "function": "Measures average size of platelets",
+  "normal_range": { "min": 7.5, "max": 12 },
+  "severity_rules": {
+    "low": { "severity": "Low" },
+    "high": { "severity": "Medium" }
+  },
+  "low": {
+    "causes": [
+      "Bone marrow suppression",
+      "Chronic disease"
+    ],
+    "impact": [
+      "Reduced platelet production"
+    ],
+    "trend_hint": "Low MPV may indicate decreased marrow activity"
+  },
+  "high": {
+    "causes": [
+      "Increased platelet turnover",
+      "Inflammation",
+      "Cardiovascular risk"
+    ],
+    "impact": [
+      "Larger, more reactive platelets",
+      "Potential clotting tendency"
+    ],
+    "trend_hint": "High MPV may correlate with inflammatory or thrombotic risk"
+  },
+  "when_to_consult": "If persistent abnormal platelet indices or bleeding/clotting symptoms occur",
+  "confidence_note": "Educational information only, not a medical diagnosis"
+},
+
 "hba1c": {
   "display_name": "Hemoglobin A1c",
   "category": "Blood Sugar",
