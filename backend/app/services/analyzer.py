@@ -1,6 +1,5 @@
 from typing import Dict, Any
-from app.utils.normal_ranges import NORMAL_RANGES   # 🔥 import from here
-
+from app.utils.normal_ranges import NORMAL_RANGES   
 
 # -------- STATUS CHECK ----------
 def get_status(value, normal_range):

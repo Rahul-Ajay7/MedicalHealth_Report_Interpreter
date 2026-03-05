@@ -15,41 +15,37 @@ export type ParameterStatus =
 
 /* ---------------- ANALYZER OUTPUT ---------------- */
 export interface ReportParameter {
-  value: number | string;
-  unit: string;
-  status: ParameterStatus;
+  value:        number | string;
+  unit:         string;
+  status:       ParameterStatus;
   normal_range: NormalRange | null;
 }
 
 export type AnalysisResults = Record<string, ReportParameter>;
 
 /* ---------------- NLP OUTPUT ---------------- */
-/**
- * Each string is a generated explanation
- * for an abnormal parameter.
- */
 export type NLPExplanation = string[];
 
 /* ---------------- RECOMMENDATIONS ---------------- */
 export interface LifestyleTip {
   parameter: string;
-  status: "low" | "high";
-  tips: string[];
+  status:    "low" | "high";
+  tips:      string[];
 }
 
 export interface NonPrescriptionSupport {
   parameter: string;
-  options: string[];
+  options:   string[];
 }
 
 export interface DoctorConsultation {
-  parameter: string;
+  parameter:    string;
   instruction?: string;
 }
 
 export interface Recommendations {
-  lifestyle_tips: LifestyleTip[];
-  non_prescription: NonPrescriptionSupport[];
+  lifestyle_tips:      LifestyleTip[];
+  non_prescription:    NonPrescriptionSupport[];
   doctor_consultation: DoctorConsultation[];
 }
 
@@ -60,7 +56,9 @@ export interface ReportParameterWithName extends ReportParameter {
 
 /* ---------------- FULL REPORT RESPONSE ---------------- */
 export interface ReportResponse {
-  file_id: string;
+  file_id:   string;
+  report_id: string;          // ✅ added — Supabase report UUID
+
   gender: "male" | "female";
 
   /** Raw analyzer output */
@@ -74,4 +72,7 @@ export interface ReportResponse {
 
   /** Flattened parameters for UI table */
   parameters: ReportParameterWithName[];
+
+  /** Overall severity from analysis */
+  severity: "Normal" | "Medium" | "High";  // ✅ added
 }

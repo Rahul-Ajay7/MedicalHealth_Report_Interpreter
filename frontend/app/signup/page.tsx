@@ -5,12 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, Activity, Loader2, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-
-interface User {
-  username: string;
-  email: string;
-  password: string;
-}
+import { supabase } from "../lib/superbaseClient";
 
 function PasswordStrength({ password }: { password: string }) {
   if (!password) return null;
@@ -39,6 +34,7 @@ function PasswordStrength({ password }: { password: string }) {
 export default function Signup() {
   const [username,     setUsername]     = useState('');
   const [email,        setEmail]        = useState('');
+  const [gender,       setGender]       = useState<'male' | 'female' | ''>('');
   const [password,     setPassword]     = useState('');
   const [confirm,      setConfirm]      = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -54,14 +50,30 @@ export default function Signup() {
     if (password.length < 6) return setError("Password must be at least 6 characters.");
     if (password !== confirm) return setError("Passwords do not match.");
 
-    const users: User[] = JSON.parse(localStorage.getItem("users") || "[]");
-    if (users.find((u) => u.username === username)) return setError("Username already taken.");
-    if (users.find((u) => u.email === email))       return setError("Email already registered.");
-
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 700));
-    users.push({ username, email, password });
-    localStorage.setItem("users", JSON.stringify(users));
+
+    // ✅ Supabase Auth signup
+    // - Creates row in auth.users (password hashed by Supabase)
+    // - username + gender go into raw_user_meta_data
+    // - DB trigger auto-creates profiles row from metadata
+    const { error: signUpError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          username,
+          gender: gender || null,
+        },
+      },
+    });
+
+    if (signUpError) {
+      setError(signUpError.message);
+      setLoading(false);
+      return;
+    }
+
+    // Profile is auto-created by the DB trigger on_auth_user_created
     router.push("/login");
   };
 
@@ -110,7 +122,7 @@ export default function Signup() {
                 "Instant CBC & metabolic panel analysis",
                 "Plain-language health explanations",
                 "Lifestyle & supplement recommendations",
-                "100% private — data stays on your device",
+                "100% private — secured by Supabase Auth",
               ].map((perk) => (
                 <div key={perk} className="flex items-center gap-3">
                   <div className="w-6 h-6 rounded-full bg-teal-500/15 border border-teal-500/20 flex items-center justify-center flex-shrink-0">
@@ -182,6 +194,27 @@ export default function Signup() {
                 required
                 className="h-12 bg-white border-slate-200 text-slate-800 placeholder:text-slate-400 rounded-xl focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 shadow-sm transition-all"
               />
+            </div>
+
+            {/* Gender */}
+            <div className="space-y-1.5">
+              <label className="text-sm font-semibold text-slate-700">Gender</label>
+              <div className="flex gap-3">
+                {(['male', 'female'] as const).map((g) => (
+                  <button
+                    key={g}
+                    type="button"
+                    onClick={() => setGender(g)}
+                    className={`flex-1 h-12 rounded-xl border font-semibold text-sm capitalize transition-all ${
+                      gender === g
+                        ? 'bg-teal-50 border-teal-500 text-teal-700 ring-2 ring-teal-500/20'
+                        : 'bg-white border-slate-200 text-slate-500 hover:border-teal-300'
+                    }`}
+                  >
+                    {g}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Password */}

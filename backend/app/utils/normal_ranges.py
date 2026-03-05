@@ -51,7 +51,7 @@ NORMAL_RANGES = {
     },
     "neutrophils": {
         "unit": "%",
-        "normal_range": {"min": 40, "max": 70}
+        "normal_range": {"min": 40, "max": 80}
     },
 
     "lymphocytes": {

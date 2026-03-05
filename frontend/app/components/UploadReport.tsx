@@ -2,29 +2,39 @@
 
 import { useState } from "react";
 import { Loader2, Plus, FileText, UploadCloud, CheckCircle2 } from "lucide-react";
-import { uploadReport, analyzeReport } from "@/services/api";
+import { uploadReport, analyzeReport } from "@/services/api";  // ✅ JWT handled inside api.ts
 import { useReport } from "@/context/ReportContext";
 
 export default function UploadReport() {
-  const [file, setFile] = useState<File | null>(null);
-  const [gender, setGender] = useState<"male" | "female">("male");
-  const [loading, setLoading] = useState(false);
+  const [file,     setFile]     = useState<File | null>(null);
+  const [gender,   setGender]   = useState<"male" | "female">("male");
+  const [loading,  setLoading]  = useState(false);
   const [analyzed, setAnalyzed] = useState(false);
   const [dragOver, setDragOver] = useState(false);
+  const [error,    setError]    = useState<string | null>(null);
 
   const { setReport } = useReport();
 
   const handleAnalyze = async () => {
     if (!file || loading) return;
+    setError(null);
+
     try {
       setLoading(true);
-      const uploadRes = await uploadReport(file);
-      const analyzeRes = await analyzeReport(uploadRes.file_id, gender);
-      setReport(analyzeRes);
+
+      // ── 1. Upload → JWT handled inside api.ts ──────────────────────
+      const uploadData = await uploadReport(file);
+
+      // ── 2. Analyze → JWT handled inside api.ts ─────────────────────
+      const analyzeData = await analyzeReport(uploadData.report_id, gender);
+
+      // ── 3. Push to context (updates AnalysisResult, LifestyleTips etc)
+      setReport(analyzeData);
       setAnalyzed(true);
-    } catch (err) {
+
+    } catch (err: any) {
       console.error("Analyze error:", err);
-      alert("Analysis failed. Please check backend logs.");
+      setError(err.message || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -33,6 +43,7 @@ export default function UploadReport() {
   const resetUpload = () => {
     setFile(null);
     setAnalyzed(false);
+    setError(null);
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -42,7 +53,6 @@ export default function UploadReport() {
     if (dropped) setFile(dropped);
   };
 
-  /* ---- COLLAPSED ---- */
   if (analyzed) {
     return (
       <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col items-center justify-center gap-3 min-h-[180px]">
@@ -50,17 +60,14 @@ export default function UploadReport() {
           <CheckCircle2 size={24} className="text-green-500" />
         </div>
         <p className="text-sm font-medium text-slate-700">Report Analyzed</p>
-        <button
-          onClick={resetUpload}
-          className="mt-1 flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 font-medium transition"
-        >
+        <button onClick={resetUpload}
+          className="mt-1 flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 font-medium transition">
           <Plus size={16} /> Upload Another
         </button>
       </div>
     );
   }
 
-  /* ---- FULL CARD ---- */
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col gap-5">
       <div>
@@ -68,46 +75,33 @@ export default function UploadReport() {
         <p className="text-xs text-slate-400 mt-0.5">PDF, JPG or PNG · Max 10MB</p>
       </div>
 
-      {/* Gender Toggle */}
       <div>
         <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">Patient Gender</p>
         <div className="grid grid-cols-2 gap-2">
-          <button
-            onClick={() => setGender("male")}
+          <button onClick={() => setGender("male")}
             className={`py-2.5 rounded-xl text-sm font-medium border transition-all ${
               gender === "male"
                 ? "bg-blue-600 text-white border-blue-600 shadow-sm"
                 : "bg-slate-50 text-slate-600 border-slate-200 hover:border-blue-300"
-            }`}
-          >
-            ♂ Male
-          </button>
-          <button
-            onClick={() => setGender("female")}
+            }`}>♂ Male</button>
+          <button onClick={() => setGender("female")}
             className={`py-2.5 rounded-xl text-sm font-medium border transition-all ${
               gender === "female"
                 ? "bg-pink-500 text-white border-pink-500 shadow-sm"
                 : "bg-slate-50 text-slate-600 border-slate-200 hover:border-pink-300"
-            }`}
-          >
-            ♀ Female
-          </button>
+            }`}>♀ Female</button>
         </div>
       </div>
 
-      {/* Drop Zone */}
       <label
         onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
         onDragLeave={() => setDragOver(false)}
         onDrop={handleDrop}
         className={`flex flex-col items-center justify-center gap-3 py-8 rounded-xl border-2 border-dashed cursor-pointer transition-all ${
-          dragOver
-            ? "border-blue-400 bg-blue-50"
-            : file
-            ? "border-green-300 bg-green-50"
-            : "border-slate-200 hover:border-blue-300 hover:bg-slate-50"
-        }`}
-      >
+          dragOver ? "border-blue-400 bg-blue-50"
+          : file   ? "border-green-300 bg-green-50"
+                   : "border-slate-200 hover:border-blue-300 hover:bg-slate-50"
+        }`}>
         {file ? (
           <>
             <div className="w-11 h-11 rounded-lg bg-green-100 flex items-center justify-center">
@@ -129,20 +123,18 @@ export default function UploadReport() {
             </div>
           </>
         )}
-        <input
-          type="file"
-          accept="application/pdf,image/png,image/jpeg,image/jpg"
-          className="hidden"
-          onChange={(e) => setFile(e.target.files?.[0] || null)}
-        />
+        <input type="file" accept="application/pdf,image/png,image/jpeg,image/jpg"
+          className="hidden" onChange={(e) => setFile(e.target.files?.[0] || null)} />
       </label>
 
-      {/* Analyze Button */}
-      <button
-        onClick={handleAnalyze}
-        disabled={!file || loading}
-        className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 disabled:text-slate-400 text-white text-sm font-semibold transition-all shadow-sm"
-      >
+      {error && (
+        <div className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-xl px-3.5 py-2.5">
+          {error}
+        </div>
+      )}
+
+      <button onClick={handleAnalyze} disabled={!file || loading}
+        className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 disabled:text-slate-400 text-white text-sm font-semibold transition-all shadow-sm">
         {loading && <Loader2 size={16} className="animate-spin" />}
         {loading ? "Analyzing..." : "Analyze Report"}
       </button>

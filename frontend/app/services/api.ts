@@ -1,34 +1,60 @@
 // src/services/api.ts
 import type { ReportResponse, ReportParameterWithName } from "@/types";
+import { supabase } from "../lib/superbaseClient";
 
 const API_BASE = "http://localhost:8000";
 
+/* ---------------- GET JWT TOKEN ---------------- */
+async function getToken(): Promise<string> {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) throw new Error("Not logged in. Please sign in again.");
+  return session.access_token;
+}
+
 /* ---------------- UPLOAD REPORT ---------------- */
-export async function uploadReport(file: File) {
+export async function uploadReport(file: File): Promise<{ report_id: string }> {
+  const token = await getToken();
+
   const formData = new FormData();
   formData.append("file", file);
 
   const res = await fetch(`${API_BASE}/upload/`, {
     method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,   // ✅ JWT
+    },
     body: formData,
   });
 
-  if (!res.ok) throw new Error("Upload failed");
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.detail || "Upload failed");
+  }
 
-  return res.json(); // { file_id: string }
+  return res.json(); // { report_id: string, file_url: string, status: string }
 }
 
 /* ---------------- ANALYZE REPORT ---------------- */
 export async function analyzeReport(
-  fileId: string,
+  reportId: string,
   gender: "male" | "female"
 ): Promise<ReportResponse> {
+  const token = await getToken();
+
   const res = await fetch(
-    `${API_BASE}/analyze/?file_id=${encodeURIComponent(fileId)}&gender=${gender}`,
-    { method: "POST" }
+    `${API_BASE}/analyze/?file_id=${encodeURIComponent(reportId)}&gender=${gender}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,  // ✅ JWT
+      },
+    }
   );
 
-  if (!res.ok) throw new Error("Analysis failed");
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.detail || "Analysis failed");
+  }
 
   const data = await res.json();
 
@@ -36,55 +62,50 @@ export async function analyzeReport(
   const parameters: ReportParameterWithName[] = Object.entries(data.analysis).map(
     ([name, p]: [string, any]) => ({
       name,
-      value: p.value,
-      unit: p.unit,
-      status: p.status,
+      value:        p.value,
+      unit:         p.unit,
+      status:       p.status,
       normal_range: p.normal_range ?? { min: 0, max: 0 },
     })
   );
 
   const report: ReportResponse = {
-    file_id: data.file_id,
-    gender: data.gender,
-
-    // raw analyzer output
-    analysis: data.analysis,
-
-    // ✅ NLP explanations (array of strings)
+    file_id:         data.file_id,
+    report_id:       data.report_id,    // ✅ new — needed for history/[id] page
+    gender:          data.gender,
+    analysis:        data.analysis,
     nlp_explanation: data.nlp_explanation ?? [],
-
-    // recommendations
     recommendations: data.recommendations || {
-      lifestyle_tips: [],
-      non_prescription: [],
-      doctor_consultation: [],
+      lifestyle_tips:       [],
+      non_prescription:     [],
+      doctor_consultation:  [],
     },
-
-    // table-ready params
     parameters,
+    severity:        data.severity,     // ✅ new
   };
 
   return report;
 }
 
 /* ---------------- CHAT ---------------- */
-
-// Matches the updated ChatResponse from chat_route.py
 export type ChatResponse = {
-  answer:        string;   // full answer + disclaimer appended
-  flagged:       boolean;  // true for emergency / sensitive / blocked
-  question_type: string;   // "emergency" | "sensitive" | "blocked" | "what_if" | "report_based"
-  response_time: number;   // seconds the LLM took to respond
+  answer:        string;
+  flagged:       boolean;
+  question_type: string;
+  response_time: number;
 };
 
 export async function askLLMChat(payload: {
-  file_id: string;
+  file_id:  string;
   question: string;
 }): Promise<ChatResponse> {
+  const token = await getToken();
+
   const res = await fetch(`${API_BASE}/chat/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,   // ✅ JWT
     },
     body: JSON.stringify(payload),
   });

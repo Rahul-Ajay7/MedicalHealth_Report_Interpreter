@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Activity, LayoutDashboard, Clock, LogOut } from "lucide-react";
+import { supabase } from "../lib/superbaseClient";
 
 type NavItem = {
   href: string;
@@ -11,16 +12,16 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/history", label: "History", icon: Clock },
+  { href: "/dashboard",         label: "Dashboard", icon: LayoutDashboard },
+  { href: "/dashboard/history", label: "History",   icon: Clock },   // ✅ fixed
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
-  const router = useRouter();
+  const router   = useRouter();
 
-  const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
+  const handleLogout = async () => {
+    await supabase.auth.signOut();   // ✅ Supabase logout instead of localStorage
     router.push("/login");
   };
 
@@ -38,7 +39,7 @@ export default function Navbar() {
         {/* Nav Links */}
         <nav className="flex items-center gap-1 flex-1">
           {navItems.map(({ href, label, icon: Icon }) => {
-            const active = pathname === href;
+            const active = pathname === href || pathname.startsWith(href + "/");
             return (
               <Link
                 key={href}
