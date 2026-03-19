@@ -7,8 +7,12 @@ import LayoutWrapper from "@/components/LayoutWrapper";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Health Report Interpreter",
+  title: "HealthAI",
   description: "Analyze blood reports and chat with an AI health assistant",
+  icons: {
+    icon:  "/healthai-logo.svg",   
+    apple: "/healthai-logo.svg",   
+  },
 };
 
 export default function RootLayout({

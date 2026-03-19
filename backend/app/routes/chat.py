@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 import logging
 
@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/chat", tags=["Chat"])
 
+# Single instance — shared across all requests
 llm = PatientChatLLM(
     base_url      = LLM_BASE_URL,
     chat_endpoint = LLM_CHAT_ENDPOINT,
@@ -18,7 +19,7 @@ llm = PatientChatLLM(
 )
 
 
-# ----------- Schemas -----------
+# ─── Schemas ──────────────────────────────────────────────────────────────────
 
 class ChatRequest(BaseModel):
     file_id:  str
@@ -27,15 +28,26 @@ class ChatRequest(BaseModel):
 
 class ChatResponse(BaseModel):
     answer:        str
-    flagged:       bool   # True if emergency / sensitive / blocked
-    question_type: str    # "emergency" | "sensitive" | "blocked" | "what_if" | "report_based"
-    response_time: float  # seconds — useful for monitoring
+    flagged:       bool    # True if emergency / sensitive / blocked
+    question_type: str     # "emergency" | "sensitive" | "blocked" | "what_if" | "report_based"
+    response_time: float   # seconds
+    llm_source:    str     # "groq" | "gemini" | "ollama" | "fallback" | "none"
 
 
-# ----------- Chat Route -----------
+# ─── Chat Route ───────────────────────────────────────────────────────────────
 
 @router.post("/", response_model=ChatResponse)
 async def chat_with_llm(data: ChatRequest):
+    """
+    Ask a question about an analyzed report.
+    Requires the report to be analyzed first (chat session must exist).
+
+    LLM fallback chain:
+      Groq (primary) → Gemini Flash (backup 1) → Ollama (backup 2)
+
+    NLP explanations from nlp.py are passed as grounding context
+    to prevent hallucination.
+    """
     session = CHAT_SESSIONS.get(data.file_id)
 
     if not session:
@@ -48,19 +60,20 @@ async def chat_with_llm(data: ChatRequest):
         result = llm.answer_question(
             question        = data.question,
             report_summary  = session["analysis"],
-            explanations    = session["nlp_explanation"],
+            explanations    = session["nlp_explanation"],  # NLP grounding layer
             recommendations = session.get("recommendations", {}),
             gender          = session.get("gender"),
-            patient_age     = session.get("age"),      # pass age if stored in session
-            language        = session.get("language"), # pass language if stored in session
+            patient_age     = session.get("age"),
+            language        = session.get("language"),
         )
 
-        # Combine answer + disclaimer (disclaimer is empty for emergencies)
+        # Append disclaimer if present (sensitive questions only)
         full_answer = result.answer + result.disclaimer
 
         logger.info(
             f"Chat response | file_id={data.file_id} "
             f"type={result.question_type.value} "
+            f"source={result.llm_source} "
             f"flagged={result.flagged} "
             f"time={result.response_time:.2f}s"
         )
@@ -70,10 +83,11 @@ async def chat_with_llm(data: ChatRequest):
             flagged       = result.flagged,
             question_type = result.question_type.value,
             response_time = result.response_time,
+            llm_source    = result.llm_source,
         )
 
     except HTTPException:
-        raise  # re-raise HTTP exceptions as-is
+        raise
 
     except Exception as e:
         logger.error(f"Chat route error | file_id={data.file_id} | error={str(e)}")

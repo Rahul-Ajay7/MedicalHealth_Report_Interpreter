@@ -10,8 +10,9 @@ router = APIRouter(prefix="/upload", tags=["Upload"])
 @router.post("/")
 async def upload_report(
     file: UploadFile = File(...),
-    user=Depends(verify_token)         # ✅ JWT auth — gets user_id from token
+    user=Depends(verify_token)
 ):
+    
     user_id   = user["sub"]
     report_id = str(uuid.uuid4())
     ext       = file.filename.split(".")[-1].lower()

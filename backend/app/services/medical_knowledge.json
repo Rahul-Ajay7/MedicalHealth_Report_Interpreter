@@ -5,16 +5,33 @@
     "unit": "g/dL",
     "function": "Carries oxygen from the lungs to all parts of the body",
     "normal_range": {
-      "male": { "min": 13, "max": 17 },
-      "female": { "min": 12, "max": 15 }
+      "male": {
+        "min": 13,
+        "max": 17
+      },
+      "female": {
+        "min": 12,
+        "max": 15
+      }
     },
     "severity_rules": {
-      "low": { "severity": "Medium" },
-      "high": { "severity": "Medium" }
+      "low": {
+        "severity": "Medium"
+      },
+      "high": {
+        "severity": "Medium"
+      }
     },
     "low": {
-      "causes": ["Iron deficiency", "Blood loss", "Poor nutrition"],
-      "impact": ["Reduced oxygen delivery", "Fatigue and weakness"],
+      "causes": [
+        "Iron deficiency",
+        "Blood loss",
+        "Poor nutrition"
+      ],
+      "impact": [
+        "Reduced oxygen delivery",
+        "Fatigue and weakness"
+      ],
       "lifestyle": [
         "Increase iron-rich foods",
         "Include leafy vegetables",
@@ -28,2018 +45,3079 @@
         "note": "Follow label instructions for over-the-counter supplements."
       },
       "prescription_required": {
-        "conditions": ["Moderate to severe anemia"],
+        "conditions": [
+          "Moderate to severe anemia"
+        ],
         "instruction": "Consult a doctor for prescription therapy."
       },
       "trend_hint": "Persistently low values may indicate anemia"
     },
     "high": {
-      "causes": ["Dehydration", "Smoking", "High altitude exposure"],
-      "impact": ["Increased blood thickness", "Higher clot risk"],
+      "causes": [
+        "Dehydration",
+        "Smoking",
+        "High altitude exposure"
+      ],
+      "impact": [
+        "Increased blood thickness",
+        "Higher clot risk"
+      ],
       "lifestyle": [
         "Stay adequately hydrated",
         "Avoid smoking"
       ],
-      "medical_attention": "Repeated high values require medical evaluation"
+      "otc_support": {
+        "safe_options": [
+          "Oral hydration solutions"
+        ],
+        "note": "OTC support is limited; medical evaluation needed for persistent elevation."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Repeated high hemoglobin values",
+          "Suspected polycythemia"
+        ],
+        "instruction": "Medical evaluation required."
+      },
+      "trend_hint": "Repeated high values require medical evaluation for polycythemia"
     },
     "when_to_consult": "If abnormal values persist across multiple tests",
     "confidence_note": "Educational information only, not a medical diagnosis"
   },
-
-  "neutrophils": {
-  "display_name": "Neutrophils",
-  "category": "White Blood Cell Differential",
-  "unit": "%",
-  "function": "Primary immune cells that fight bacterial infections and respond to inflammation",
-
-  "normal_range": {
-    "male": { "min": 40, "max": 70 },
-    "female": { "min": 40, "max": 70 }
-  },
-
-  "severity_rules": {
-    "low": { "severity": "Medium" },
-    "high": { "severity": "Medium" }
-  },
-
-  "low": {
-    "causes": [
-      "Viral infections",
-      "Bone marrow suppression",
-      "Vitamin B12 or folate deficiency",
-      "Certain medications (chemotherapy, antibiotics)"
-    ],
-    "impact": [
-      "Weakened immune response",
-      "Increased risk of infections"
-    ],
-    "lifestyle": [
-      "Maintain good personal hygiene",
-      "Ensure adequate rest and sleep",
-      "Consume a balanced diet rich in vitamins"
-    ],
-    "otc_support": {
-      "safe_options": [
-        "Vitamin B12 supplements",
-        "Folate supplements"
-      ],
-      "note": "Over-the-counter supplements may help only in mild deficiency cases."
-    },
-    "prescription_required": {
-      "conditions": [
-        "Severe neutropenia",
-        "Recurrent or serious infections"
-      ],
-      "instruction": "Consult a doctor for further evaluation and treatment."
-    },
-    "trend_hint": "Persistently low neutrophil levels may indicate immune suppression"
-  },
-
-  "high": {
-    "causes": [
-      "Bacterial infections",
-      "Inflammation or tissue injury",
-      "Physical or emotional stress",
-      "Smoking"
-    ],
-    "impact": [
-      "Ongoing infection or inflammation",
-      "Possible immune system overactivity"
-    ],
-    "lifestyle": [
-      "Stay well hydrated",
-      "Avoid smoking",
-      "Follow a healthy, anti-inflammatory diet"
-    ],
-    "medical_attention": "If neutrophil levels remain elevated, medical evaluation is recommended"
-  },
-
-  "when_to_consult": "If abnormal neutrophil levels persist across multiple blood tests",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-
   "rbc_count": {
-  "display_name": "Red Blood Cell Count (RBC)",
-  "category": "Complete Blood Count",
-  "unit": "million/µL",
-  "function": "Transports oxygen and carbon dioxide between the lungs and body tissues",
-  "normal_range": {
-    "male": { "min": 4.5, "max": 5.9 },
-    "female": { "min": 4.1, "max": 5.1 }
-  },
-  "severity_rules": {
-    "low": { "severity": "Medium" },
-    "high": { "severity": "Medium" }
-  },
-  "low": {
-    "causes": [
-      "Iron deficiency anemia",
-      "Vitamin B12 deficiency",
-      "Folate deficiency",
-      "Bone marrow disorders",
-      "Chronic disease"
-    ],
-    "impact": [
-      "Fatigue",
-      "Shortness of breath",
-      "Dizziness",
-      "Reduced oxygen delivery"
-    ],
-    "lifestyle": [
-      "Consume iron-rich foods (leafy greens, legumes)",
-      "Increase vitamin B12 and folate intake",
-      "Maintain balanced nutrition"
-    ],
-    "otc_support": {
-      "safe_options": [
-        "Iron-containing multivitamin supplements",
-        "Vitamin B12 supplements",
-        "Folic acid supplements"
+    "display_name": "Red Blood Cell Count (RBC)",
+    "category": "Complete Blood Count",
+    "unit": "million/\u00b5L",
+    "function": "Transports oxygen and carbon dioxide between the lungs and body tissues",
+    "normal_range": {
+      "male": {
+        "min": 4.5,
+        "max": 5.9
+      },
+      "female": {
+        "min": 4.1,
+        "max": 5.1
+      }
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Medium"
+      },
+      "high": {
+        "severity": "Medium"
+      }
+    },
+    "low": {
+      "causes": [
+        "Iron deficiency anemia",
+        "Vitamin B12 deficiency",
+        "Folate deficiency",
+        "Bone marrow disorders",
+        "Chronic disease"
       ],
-      "note": "Follow label instructions; avoid self-supplementation without confirmed deficiency."
-    },
-    "prescription_required": {
-      "conditions": [
-        "Moderate to severe anemia",
-        "Persistent unexplained low RBC"
+      "impact": [
+        "Fatigue",
+        "Shortness of breath",
+        "Dizziness",
+        "Reduced oxygen delivery"
       ],
-      "instruction": "Doctor evaluation required for further testing and treatment."
-    },
-    "trend_hint": "Persistently low RBC may indicate chronic anemia or bone marrow suppression"
-  },
-  "high": {
-    "causes": [
-      "Dehydration",
-      "Smoking",
-      "Chronic lung disease",
-      "High altitude exposure",
-      "Polycythemia"
-    ],
-    "impact": [
-      "Increased blood viscosity",
-      "Higher clot risk",
-      "Headache or dizziness"
-    ],
-    "lifestyle": [
-      "Stay adequately hydrated",
-      "Avoid smoking",
-      "Monitor oxygen levels if at high altitude"
-    ],
-    "otc_support": {
-      "safe_options": [
-        "Oral hydration solutions"
+      "lifestyle": [
+        "Consume iron-rich foods (leafy greens, legumes)",
+        "Increase vitamin B12 and folate intake",
+        "Maintain balanced nutrition"
       ],
-      "note": "Hydration may help if elevation is due to dehydration."
+      "otc_support": {
+        "safe_options": [
+          "Iron-containing multivitamin supplements",
+          "Vitamin B12 supplements",
+          "Folic acid supplements"
+        ],
+        "note": "Follow label instructions; avoid self-supplementation without confirmed deficiency."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Moderate to severe anemia",
+          "Persistent unexplained low RBC"
+        ],
+        "instruction": "Doctor evaluation required for further testing and treatment."
+      },
+      "trend_hint": "Persistently low RBC may indicate chronic anemia or bone marrow suppression"
     },
-    "prescription_required": {
-      "conditions": [
-        "Suspected polycythemia",
-        "Repeated high RBC values"
+    "high": {
+      "causes": [
+        "Dehydration",
+        "Smoking",
+        "Chronic lung disease",
+        "High altitude exposure",
+        "Polycythemia"
       ],
-      "instruction": "Consult physician for hematology evaluation."
-    },
-    "trend_hint": "Progressively rising RBC may indicate polycythemia or chronic hypoxia"
-  },
-  "when_to_consult": "If abnormal RBC levels persist or symptoms like fatigue or clotting issues occur",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"wbc_count": {
-  "display_name": "White Blood Cell Count (WBC)",
-  "category": "Complete Blood Count",
-  "unit": "cells/µL",
-  "function": "Helps the body fight infections and inflammatory conditions",
-  "normal_range": { "min": 4000, "max": 11000 },
-  "severity_rules": {
-    "low": { "severity": "Medium" },
-    "high": { "severity": "Medium" }
-  },
-  "low": {
-    "causes": [
-      "Viral infections",
-      "Bone marrow suppression",
-      "Autoimmune disorders",
-      "Certain medications"
-    ],
-    "impact": [
-      "Increased infection risk",
-      "Delayed recovery from illness"
-    ],
-    "lifestyle": [
-      "Maintain good hygiene",
-      "Eat nutritious foods",
-      "Ensure adequate rest",
-      "Avoid exposure to infections"
-    ],
-    "otc_support": {
-      "safe_options": [
-        "General multivitamins",
-        "Vitamin C supplements"
+      "impact": [
+        "Increased blood viscosity",
+        "Higher clot risk",
+        "Headache or dizziness"
       ],
-      "note": "Supportive only; does not treat underlying cause."
-    },
-    "prescription_required": {
-      "conditions": [
-        "Severe neutropenia",
-        "Persistent low WBC"
+      "lifestyle": [
+        "Stay adequately hydrated",
+        "Avoid smoking",
+        "Monitor oxygen levels if at high altitude"
       ],
-      "instruction": "Medical evaluation required to determine underlying cause."
+      "otc_support": {
+        "safe_options": [
+          "Oral hydration solutions"
+        ],
+        "note": "Hydration may help if elevation is due to dehydration."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Suspected polycythemia",
+          "Repeated high RBC values"
+        ],
+        "instruction": "Consult physician for hematology evaluation."
+      },
+      "trend_hint": "Progressively rising RBC may indicate polycythemia or chronic hypoxia"
     },
-    "trend_hint": "Persistently low WBC may indicate immune suppression or marrow dysfunction"
+    "when_to_consult": "If abnormal RBC levels persist or symptoms like fatigue or clotting issues occur",
+    "confidence_note": "Educational information only, not a medical diagnosis"
   },
-  "high": {
-    "causes": [
-      "Bacterial infection",
-      "Inflammation",
-      "Stress response",
-      "Leukemia (rare but serious)"
-    ],
-    "impact": [
-      "Active immune response",
-      "Possible underlying infection"
-    ],
-    "lifestyle": [
-      "Stay hydrated",
-      "Rest adequately",
-      "Follow infection control measures"
-    ],
-    "otc_support": {
-      "safe_options": [
-        "Fever-reducing medications (as per label instructions)"
+  "wbc_count": {
+    "display_name": "White Blood Cell Count (WBC)",
+    "category": "Complete Blood Count",
+    "unit": "cells/\u00b5L",
+    "function": "Helps the body fight infections and inflammatory conditions",
+    "normal_range": {
+      "min": 4000,
+      "max": 11000
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Medium"
+      },
+      "high": {
+        "severity": "Medium"
+      }
+    },
+    "low": {
+      "causes": [
+        "Viral infections",
+        "Bone marrow suppression",
+        "Autoimmune disorders",
+        "Certain medications"
       ],
-      "note": "Does not replace treatment for infection."
-    },
-    "prescription_required": {
-      "conditions": [
-        "Suspected bacterial infection",
-        "Very high WBC count",
-        "Persistent unexplained elevation"
+      "impact": [
+        "Increased infection risk",
+        "Delayed recovery from illness"
       ],
-      "instruction": "Doctor consultation required for further investigation."
-    },
-    "trend_hint": "Rapid rise may indicate acute infection; persistent elevation may require further evaluation"
-  },
-  "when_to_consult": "If fever, recurrent infections, or unexplained high/low WBC levels occur",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-
-"hematocrit": {
-  "display_name": "Hematocrit (HCT)",
-  "category": "Complete Blood Count",
-  "unit": "%",
-  "function": "Percentage of blood volume composed of red blood cells",
-  "normal_range": {
-    "male": { "min": 40, "max": 50 },
-    "female": { "min": 36, "max": 44 }
-  },
-  "severity_rules": {
-    "low": { "severity": "Medium" },
-    "high": { "severity": "Medium" }
-  },
-  "low": {
-    "causes": [
-      "Anemia",
-      "Blood loss",
-      "Nutritional deficiencies",
-      "Chronic kidney disease"
-    ],
-    "impact": [
-      "Reduced oxygen-carrying capacity",
-      "Fatigue",
-      "Shortness of breath"
-    ],
-    "lifestyle": [
-      "Iron-rich diet if deficient",
-      "Balanced nutrition"
-    ],
-    "trend_hint": "Declining hematocrit suggests worsening anemia"
-  },
-  "high": {
-    "causes": [
-      "Dehydration",
-      "Polycythemia",
-      "Chronic hypoxia",
-      "Smoking"
-    ],
-    "impact": [
-      "Increased blood viscosity",
-      "Higher clot risk"
-    ],
-    "lifestyle": [
-      "Adequate hydration",
-      "Smoking cessation"
-    ],
-    "trend_hint": "Persistently high levels may indicate polycythemia"
-  },
-  "prescription_required": {
-    "conditions": [
-      "Severe anemia",
-      "Suspected polycythemia"
-    ],
-    "instruction": "Medical evaluation required for persistent abnormalities."
-  },
-  "when_to_consult": "If symptomatic or persistent abnormal values occur",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"mcv": {
-  "display_name": "Mean Corpuscular Volume (MCV)",
-  "category": "Complete Blood Count",
-  "unit": "fL",
-  "function": "Measures average size of red blood cells",
-  "normal_range": { "min": 80, "max": 100 },
-  "severity_rules": {
-    "low": { "severity": "Low" },
-    "high": { "severity": "Low" }
-  },
-  "low": {
-    "causes": [
-      "Iron deficiency anemia",
-      "Thalassemia"
-    ],
-    "impact": [
-      "Microcytic anemia"
-    ],
-    "lifestyle": [
-      "Increase iron intake if deficient"
-    ],
-    "trend_hint": "Low MCV suggests microcytic anemia"
-  },
-  "high": {
-    "causes": [
-      "Vitamin B12 deficiency",
-      "Folate deficiency",
-      "Alcohol use",
-      "Liver disease"
-    ],
-    "impact": [
-      "Macrocytic anemia"
-    ],
-    "lifestyle": [
-      "Balanced diet with B12 and folate"
-    ],
-    "trend_hint": "High MCV suggests macrocytic anemia"
-  },
-  "when_to_consult": "If anemia symptoms or persistent abnormal MCV occur",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"mch": {
-  "display_name": "Mean Corpuscular Hemoglobin (MCH)",
-  "category": "Complete Blood Count",
-  "unit": "pg",
-  "function": "Measures average amount of hemoglobin per red blood cell",
-  "normal_range": { "min": 27, "max": 33 },
-  "severity_rules": {
-    "low": { "severity": "Low" },
-    "high": { "severity": "Low" }
-  },
-  "low": {
-    "causes": [
-      "Iron deficiency anemia"
-    ],
-    "impact": [
-      "Hypochromic anemia"
-    ],
-    "trend_hint": "Low MCH often parallels low MCV"
-  },
-  "high": {
-    "causes": [
-      "Macrocytic anemia"
-    ],
-    "impact": [
-      "Large red cells with increased hemoglobin content"
-    ],
-    "trend_hint": "High MCH usually seen with high MCV"
-  },
-  "when_to_consult": "If anemia suspected",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"mchc": {
-  "display_name": "Mean Corpuscular Hemoglobin Concentration (MCHC)",
-  "category": "Complete Blood Count",
-  "unit": "g/dL",
-  "function": "Measures average concentration of hemoglobin in red blood cells",
-  "normal_range": { "min": 32, "max": 36 },
-  "severity_rules": {
-    "low": { "severity": "Low" },
-    "high": { "severity": "Low" }
-  },
-  "low": {
-    "causes": [
-      "Iron deficiency anemia"
-    ],
-    "impact": [
-      "Pale red blood cells"
-    ],
-    "trend_hint": "Low MCHC suggests hypochromia"
-  },
-  "high": {
-    "causes": [
-      "Hereditary spherocytosis",
-      "Hemolysis"
-    ],
-    "impact": [
-      "Increased hemoglobin concentration in RBCs"
-    ],
-    "trend_hint": "High MCHC may indicate hemolytic disorder"
-  },
-  "when_to_consult": "If persistent abnormal results",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"lymphocytes": {
-  "display_name": "Lymphocytes",
-  "category": "Complete Blood Count",
-  "unit": "%",
-  "function": "White blood cells responsible for adaptive immune response and viral defense",
-  "normal_range": { "min": 20, "max": 40 },
-  "severity_rules": {
-    "low": { "severity": "Medium" },
-    "high": { "severity": "Medium" }
-  },
-  "low": {
-    "causes": [
-      "Acute infection",
-      "Immunodeficiency",
-      "Steroid therapy",
-      "Bone marrow suppression"
-    ],
-    "impact": [
-      "Reduced immune defense",
-      "Increased infection susceptibility"
-    ],
-    "trend_hint": "Persistently low lymphocytes may indicate immune suppression"
-  },
-  "high": {
-    "causes": [
-      "Viral infection",
-      "Chronic inflammation",
-      "Lymphoproliferative disorders"
-    ],
-    "impact": [
-      "Active immune response",
-      "Possible chronic infection or hematologic disorder"
-    ],
-    "trend_hint": "Marked elevation warrants further evaluation"
-  },
-  "when_to_consult": "If recurrent infections or persistent abnormal counts occur",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"monocytes": {
-  "display_name": "Monocytes",
-  "category": "Complete Blood Count",
-  "unit": "%",
-  "function": "White blood cells involved in chronic inflammation and tissue repair",
-  "normal_range": { "min": 2, "max": 8 },
-  "severity_rules": {
-    "low": { "severity": "Low" },
-    "high": { "severity": "Low" }
-  },
-  "low": {
-    "causes": [
-      "Bone marrow suppression",
-      "Acute stress"
-    ],
-    "impact": [
-      "Usually clinically insignificant"
-    ],
-    "trend_hint": "Isolated low monocytes rarely significant"
-  },
-  "high": {
-    "causes": [
-      "Chronic infection",
-      "Autoimmune disease",
-      "Recovery phase of infection"
-    ],
-    "impact": [
-      "Chronic inflammatory response"
-    ],
-    "trend_hint": "Persistent monocytosis may require evaluation"
-  },
-  "when_to_consult": "If persistent elevation with symptoms",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"eosinophils": {
-  "display_name": "Eosinophils",
-  "category": "Complete Blood Count",
-  "unit": "%",
-  "function": "White blood cells involved in allergic reactions and parasitic infections",
-  "normal_range": { "min": 1, "max": 6 },
-  "severity_rules": {
-    "low": { "severity": "Low" },
-    "high": { "severity": "Medium" }
-  },
-  "low": {
-    "causes": [
-      "Stress response",
-      "Steroid therapy"
-    ],
-    "impact": [
-      "Usually clinically insignificant"
-    ],
-    "trend_hint": "Low eosinophils rarely require action"
-  },
-  "high": {
-    "causes": [
-      "Allergic disorders",
-      "Asthma",
-      "Parasitic infection",
-      "Drug reactions"
-    ],
-    "impact": [
-      "Allergic inflammation",
-      "Tissue damage if markedly elevated"
-    ],
-    "trend_hint": "Persistent eosinophilia warrants evaluation"
-  },
-  "when_to_consult": "If associated with allergy symptoms or unexplained elevation",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"basophils": {
-  "display_name": "Basophils",
-  "category": "Complete Blood Count",
-  "unit": "%",
-  "function": "White blood cells involved in inflammatory and allergic responses",
-  "normal_range": { "min": 0, "max": 1 },
-  "severity_rules": {
-    "low": { "severity": "Low" },
-    "high": { "severity": "Low" }
-  },
-  "low": {
-    "causes": [
-      "Acute infection",
-      "Stress response"
-    ],
-    "impact": [
-      "Usually clinically insignificant"
-    ],
-    "trend_hint": "Low basophils rarely clinically meaningful"
-  },
-  "high": {
-    "causes": [
-      "Chronic inflammation",
-      "Allergic disorders",
-      "Myeloproliferative disorders"
-    ],
-    "impact": [
-      "Allergic or chronic inflammatory state"
-    ],
-    "trend_hint": "Persistent basophilia requires evaluation"
-  },
-  "when_to_consult": "If persistent elevation or abnormal CBC findings",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"rdw": {
-  "display_name": "Red Cell Distribution Width (RDW)",
-  "category": "Complete Blood Count",
-  "unit": "%",
-  "function": "Measures variation in red blood cell size (anisocytosis)",
-  "normal_range": { "min": 11.5, "max": 14.5 },
-  "severity_rules": {
-    "low": { "severity": "Low" },
-    "high": { "severity": "Medium" }
-  },
-  "low": {
-    "causes": [
-      "Usually not clinically significant"
-    ],
-    "impact": [
-      "Minimal diagnostic relevance"
-    ],
-    "trend_hint": "Low RDW rarely concerning"
-  },
-  "high": {
-    "causes": [
-      "Iron deficiency anemia",
-      "Vitamin B12 deficiency",
-      "Folate deficiency",
-      "Mixed anemia"
-    ],
-    "impact": [
-      "Significant size variability of RBCs"
-    ],
-    "trend_hint": "High RDW with abnormal MCV helps classify anemia"
-  },
-  "when_to_consult": "If anemia suspected or persistent abnormal values occur",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"mpv": {
-  "display_name": "Mean Platelet Volume (MPV)",
-  "category": "Complete Blood Count",
-  "unit": "fL",
-  "function": "Measures average size of platelets",
-  "normal_range": { "min": 7.5, "max": 12 },
-  "severity_rules": {
-    "low": { "severity": "Low" },
-    "high": { "severity": "Medium" }
-  },
-  "low": {
-    "causes": [
-      "Bone marrow suppression",
-      "Chronic disease"
-    ],
-    "impact": [
-      "Reduced platelet production"
-    ],
-    "trend_hint": "Low MPV may indicate decreased marrow activity"
-  },
-  "high": {
-    "causes": [
-      "Increased platelet turnover",
-      "Inflammation",
-      "Cardiovascular risk"
-    ],
-    "impact": [
-      "Larger, more reactive platelets",
-      "Potential clotting tendency"
-    ],
-    "trend_hint": "High MPV may correlate with inflammatory or thrombotic risk"
-  },
-  "when_to_consult": "If persistent abnormal platelet indices or bleeding/clotting symptoms occur",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-
-"platelet_count": {
-  "display_name": "Platelet Count",
-  "category": "Complete Blood Count",
-  "unit": "/µL",
-  "function": "Essential for blood clotting and prevention of bleeding",
-  "normal_range": { "min": 150000, "max": 450000 },
-  "severity_rules": {
-    "low": { "severity": "High" },
-    "high": { "severity": "Medium" }
-  },
-  "low": {
-    "causes": [
-      "Viral infections",
-      "Bone marrow disorders",
-      "Vitamin B12 deficiency",
-      "Autoimmune conditions"
-    ],
-    "impact": [
-      "Easy bruising",
-      "Prolonged bleeding",
-      "Nosebleeds",
-      "Bleeding gums"
-    ],
-    "lifestyle": [
-      "Avoid injury or contact sports",
-      "Use soft toothbrush",
-      "Eat vitamin-rich balanced diet"
-    ],
-    "otc_support": {
-      "safe_options": [
-        "Vitamin B12 supplements (if deficient)",
-        "Folate supplements"
+      "lifestyle": [
+        "Maintain good hygiene",
+        "Eat nutritious foods",
+        "Ensure adequate rest",
+        "Avoid exposure to infections"
       ],
-      "note": "Avoid NSAIDs unless advised, as they may increase bleeding risk."
+      "otc_support": {
+        "safe_options": [
+          "General multivitamins",
+          "Vitamin C supplements"
+        ],
+        "note": "Supportive only; does not treat underlying cause."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Severe neutropenia",
+          "Persistent low WBC"
+        ],
+        "instruction": "Medical evaluation required to determine underlying cause."
+      },
+      "trend_hint": "Persistently low WBC may indicate immune suppression or marrow dysfunction"
     },
-    "prescription_required": {
-      "conditions": [
-        "Very low platelet count (<50,000/µL)",
-        "Active bleeding"
+    "high": {
+      "causes": [
+        "Bacterial infection",
+        "Inflammation",
+        "Stress response",
+        "Leukemia (rare but serious)"
       ],
-      "instruction": "Immediate medical consultation required."
-    },
-    "trend_hint": "Rapidly falling platelet count may indicate serious underlying condition"
-  },
-  "high": {
-    "causes": [
-      "Inflammation",
-      "Iron deficiency",
-      "Post-surgery recovery",
-      "Bone marrow disorders"
-    ],
-    "impact": [
-      "Increased clotting tendency",
-      "Possible thrombotic risk"
-    ],
-    "lifestyle": [
-      "Stay hydrated",
-      "Manage underlying inflammatory conditions"
-    ],
-    "otc_support": {
-      "safe_options": [
-        "Iron supplements (if iron deficiency confirmed)"
+      "impact": [
+        "Active immune response",
+        "Possible underlying infection"
       ],
-      "note": "Do not self-medicate with blood thinners."
-    },
-    "prescription_required": {
-      "conditions": [
-        "Very high platelet count (>600,000/µL)",
-        "History of clotting disorders"
+      "lifestyle": [
+        "Stay hydrated",
+        "Rest adequately",
+        "Follow infection control measures"
       ],
-      "instruction": "Consult physician for hematology evaluation."
+      "otc_support": {
+        "safe_options": [
+          "Fever-reducing medications (as per label instructions)"
+        ],
+        "note": "Does not replace treatment for infection."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Suspected bacterial infection",
+          "Very high WBC count",
+          "Persistent unexplained elevation"
+        ],
+        "instruction": "Doctor consultation required for further investigation."
+      },
+      "trend_hint": "Rapid rise may indicate acute infection; persistent elevation may require further evaluation"
     },
-    "trend_hint": "Persistently elevated platelets may require evaluation for reactive or primary thrombocytosis"
+    "when_to_consult": "If fever, recurrent infections, or unexplained high/low WBC levels occur",
+    "confidence_note": "Educational information only, not a medical diagnosis"
   },
-  "when_to_consult": "If unusual bleeding, bruising, or clotting symptoms occur",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-
-
-  "blood_glucose_fasting": {
-  "display_name": "Fasting Blood Glucose",
-  "category": "Blood Sugar",
-  "unit": "mg/dL",
-  "function": "Measures blood glucose levels after 8–12 hours of fasting",
-  "normal_range": { "min": 70, "max": 99 },
-  "severity_rules": {
-    "low": { "severity": "Medium" },
-    "high": { "severity": "High" }
-  },
-  "low": {
-    "causes": [
-      "Skipping meals",
-      "Excess insulin or diabetes medication",
-      "Hormonal imbalance"
-    ],
-    "impact": [
-      "Dizziness",
-      "Sweating",
-      "Confusion",
-      "Low energy"
-    ],
-    "lifestyle": [
-      "Eat regular balanced meals",
-      "Avoid prolonged fasting",
-      "Monitor glucose if diabetic"
-    ],
-    "otc_support": {
-      "safe_options": [
-        "Glucose tablets",
-        "Oral glucose gel"
+  "hematocrit": {
+    "display_name": "Hematocrit (HCT)",
+    "category": "Complete Blood Count",
+    "unit": "%",
+    "function": "Percentage of blood volume composed of red blood cells",
+    "normal_range": {
+      "male": {
+        "min": 40,
+        "max": 50
+      },
+      "female": {
+        "min": 36,
+        "max": 44
+      }
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Medium"
+      },
+      "high": {
+        "severity": "Medium"
+      }
+    },
+    "low": {
+      "causes": [
+        "Anemia",
+        "Blood loss",
+        "Nutritional deficiencies",
+        "Chronic kidney disease"
       ],
-      "note": "Use as directed for mild hypoglycemia."
-    },
-    "prescription_required": {
-      "conditions": ["Recurrent hypoglycemia"],
-      "instruction": "Consult doctor to adjust diabetes medications."
-    },
-    "trend_hint": "Repeated low values may indicate medication imbalance or endocrine disorder"
-  },
-  "high": {
-    "causes": [
-      "Diabetes",
-      "Prediabetes",
-      "Poor dietary habits",
-      "Physical inactivity"
-    ],
-    "impact": [
-      "Increased cardiovascular risk",
-      "Kidney damage",
-      "Nerve damage",
-      "Vision problems"
-    ],
-    "lifestyle": [
-      "Limit refined sugars and processed foods",
-      "Increase fiber intake",
-      "Regular physical activity",
-      "Weight management"
-    ],
-    "otc_support": {
-      "safe_options": [
-        "Fiber supplements",
-        "Low glycemic index meal planning aids"
+      "impact": [
+        "Reduced oxygen-carrying capacity",
+        "Fatigue",
+        "Shortness of breath"
       ],
-      "note": "OTC options do not replace medical therapy."
-    },
-    "prescription_required": {
-      "conditions": ["Fasting glucose ≥126 mg/dL on repeated tests"],
-      "instruction": "Doctor consultation for diabetes evaluation and medication."
-    },
-    "trend_hint": "Persistently elevated fasting glucose suggests diabetes progression"
-  },
-  "when_to_consult": "If abnormal levels persist across multiple tests or symptoms like excessive thirst and urination appear",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"hba1c": {
-  "display_name": "Hemoglobin A1c",
-  "category": "Blood Sugar",
-  "unit": "%",
-  "function": "Reflects average blood glucose levels over the past 2–3 months",
-  "normal_range": { "min": 4.0, "max": 5.6 },
-  "severity_rules": {
-    "low": { "severity": "Low" },
-    "high": { "severity": "High" }
-  },
-  "low": {
-    "causes": [
-      "Frequent hypoglycemia",
-      "Overtreatment of diabetes"
-    ],
-    "impact": [
-      "Risk of hypoglycemic episodes"
-    ],
-    "lifestyle": [
-      "Avoid unnecessary glucose restriction",
-      "Monitor medication dosage"
-    ],
-    "trend_hint": "Very low HbA1c in diabetics may indicate overtreatment"
-  },
-  "high": {
-    "causes": [
-      "Poor glucose management",
-      "Prediabetes",
-      "Type 1 or Type 2 diabetes"
-    ],
-    "impact": [
-      "Increased risk of neuropathy",
-      "Retinopathy",
-      "Kidney disease",
-      "Cardiovascular complications"
-    ],
-    "lifestyle": [
-      "Low glycemic index diet",
-      "Regular aerobic exercise",
-      "Consistent glucose monitoring"
-    ],
-    "otc_support": {
-      "safe_options": [
-        "Dietary fiber supplements",
-        "Diabetes-friendly nutritional plans"
+      "lifestyle": [
+        "Iron-rich diet if deficient",
+        "Balanced nutrition"
       ],
-      "note": "OTC measures are supportive, not curative."
+      "otc_support": {
+        "safe_options": [
+          "Iron supplements if deficiency confirmed",
+          "Folic acid supplements"
+        ],
+        "note": "Supplement only if deficiency is confirmed."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Severe anemia",
+          "Persistent unexplained low hematocrit"
+        ],
+        "instruction": "Medical evaluation required for persistent abnormalities."
+      },
+      "trend_hint": "Declining hematocrit suggests worsening anemia"
     },
-    "prescription_required": {
-      "conditions": [
-        "HbA1c ≥6.5%",
-        "Worsening glycemic control"
+    "high": {
+      "causes": [
+        "Dehydration",
+        "Polycythemia",
+        "Chronic hypoxia",
+        "Smoking"
       ],
-      "instruction": "Consult doctor for structured diabetes management plan."
-    },
-    "trend_hint": "Rising HbA1c over time indicates worsening glucose control"
-  },
-  "when_to_consult": "If HbA1c is above 5.7% or increasing steadily",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-
-"serum_creatinine": {
-  "display_name": "Serum Creatinine",
-  "category": "Kidney Function Test",
-  "unit": "mg/dL",
-  "function": "Indicates kidney filtration efficiency and waste clearance",
-  "normal_range": {
-    "male": { "min": 0.7, "max": 1.3 },
-    "female": { "min": 0.6, "max": 1.1 }
-  },
-  "severity_rules": {
-    "low": { "severity": "Low" },
-    "high": { "severity": "High" }
-  },
-  "low": {
-    "causes": [
-      "Low muscle mass",
-      "Malnutrition"
-    ],
-    "impact": [
-      "Usually clinically insignificant"
-    ],
-    "lifestyle": [
-      "Ensure adequate nutrition",
-      "Maintain healthy muscle mass"
-    ],
-    "trend_hint": "Persistently low creatinine may reflect low muscle mass"
-  },
-  "high": {
-    "causes": [
-      "Kidney dysfunction",
-      "Chronic kidney disease",
-      "Dehydration",
-      "Urinary obstruction"
-    ],
-    "impact": [
-      "Waste accumulation in blood",
-      "Fluid imbalance",
-      "Electrolyte disturbances"
-    ],
-    "lifestyle": [
-      "Stay adequately hydrated",
-      "Limit excess protein intake",
-      "Control blood pressure and blood sugar"
-    ],
-    "otc_support": {
-      "safe_options": [
-        "Oral hydration solutions"
+      "impact": [
+        "Increased blood viscosity",
+        "Higher clot risk"
       ],
-      "note": "OTC support is limited and does not treat kidney disease."
-    },
-    "prescription_required": {
-      "conditions": [
-        "Chronic kidney disease",
-        "Rapid rise in creatinine"
+      "lifestyle": [
+        "Adequate hydration",
+        "Smoking cessation"
       ],
-      "instruction": "Nephrologist consultation required."
+      "otc_support": {
+        "safe_options": [
+          "Oral hydration solutions"
+        ],
+        "note": "Hydration may help if elevated due to dehydration."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Suspected polycythemia",
+          "Persistently high hematocrit"
+        ],
+        "instruction": "Medical evaluation required for persistent abnormalities."
+      },
+      "trend_hint": "Persistently high levels may indicate polycythemia"
     },
-    "trend_hint": "Progressively rising creatinine suggests declining kidney function"
+    "when_to_consult": "If symptomatic or persistent abnormal values occur",
+    "confidence_note": "Educational information only, not a medical diagnosis"
   },
-  "when_to_consult": "If levels remain elevated or increase rapidly",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-
-  "bun": {
-  "display_name": "Blood Urea Nitrogen (BUN)",
-  "category": "Kidney Function Test",
-  "unit": "mg/dL",
-  "function": "Measures urea nitrogen levels in the blood to assess kidney function and protein metabolism",
-  "normal_range": { "min": 7, "max": 20 },
-  "severity_rules": {
-    "low": { "severity": "Low" },
-    "high": { "severity": "Medium" }
-  },
-  "low": {
-    "causes": [
-      "Low protein intake",
-      "Liver disease",
-      "Overhydration"
-    ],
-    "impact": [
-      "Reduced urea production",
-      "Possible liver dysfunction indicator"
-    ],
-    "lifestyle": [
-      "Ensure adequate protein intake",
-      "Maintain balanced hydration"
-    ],
-    "trend_hint": "Persistently low BUN may suggest liver-related issues"
-  },
-  "high": {
-    "causes": [
-      "Kidney dysfunction",
-      "Dehydration",
-      "High protein diet",
-      "Gastrointestinal bleeding"
-    ],
-    "impact": [
-      "Waste accumulation in blood",
-      "Possible kidney impairment"
-    ],
-    "lifestyle": [
-      "Stay adequately hydrated",
-      "Avoid excessive protein intake",
-      "Monitor blood pressure"
-    ],
-    "otc_support": {
-      "safe_options": [
-        "Oral rehydration solutions"
+  "mcv": {
+    "display_name": "Mean Corpuscular Volume (MCV)",
+    "category": "Complete Blood Count",
+    "unit": "fL",
+    "function": "Measures average size of red blood cells",
+    "normal_range": {
+      "min": 80,
+      "max": 100
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "Low"
+      }
+    },
+    "low": {
+      "causes": [
+        "Iron deficiency anemia",
+        "Thalassemia"
       ],
-      "note": "Hydration may help if elevation is due to dehydration."
-    },
-    "prescription_required": {
-      "conditions": [
-        "Persistently elevated BUN",
-        "Suspected kidney disease"
+      "impact": [
+        "Microcytic anemia",
+        "Reduced oxygen-carrying capacity"
       ],
-      "instruction": "Doctor evaluation required for renal assessment."
-    },
-    "trend_hint": "Rising BUN may indicate declining kidney function"
-  },
-  "when_to_consult": "If BUN remains outside normal range or symptoms of kidney issues occur",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
- "total_cholesterol": {
-  "display_name": "Total Cholesterol",
-  "category": "Lipid Profile",
-  "unit": "mg/dL",
-  "function": "Represents the total cholesterol level in the bloodstream",
-  "normal_range": { "max": 200 },
-  "severity_rules": {
-    "high": { "severity": "Medium" }
-  },
-  "high": {
-    "causes": [
-      "High saturated fat intake",
-      "Sedentary lifestyle",
-      "Obesity",
-      "Genetic factors"
-    ],
-    "impact": [
-      "Atherosclerosis risk",
-      "Increased cardiovascular disease risk"
-    ],
-    "lifestyle": [
-      "Regular aerobic exercise",
-      "Reduce saturated and trans fats",
-      "Increase dietary fiber",
-      "Weight management"
-    ],
-    "otc_support": {
-      "safe_options": [
-        "Plant sterol supplements",
-        "Omega-3 fatty acids"
+      "lifestyle": [
+        "Increase iron intake if deficient",
+        "Balanced nutrition"
       ],
-      "note": "OTC supplements are supportive and not a substitute for medication."
+      "otc_support": {
+        "safe_options": [
+          "Iron supplements if deficiency confirmed"
+        ],
+        "note": "Do not self-supplement without confirmed deficiency."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Confirmed thalassemia or moderate anemia"
+        ],
+        "instruction": "Doctor evaluation required for further testing."
+      },
+      "trend_hint": "Low MCV suggests microcytic anemia"
     },
-    "prescription_required": {
-      "conditions": [
-        "Persistently high cholesterol",
-        "High cardiovascular risk profile"
+    "high": {
+      "causes": [
+        "Vitamin B12 deficiency",
+        "Folate deficiency",
+        "Alcohol use",
+        "Liver disease"
       ],
-      "instruction": "Consult doctor for lipid-lowering therapy if required."
-    },
-    "trend_hint": "Gradual increase over time increases long-term cardiovascular risk"
-  },
-  "when_to_consult": "If total cholesterol remains above 200 mg/dL despite lifestyle changes",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-  "ldl_cholesterol": {
-  "display_name": "LDL (Bad) Cholesterol",
-  "category": "Lipid Profile",
-  "unit": "mg/dL",
-  "function": "Transports cholesterol to tissues; excess contributes to arterial plaque formation",
-  "normal_range": { "max": 100 },
-  "severity_rules": {
-    "high": { "severity": "High" }
-  },
-  "high": {
-    "causes": [
-      "High saturated fat diet",
-      "Genetics",
-      "Obesity",
-      "Lack of physical activity"
-    ],
-    "impact": [
-      "Increased risk of heart attack",
-      "Stroke risk",
-      "Arterial plaque buildup"
-    ],
-    "lifestyle": [
-      "Adopt low saturated fat diet",
-      "Increase physical activity",
-      "Maintain healthy weight"
-    ],
-    "otc_support": {
-      "safe_options": [
-        "Plant sterols",
-        "Soluble fiber supplements"
+      "impact": [
+        "Macrocytic anemia",
+        "Reduced red cell efficiency"
       ],
-      "note": "OTC measures support but do not replace prescribed therapy."
-    },
-    "prescription_required": {
-      "conditions": [
-        "LDL ≥130 mg/dL",
-        "High cardiovascular risk",
-        "Existing heart disease"
+      "lifestyle": [
+        "Balanced diet with B12 and folate",
+        "Limit alcohol intake"
       ],
-      "instruction": "Doctor consultation required for possible statin therapy."
+      "otc_support": {
+        "safe_options": [
+          "Vitamin B12 supplements",
+          "Folic acid supplements"
+        ],
+        "note": "Follow label instructions."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Persistent macrocytic anemia",
+          "Neurological symptoms"
+        ],
+        "instruction": "Consult doctor for further evaluation."
+      },
+      "trend_hint": "High MCV suggests macrocytic anemia"
     },
-    "trend_hint": "Rising LDL levels increase long-term cardiovascular risk"
+    "when_to_consult": "If anemia symptoms or persistent abnormal MCV occur",
+    "confidence_note": "Educational information only, not a medical diagnosis"
   },
-  "when_to_consult": "If LDL remains elevated or cardiovascular risk factors are present",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"hdl_cholesterol": {
-  "display_name": "HDL (Good) Cholesterol",
-  "category": "Lipid Profile",
-  "unit": "mg/dL",
-  "function": "Helps remove excess cholesterol from bloodstream and protects against heart disease",
-  "normal_range": { "min": 40 },
-  "severity_rules": {
-    "low": { "severity": "Medium" }
-  },
-  "low": {
-    "causes": [
-      "Sedentary lifestyle",
-      "Smoking",
-      "Obesity",
-      "Poor diet"
-    ],
-    "impact": [
-      "Reduced cardiovascular protection",
-      "Higher heart disease risk"
-    ],
-    "lifestyle": [
-      "Increase aerobic exercise",
-      "Quit smoking",
-      "Consume healthy fats (nuts, olive oil, fatty fish)"
-    ],
-    "otc_support": {
-      "safe_options": [
-        "Omega-3 supplements"
+  "mch": {
+    "display_name": "Mean Corpuscular Hemoglobin (MCH)",
+    "category": "Complete Blood Count",
+    "unit": "pg",
+    "function": "Measures average amount of hemoglobin per red blood cell",
+    "normal_range": {
+      "min": 27,
+      "max": 33
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "Low"
+      }
+    },
+    "low": {
+      "causes": [
+        "Iron deficiency anemia"
       ],
-      "note": "Lifestyle changes are primary intervention."
-    },
-    "trend_hint": "Persistently low HDL increases cardiovascular risk"
-  },
-  "when_to_consult": "If HDL remains low along with elevated LDL or triglycerides",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"triglycerides": {
-  "display_name": "Triglycerides",
-  "category": "Lipid Profile",
-  "unit": "mg/dL",
-  "function": "Stores excess calories as fat for later energy use",
-  "normal_range": { "max": 150 },
-  "severity_rules": {
-    "high": { "severity": "Medium" }
-  },
-  "high": {
-    "causes": [
-      "High sugar intake",
-      "Excess alcohol consumption",
-      "Obesity",
-      "Uncontrolled diabetes",
-      "Physical inactivity"
-    ],
-    "impact": [
-      "Increased cardiovascular risk",
-      "Risk of pancreatitis (very high levels)"
-    ],
-    "lifestyle": [
-      "Reduce sugar and refined carbohydrates",
-      "Limit alcohol",
-      "Increase physical activity",
-      "Weight management"
-    ],
-    "otc_support": {
-      "safe_options": [
-        "Omega-3 fatty acid supplements"
+      "impact": [
+        "Hypochromic anemia",
+        "Pale red blood cells"
       ],
-      "note": "Very high triglycerides require medical supervision."
-    },
-    "prescription_required": {
-      "conditions": [
-        "Triglycerides ≥500 mg/dL",
-        "Recurrent high readings"
+      "lifestyle": [
+        "Increase iron-rich foods",
+        "Ensure adequate nutrition"
       ],
-      "instruction": "Doctor consultation required to prevent complications."
+      "otc_support": {
+        "safe_options": [
+          "Iron supplements if deficiency confirmed"
+        ],
+        "note": "Confirm deficiency before supplementing."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Persistent hypochromic anemia"
+        ],
+        "instruction": "Consult doctor for evaluation."
+      },
+      "trend_hint": "Low MCH often parallels low MCV and indicates iron deficiency"
     },
-    "trend_hint": "Persistently elevated triglycerides may indicate metabolic syndrome"
+    "high": {
+      "causes": [
+        "Macrocytic anemia",
+        "Vitamin B12 or folate deficiency"
+      ],
+      "impact": [
+        "Large red cells with increased hemoglobin content"
+      ],
+      "lifestyle": [
+        "Ensure adequate B12 and folate intake"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Vitamin B12 supplements",
+          "Folic acid supplements"
+        ],
+        "note": "Follow label instructions."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Persistent macrocytic anemia"
+        ],
+        "instruction": "Consult doctor for further evaluation."
+      },
+      "trend_hint": "High MCH usually seen with high MCV"
+    },
+    "when_to_consult": "If anemia suspected or persistent abnormal values",
+    "confidence_note": "Educational information only, not a medical diagnosis"
   },
-  "when_to_consult": "If triglyceride levels remain elevated or exceed 200 mg/dL",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-
-  "alt_sgpt": {
-  "display_name": "ALT (SGPT)",
-  "category": "Liver Function Test",
-  "unit": "U/L",
-  "function": "Alanine aminotransferase enzyme used to assess liver cell injury",
-  "normal_range": { "min": 7, "max": 55 },
-  "severity_rules": {
-    "low": { "severity": "Low" },
-    "high": { "severity": "Medium" }
+  "mchc": {
+    "display_name": "Mean Corpuscular Hemoglobin Concentration (MCHC)",
+    "category": "Complete Blood Count",
+    "unit": "g/dL",
+    "function": "Measures average concentration of hemoglobin in red blood cells",
+    "normal_range": {
+      "min": 32,
+      "max": 36
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "Low"
+      }
+    },
+    "low": {
+      "causes": [
+        "Iron deficiency anemia"
+      ],
+      "impact": [
+        "Pale red blood cells (hypochromia)"
+      ],
+      "lifestyle": [
+        "Increase iron-rich foods",
+        "Ensure balanced nutrition"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Iron supplements if deficiency confirmed"
+        ],
+        "note": "Confirm deficiency before supplementing."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Persistent hypochromic anemia"
+        ],
+        "instruction": "Doctor evaluation required."
+      },
+      "trend_hint": "Low MCHC suggests hypochromia, often from iron deficiency"
+    },
+    "high": {
+      "causes": [
+        "Hereditary spherocytosis",
+        "Hemolysis"
+      ],
+      "impact": [
+        "Increased hemoglobin concentration in RBCs",
+        "Possible hemolytic disorder"
+      ],
+      "lifestyle": [
+        "Maintain adequate hydration",
+        "Balanced diet"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No specific OTC intervention; medical evaluation needed."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Suspected hemolytic disorder",
+          "Persistent high MCHC"
+        ],
+        "instruction": "Consult doctor for hematology evaluation."
+      },
+      "trend_hint": "High MCHC may indicate hemolytic disorder"
+    },
+    "when_to_consult": "If persistent abnormal results or anemia symptoms occur",
+    "confidence_note": "Educational information only, not a medical diagnosis"
   },
-  "low": {
-    "causes": [
-      "Vitamin B6 deficiency",
-      "Chronic kidney disease"
-    ],
-    "impact": [
-      "Usually clinically insignificant",
-      "May indicate nutritional deficiency"
-    ],
-    "lifestyle": [
-      "Ensure balanced nutrition"
-    ],
-    "trend_hint": "Isolated low ALT is rarely concerning"
+  "neutrophils": {
+    "display_name": "Neutrophils",
+    "category": "White Blood Cell Differential",
+    "unit": "%",
+    "function": "Primary immune cells that fight bacterial infections and respond to inflammation",
+    "normal_range": {
+      "male": {
+        "min": 40,
+        "max": 70
+      },
+      "female": {
+        "min": 40,
+        "max": 70
+      }
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Medium"
+      },
+      "high": {
+        "severity": "Medium"
+      }
+    },
+    "low": {
+      "causes": [
+        "Viral infections",
+        "Bone marrow suppression",
+        "Vitamin B12 or folate deficiency",
+        "Certain medications (chemotherapy, antibiotics)"
+      ],
+      "impact": [
+        "Weakened immune response",
+        "Increased risk of infections"
+      ],
+      "lifestyle": [
+        "Maintain good personal hygiene",
+        "Ensure adequate rest and sleep",
+        "Consume a balanced diet rich in vitamins"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Vitamin B12 supplements",
+          "Folate supplements"
+        ],
+        "note": "Over-the-counter supplements may help only in mild deficiency cases."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Severe neutropenia",
+          "Recurrent or serious infections"
+        ],
+        "instruction": "Consult a doctor for further evaluation and treatment."
+      },
+      "trend_hint": "Persistently low neutrophil levels may indicate immune suppression"
+    },
+    "high": {
+      "causes": [
+        "Bacterial infections",
+        "Inflammation or tissue injury",
+        "Physical or emotional stress",
+        "Smoking"
+      ],
+      "impact": [
+        "Ongoing infection or inflammation",
+        "Possible immune system overactivity"
+      ],
+      "lifestyle": [
+        "Stay well hydrated",
+        "Avoid smoking",
+        "Follow a healthy, anti-inflammatory diet"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No specific OTC intervention; address underlying cause."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Suspected bacterial infection",
+          "Persistently elevated neutrophils"
+        ],
+        "instruction": "Medical evaluation recommended if neutrophil levels remain elevated."
+      },
+      "trend_hint": "Persistently elevated neutrophils may indicate chronic infection or inflammation"
+    },
+    "when_to_consult": "If abnormal neutrophil levels persist across multiple blood tests",
+    "confidence_note": "Educational information only, not a medical diagnosis"
   },
-  "high": {
-    "causes": [
-      "Fatty liver disease",
-      "Viral hepatitis",
-      "Alcohol-related liver injury",
-      "Medication-induced liver damage"
-    ],
-    "impact": [
-      "Liver cell inflammation or damage",
-      "Progression to chronic liver disease if persistent"
-    ],
-    "lifestyle": [
-      "Weight management",
-      "Limit alcohol intake",
-      "Control blood sugar",
-      "Avoid unnecessary hepatotoxic drugs"
-    ],
-    "otc_support": {
-      "safe_options": [
+  "lymphocytes": {
+    "display_name": "Lymphocytes",
+    "category": "White Blood Cell Differential",
+    "unit": "%",
+    "function": "White blood cells responsible for adaptive immune response and viral defense",
+    "normal_range": {
+      "min": 20,
+      "max": 40
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Medium"
+      },
+      "high": {
+        "severity": "Medium"
+      }
+    },
+    "low": {
+      "causes": [
+        "Acute infection",
+        "Immunodeficiency",
+        "Steroid therapy",
+        "Bone marrow suppression"
+      ],
+      "impact": [
+        "Reduced immune defense",
+        "Increased infection susceptibility"
+      ],
+      "lifestyle": [
+        "Ensure adequate rest",
+        "Balanced nutrition",
+        "Maintain good hygiene"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Vitamin C supplements",
+          "General multivitamins"
+        ],
+        "note": "Supportive only; does not treat underlying cause."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Severe lymphopenia",
+          "Recurrent infections"
+        ],
+        "instruction": "Doctor evaluation required for immune assessment."
+      },
+      "trend_hint": "Persistently low lymphocytes may indicate immune suppression"
+    },
+    "high": {
+      "causes": [
+        "Viral infection",
+        "Chronic inflammation",
+        "Lymphoproliferative disorders"
+      ],
+      "impact": [
+        "Active immune response",
+        "Possible chronic infection or hematologic disorder"
+      ],
+      "lifestyle": [
+        "Adequate rest",
+        "Balanced nutrition"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No specific OTC intervention; address underlying cause."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Marked elevation",
+          "Suspected lymphoproliferative disorder"
+        ],
+        "instruction": "Further medical evaluation required."
+      },
+      "trend_hint": "Marked elevation warrants further evaluation"
+    },
+    "when_to_consult": "If recurrent infections or persistent abnormal counts occur",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+  "monocytes": {
+    "display_name": "Monocytes",
+    "category": "White Blood Cell Differential",
+    "unit": "%",
+    "function": "White blood cells involved in chronic inflammation and tissue repair",
+    "normal_range": {
+      "min": 2,
+      "max": 8
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "Low"
+      }
+    },
+    "low": {
+      "causes": [
+        "Bone marrow suppression",
+        "Acute stress"
+      ],
+      "impact": [
+        "Usually clinically insignificant"
+      ],
+      "lifestyle": [
+        "Balanced nutrition",
+        "Adequate rest"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No specific OTC intervention required."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Persistent monocytopenia with symptoms"
+        ],
+        "instruction": "Consult doctor if associated with immune symptoms."
+      },
+      "trend_hint": "Isolated low monocytes rarely significant"
+    },
+    "high": {
+      "causes": [
+        "Chronic infection",
+        "Autoimmune disease",
+        "Recovery phase of infection"
+      ],
+      "impact": [
+        "Chronic inflammatory response"
+      ],
+      "lifestyle": [
+        "Anti-inflammatory diet",
+        "Adequate hydration"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "Address underlying inflammatory or infectious cause."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Persistent monocytosis with symptoms"
+        ],
+        "instruction": "Doctor evaluation required."
+      },
+      "trend_hint": "Persistent monocytosis may require evaluation"
+    },
+    "when_to_consult": "If persistent elevation with symptoms",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+  "eosinophils": {
+    "display_name": "Eosinophils",
+    "category": "White Blood Cell Differential",
+    "unit": "%",
+    "function": "White blood cells involved in allergic reactions and parasitic infections",
+    "normal_range": {
+      "min": 1,
+      "max": 6
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "Medium"
+      }
+    },
+    "low": {
+      "causes": [
+        "Stress response",
+        "Steroid therapy"
+      ],
+      "impact": [
+        "Usually clinically insignificant"
+      ],
+      "lifestyle": [
+        "No specific action needed"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No specific OTC intervention required."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Not typically required for low eosinophils"
+        ],
+        "instruction": "Consult doctor only if associated with other abnormalities."
+      },
+      "trend_hint": "Low eosinophils rarely require action"
+    },
+    "high": {
+      "causes": [
+        "Allergic disorders",
+        "Asthma",
+        "Parasitic infection",
+        "Drug reactions"
+      ],
+      "impact": [
+        "Allergic inflammation",
+        "Tissue damage if markedly elevated"
+      ],
+      "lifestyle": [
+        "Avoid known allergens",
+        "Follow anti-inflammatory diet"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Antihistamines for mild allergic symptoms (as per label)"
+        ],
+        "note": "Does not address underlying cause."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Persistent eosinophilia",
+          "Suspected parasitic infection or drug reaction"
+        ],
+        "instruction": "Doctor evaluation required."
+      },
+      "trend_hint": "Persistent eosinophilia warrants evaluation"
+    },
+    "when_to_consult": "If associated with allergy symptoms or unexplained elevation",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+  "basophils": {
+    "display_name": "Basophils",
+    "category": "White Blood Cell Differential",
+    "unit": "%",
+    "function": "White blood cells involved in inflammatory and allergic responses",
+    "normal_range": {
+      "min": 0,
+      "max": 1
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "Low"
+      }
+    },
+    "low": {
+      "causes": [
+        "Acute infection",
+        "Stress response"
+      ],
+      "impact": [
+        "Usually clinically insignificant"
+      ],
+      "lifestyle": [
+        "Maintain balanced nutrition and rest"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No specific OTC intervention required."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Not typically required"
+        ],
+        "instruction": "Consult doctor only if associated with other CBC abnormalities."
+      },
+      "trend_hint": "Low basophils rarely clinically meaningful"
+    },
+    "high": {
+      "causes": [
+        "Chronic inflammation",
+        "Allergic disorders",
+        "Myeloproliferative disorders"
+      ],
+      "impact": [
+        "Allergic or chronic inflammatory state"
+      ],
+      "lifestyle": [
+        "Manage allergies",
+        "Anti-inflammatory diet"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No specific OTC intervention; address underlying cause."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Persistent basophilia",
+          "Suspected myeloproliferative disorder"
+        ],
+        "instruction": "Doctor evaluation required."
+      },
+      "trend_hint": "Persistent basophilia requires evaluation"
+    },
+    "when_to_consult": "If persistent elevation or abnormal CBC findings",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+  "rdw": {
+    "display_name": "Red Cell Distribution Width (RDW)",
+    "category": "Complete Blood Count",
+    "unit": "%",
+    "function": "Measures variation in red blood cell size (anisocytosis)",
+    "normal_range": {
+      "min": 11.5,
+      "max": 14.5
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "Medium"
+      }
+    },
+    "low": {
+      "causes": [
+        "Usually not clinically significant"
+      ],
+      "impact": [
+        "Minimal diagnostic relevance"
+      ],
+      "lifestyle": [
+        "Maintain balanced nutrition"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No specific OTC intervention required."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Not typically required"
+        ],
+        "instruction": "Consult doctor if associated with other abnormal blood indices."
+      },
+      "trend_hint": "Low RDW rarely concerning"
+    },
+    "high": {
+      "causes": [
+        "Iron deficiency anemia",
+        "Vitamin B12 deficiency",
+        "Folate deficiency",
+        "Mixed anemia"
+      ],
+      "impact": [
+        "Significant size variability of RBCs"
+      ],
+      "lifestyle": [
+        "Ensure balanced diet with iron, B12, and folate"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Iron supplements",
+          "Vitamin B12 supplements",
+          "Folic acid supplements"
+        ],
+        "note": "Supplement only if specific deficiency is confirmed."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Persistent high RDW with anemia"
+        ],
+        "instruction": "Doctor evaluation to classify anemia type."
+      },
+      "trend_hint": "High RDW with abnormal MCV helps classify anemia"
+    },
+    "when_to_consult": "If anemia suspected or persistent abnormal values occur",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+  "mpv": {
+    "display_name": "Mean Platelet Volume (MPV)",
+    "category": "Complete Blood Count",
+    "unit": "fL",
+    "function": "Measures average size of platelets",
+    "normal_range": {
+      "min": 7.5,
+      "max": 12
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "Medium"
+      }
+    },
+    "low": {
+      "causes": [
+        "Bone marrow suppression",
+        "Chronic disease"
+      ],
+      "impact": [
+        "Reduced platelet production"
+      ],
+      "lifestyle": [
+        "Balanced nutrition",
+        "Adequate rest"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No specific OTC intervention; identify and address underlying cause."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Persistent low MPV with thrombocytopenia"
+        ],
+        "instruction": "Doctor evaluation required."
+      },
+      "trend_hint": "Low MPV may indicate decreased marrow activity"
+    },
+    "high": {
+      "causes": [
+        "Increased platelet turnover",
+        "Inflammation",
+        "Cardiovascular risk"
+      ],
+      "impact": [
+        "Larger, more reactive platelets",
+        "Potential clotting tendency"
+      ],
+      "lifestyle": [
+        "Anti-inflammatory diet",
+        "Stay hydrated",
+        "Regular physical activity"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Omega-3 fatty acids (may reduce platelet reactivity)"
+        ],
+        "note": "Do not self-administer blood thinners."
+      },
+      "prescription_required": {
+        "conditions": [
+          "High MPV with cardiovascular risk factors or clotting symptoms"
+        ],
+        "instruction": "Doctor evaluation recommended."
+      },
+      "trend_hint": "High MPV may correlate with inflammatory or thrombotic risk"
+    },
+    "when_to_consult": "If persistent abnormal platelet indices or bleeding/clotting symptoms occur",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+  "platelet_count": {
+    "display_name": "Platelet Count",
+    "category": "Complete Blood Count",
+    "unit": "/\u00b5L",
+    "function": "Essential for blood clotting and prevention of bleeding",
+    "normal_range": {
+      "min": 150000,
+      "max": 450000
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "High"
+      },
+      "high": {
+        "severity": "Medium"
+      }
+    },
+    "low": {
+      "causes": [
+        "Viral infections",
+        "Bone marrow disorders",
+        "Vitamin B12 deficiency",
+        "Autoimmune conditions"
+      ],
+      "impact": [
+        "Easy bruising",
+        "Prolonged bleeding",
+        "Nosebleeds",
+        "Bleeding gums"
+      ],
+      "lifestyle": [
+        "Avoid injury or contact sports",
+        "Use soft toothbrush",
+        "Eat vitamin-rich balanced diet"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Vitamin B12 supplements (if deficient)",
+          "Folate supplements"
+        ],
+        "note": "Avoid NSAIDs unless advised, as they may increase bleeding risk."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Platelet count <50,000/\u00b5L",
+          "Active bleeding"
+        ],
+        "instruction": "Immediate medical consultation required."
+      },
+      "trend_hint": "Rapidly falling platelet count may indicate serious underlying condition"
+    },
+    "high": {
+      "causes": [
+        "Inflammation",
+        "Iron deficiency",
+        "Post-surgery recovery",
+        "Bone marrow disorders"
+      ],
+      "impact": [
+        "Increased clotting tendency",
+        "Possible thrombotic risk"
+      ],
+      "lifestyle": [
+        "Stay hydrated",
+        "Manage underlying inflammatory conditions"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Iron supplements (if iron deficiency confirmed)"
+        ],
+        "note": "Do not self-medicate with blood thinners."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Platelet count >600,000/\u00b5L",
+          "History of clotting disorders"
+        ],
+        "instruction": "Consult physician for hematology evaluation."
+      },
+      "trend_hint": "Persistently elevated platelets may require evaluation for reactive or primary thrombocytosis"
+    },
+    "when_to_consult": "If unusual bleeding, bruising, or clotting symptoms occur",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+  "fasting_blood_glucose": {
+    "display_name": "Fasting Blood Glucose",
+    "category": "Blood Sugar",
+    "unit": "mg/dL",
+    "function": "Measures blood glucose levels after 8\u201312 hours of fasting",
+    "normal_range": {
+      "min": 70,
+      "max": 99
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Medium"
+      },
+      "high": {
+        "severity": "High"
+      }
+    },
+    "low": {
+      "causes": [
+        "Skipping meals",
+        "Excess insulin or diabetes medication",
+        "Hormonal imbalance"
+      ],
+      "impact": [
+        "Dizziness",
+        "Sweating",
+        "Confusion",
+        "Low energy"
+      ],
+      "lifestyle": [
+        "Eat regular balanced meals",
+        "Avoid prolonged fasting",
+        "Monitor glucose if diabetic"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Glucose tablets",
+          "Oral glucose gel"
+        ],
+        "note": "Use as directed for mild hypoglycemia."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Recurrent hypoglycemia"
+        ],
+        "instruction": "Consult doctor to adjust diabetes medications."
+      },
+      "trend_hint": "Repeated low values may indicate medication imbalance or endocrine disorder"
+    },
+    "high": {
+      "causes": [
+        "Diabetes",
+        "Prediabetes",
+        "Poor dietary habits",
+        "Physical inactivity"
+      ],
+      "impact": [
+        "Increased cardiovascular risk",
+        "Kidney damage",
+        "Nerve damage",
+        "Vision problems"
+      ],
+      "lifestyle": [
+        "Limit refined sugars and processed foods",
+        "Increase fiber intake",
+        "Regular physical activity",
+        "Weight management"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Fiber supplements",
+          "Low glycemic index meal planning aids"
+        ],
+        "note": "OTC options do not replace medical therapy."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Fasting glucose \u2265126 mg/dL on repeated tests"
+        ],
+        "instruction": "Doctor consultation for diabetes evaluation and medication."
+      },
+      "trend_hint": "Persistently elevated fasting glucose suggests diabetes progression"
+    },
+    "when_to_consult": "If abnormal levels persist or symptoms like excessive thirst and urination appear",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+  "hba1c": {
+    "display_name": "Hemoglobin A1c (HbA1c)",
+    "category": "Blood Sugar",
+    "unit": "%",
+    "function": "Reflects average blood glucose levels over the past 2\u20133 months",
+    "normal_range": {
+      "min": 4.0,
+      "max": 5.6
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "High"
+      }
+    },
+    "low": {
+      "causes": [
+        "Frequent hypoglycemia",
+        "Overtreatment of diabetes"
+      ],
+      "impact": [
+        "Risk of hypoglycemic episodes"
+      ],
+      "lifestyle": [
+        "Avoid unnecessary glucose restriction",
+        "Monitor medication dosage"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No OTC intervention needed; consult doctor for medication review."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Very low HbA1c in known diabetic"
+        ],
+        "instruction": "Doctor must review and adjust medication dosages."
+      },
+      "trend_hint": "Very low HbA1c in diabetics may indicate overtreatment"
+    },
+    "high": {
+      "causes": [
+        "Poor glucose management",
+        "Prediabetes",
+        "Type 1 or Type 2 diabetes"
+      ],
+      "impact": [
+        "Increased risk of neuropathy",
+        "Retinopathy",
+        "Kidney disease",
+        "Cardiovascular complications"
+      ],
+      "lifestyle": [
+        "Low glycemic index diet",
+        "Regular aerobic exercise",
+        "Consistent glucose monitoring"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Dietary fiber supplements",
+          "Diabetes-friendly nutritional plans"
+        ],
+        "note": "OTC measures are supportive, not curative."
+      },
+      "prescription_required": {
+        "conditions": [
+          "HbA1c \u22656.5%",
+          "Worsening glycemic control"
+        ],
+        "instruction": "Consult doctor for structured diabetes management plan."
+      },
+      "trend_hint": "Rising HbA1c over time indicates worsening glucose control"
+    },
+    "when_to_consult": "If HbA1c is above 5.7% or increasing steadily",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+  "total_cholesterol": {
+    "display_name": "Total Cholesterol",
+    "category": "Lipid Profile",
+    "unit": "mg/dL",
+    "function": "Represents the total cholesterol level in the bloodstream",
+    "normal_range": {
+      "min": 0,
+      "max": 200
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "Medium"
+      }
+    },
+    "low": {
+      "causes": [
+        "Malnutrition",
+        "Liver disease",
+        "Hyperthyroidism"
+      ],
+      "impact": [
+        "Rarely clinically significant",
+        "May indicate malnutrition or liver dysfunction"
+      ],
+      "lifestyle": [
+        "Ensure adequate caloric and nutritional intake"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No specific OTC intervention required."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Very low cholesterol with symptoms"
+        ],
+        "instruction": "Consult doctor to rule out underlying cause."
+      },
+      "trend_hint": "Very low total cholesterol is rarely concerning but may warrant evaluation"
+    },
+    "high": {
+      "causes": [
+        "High saturated fat intake",
+        "Sedentary lifestyle",
+        "Obesity",
+        "Genetic factors"
+      ],
+      "impact": [
+        "Atherosclerosis risk",
+        "Increased cardiovascular disease risk"
+      ],
+      "lifestyle": [
+        "Regular aerobic exercise",
+        "Reduce saturated and trans fats",
+        "Increase dietary fiber",
+        "Weight management"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Plant sterol supplements",
+          "Omega-3 fatty acids"
+        ],
+        "note": "OTC supplements are supportive and not a substitute for medication."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Persistently high cholesterol",
+          "High cardiovascular risk profile"
+        ],
+        "instruction": "Consult doctor for lipid-lowering therapy if required."
+      },
+      "trend_hint": "Gradual increase over time increases long-term cardiovascular risk"
+    },
+    "when_to_consult": "If total cholesterol remains above 200 mg/dL despite lifestyle changes",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+  "ldl": {
+    "display_name": "LDL (Bad) Cholesterol",
+    "category": "Lipid Profile",
+    "unit": "mg/dL",
+    "function": "Transports cholesterol to tissues; excess contributes to arterial plaque formation",
+    "normal_range": {
+      "min": 0,
+      "max": 100
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "High"
+      }
+    },
+    "low": {
+      "causes": [
+        "Statin therapy",
+        "Malnutrition",
+        "Hyperthyroidism"
+      ],
+      "impact": [
+        "Usually not harmful",
+        "Very low levels may occur with aggressive treatment"
+      ],
+      "lifestyle": [
+        "Maintain balanced nutrition"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No specific OTC intervention needed."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Very low LDL (<40 mg/dL) with symptoms"
+        ],
+        "instruction": "Review statin dosage with your doctor."
+      },
+      "trend_hint": "Very low LDL rarely requires intervention"
+    },
+    "high": {
+      "causes": [
+        "High saturated fat diet",
+        "Genetics",
+        "Obesity",
+        "Lack of physical activity"
+      ],
+      "impact": [
+        "Increased risk of heart attack",
+        "Stroke risk",
+        "Arterial plaque buildup"
+      ],
+      "lifestyle": [
+        "Adopt low saturated fat diet",
+        "Increase physical activity",
+        "Maintain healthy weight"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Plant sterols",
+          "Soluble fiber supplements"
+        ],
+        "note": "OTC measures support but do not replace prescribed therapy."
+      },
+      "prescription_required": {
+        "conditions": [
+          "LDL \u2265130 mg/dL",
+          "High cardiovascular risk",
+          "Existing heart disease"
+        ],
+        "instruction": "Doctor consultation required for possible statin therapy."
+      },
+      "trend_hint": "Rising LDL levels increase long-term cardiovascular risk"
+    },
+    "when_to_consult": "If LDL remains elevated or cardiovascular risk factors are present",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+  "hdl": {
+    "display_name": "HDL (Good) Cholesterol",
+    "category": "Lipid Profile",
+    "unit": "mg/dL",
+    "function": "Helps remove excess cholesterol from bloodstream and protects against heart disease",
+    "normal_range": {
+      "male": {
+        "min": 40,
+        "max": 60
+      },
+      "female": {
+        "min": 50,
+        "max": 60
+      }
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Medium"
+      },
+      "high": {
+        "severity": "Low"
+      }
+    },
+    "low": {
+      "causes": [
+        "Sedentary lifestyle",
+        "Smoking",
+        "Obesity",
+        "Poor diet"
+      ],
+      "impact": [
+        "Reduced cardiovascular protection",
+        "Higher heart disease risk"
+      ],
+      "lifestyle": [
+        "Increase aerobic exercise",
+        "Quit smoking",
+        "Consume healthy fats (nuts, olive oil, fatty fish)"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Omega-3 supplements"
+        ],
+        "note": "Lifestyle changes are the primary intervention."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Persistently low HDL with high LDL or triglycerides"
+        ],
+        "instruction": "Consult doctor for lipid management plan."
+      },
+      "trend_hint": "Persistently low HDL increases cardiovascular risk"
+    },
+    "high": {
+      "causes": [
+        "Regular physical exercise",
+        "Moderate alcohol consumption",
+        "Genetics"
+      ],
+      "impact": [
+        "Generally protective",
+        "Very high levels may occasionally be associated with certain conditions"
+      ],
+      "lifestyle": [
+        "Maintain healthy lifestyle that promotes high HDL"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "High HDL is generally beneficial; no OTC intervention needed."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Extremely elevated HDL >100 mg/dL with symptoms"
+        ],
+        "instruction": "Consult doctor if associated with unusual symptoms."
+      },
+      "trend_hint": "High HDL is typically protective for cardiovascular health"
+    },
+    "when_to_consult": "If HDL remains low along with elevated LDL or triglycerides",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+  "triglycerides": {
+    "display_name": "Triglycerides",
+    "category": "Lipid Profile",
+    "unit": "mg/dL",
+    "function": "Stores excess calories as fat for later energy use",
+    "normal_range": {
+      "min": 0,
+      "max": 150
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "Medium"
+      }
+    },
+    "low": {
+      "causes": [
+        "Malnutrition",
+        "Hyperthyroidism",
+        "Very low fat diet"
+      ],
+      "impact": [
+        "Usually not clinically significant"
+      ],
+      "lifestyle": [
+        "Ensure adequate caloric intake"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No specific OTC intervention required."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Very low triglycerides with symptoms"
+        ],
+        "instruction": "Consult doctor to rule out malnutrition or metabolic disorder."
+      },
+      "trend_hint": "Low triglycerides rarely require intervention"
+    },
+    "high": {
+      "causes": [
+        "High sugar intake",
+        "Excess alcohol consumption",
+        "Obesity",
+        "Uncontrolled diabetes",
+        "Physical inactivity"
+      ],
+      "impact": [
+        "Increased cardiovascular risk",
+        "Risk of pancreatitis at very high levels"
+      ],
+      "lifestyle": [
+        "Reduce sugar and refined carbohydrates",
+        "Limit alcohol",
+        "Increase physical activity",
+        "Weight management"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Omega-3 fatty acid supplements"
+        ],
+        "note": "Very high triglycerides require medical supervision."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Triglycerides \u2265500 mg/dL",
+          "Recurrent high readings"
+        ],
+        "instruction": "Doctor consultation required to prevent complications."
+      },
+      "trend_hint": "Persistently elevated triglycerides may indicate metabolic syndrome"
+    },
+    "when_to_consult": "If triglyceride levels remain elevated or exceed 200 mg/dL",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+  "bilirubin_total": {
+    "display_name": "Total Bilirubin",
+    "category": "Liver Function Test",
+    "unit": "mg/dL",
+    "function": "Measures bilirubin levels to assess liver function and bile flow",
+    "normal_range": {
+      "min": 0.1,
+      "max": 1.2
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "Medium"
+      }
+    },
+    "low": {
+      "causes": [
+        "Usually clinically insignificant"
+      ],
+      "impact": [
+        "No major health concern"
+      ],
+      "lifestyle": [],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No specific OTC intervention required."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Not typically required"
+        ],
+        "instruction": "Consult doctor only if associated with other abnormal liver markers."
+      },
+      "trend_hint": "Low bilirubin rarely requires intervention"
+    },
+    "high": {
+      "causes": [
+        "Liver disease",
+        "Bile duct obstruction",
+        "Hemolysis",
+        "Gilbert syndrome"
+      ],
+      "impact": [
+        "Jaundice",
+        "Yellowing of skin and eyes",
+        "Underlying liver or blood disorder"
+      ],
+      "lifestyle": [
         "Avoid alcohol",
-        "Maintain healthy diet"
+        "Maintain liver-friendly diet"
       ],
-      "note": "No OTC medication should replace medical evaluation."
+      "otc_support": {
+        "safe_options": [],
+        "note": "Underlying cause must be identified before treatment."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Visible jaundice",
+          "Rapid bilirubin rise"
+        ],
+        "instruction": "Immediate medical evaluation recommended."
+      },
+      "trend_hint": "Rapid increase may indicate acute liver or bile duct problem"
     },
-    "prescription_required": {
-      "conditions": [
-        "ALT persistently >2x normal",
-        "Symptoms of liver disease"
+    "when_to_consult": "If jaundice or persistent elevation is observed",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+  "sgpt_alt": {
+    "display_name": "ALT / SGPT",
+    "category": "Liver Function Test",
+    "unit": "U/L",
+    "function": "Alanine aminotransferase enzyme used to assess liver cell injury",
+    "normal_range": {
+      "min": 7,
+      "max": 56
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "Medium"
+      }
+    },
+    "low": {
+      "causes": [
+        "Vitamin B6 deficiency",
+        "Chronic kidney disease"
       ],
-      "instruction": "Doctor evaluation required for liver assessment."
-    },
-    "trend_hint": "Rising ALT suggests active liver injury"
-  },
-  "when_to_consult": "If ALT remains elevated or symptoms like jaundice or abdominal pain occur",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
- "ast_sgot": {
-  "display_name": "AST (SGOT)",
-  "category": "Liver Function Test",
-  "unit": "U/L",
-  "function": "Aspartate aminotransferase enzyme found in liver, heart, and muscle tissue",
-  "normal_range": { "min": 8, "max": 48 },
-  "severity_rules": {
-    "low": { "severity": "Low" },
-    "high": { "severity": "Medium" }
-  },
-  "low": {
-    "causes": [
-      "Vitamin B6 deficiency"
-    ],
-    "impact": [
-      "Typically not clinically significant"
-    ],
-    "lifestyle": [
-      "Balanced diet"
-    ],
-    "trend_hint": "Isolated low AST rarely requires intervention"
-  },
-  "high": {
-    "causes": [
-      "Liver disease",
-      "Muscle injury",
-      "Heart injury",
-      "Alcohol use"
-    ],
-    "impact": [
-      "Liver or muscle tissue damage",
-      "Requires correlation with ALT"
-    ],
-    "lifestyle": [
-      "Limit alcohol",
-      "Avoid intense muscle strain before testing"
-    ],
-    "otc_support": {
-      "safe_options": [
-        "Rest if muscle injury suspected"
+      "impact": [
+        "Usually clinically insignificant",
+        "May indicate nutritional deficiency"
       ],
-      "note": "Persistent elevation requires medical evaluation."
-    },
-    "prescription_required": {
-      "conditions": [
-        "AST persistently elevated",
-        "AST/ALT ratio abnormal"
+      "lifestyle": [
+        "Ensure balanced nutrition"
       ],
-      "instruction": "Further liver or cardiac evaluation may be required."
+      "otc_support": {
+        "safe_options": [
+          "Vitamin B6 supplement if deficiency confirmed"
+        ],
+        "note": "Confirm deficiency before supplementing."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Persistent low ALT with other abnormal markers"
+        ],
+        "instruction": "Consult doctor if associated with other findings."
+      },
+      "trend_hint": "Isolated low ALT is rarely concerning"
     },
-    "trend_hint": "AST higher than ALT may suggest alcohol-related liver disease"
-  },
-  "when_to_consult": "If AST remains elevated or symptoms of liver/heart issues occur",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
- "total_bilirubin": {
-  "display_name": "Total Bilirubin",
-  "category": "Liver Function Test",
-  "unit": "mg/dL",
-  "function": "Measures bilirubin levels to assess liver function and bile flow",
-  "normal_range": { "min": 0.1, "max": 1.2 },
-  "severity_rules": {
-    "low": { "severity": "Low" },
-    "high": { "severity": "Medium" }
-  },
-  "low": {
-    "causes": [
-      "Usually clinically insignificant"
-    ],
-    "impact": [
-      "No major health concern"
-    ],
-    "lifestyle": [],
-    "trend_hint": "Low bilirubin rarely requires intervention"
-  },
-  "high": {
-    "causes": [
-      "Liver disease",
-      "Bile duct obstruction",
-      "Hemolysis",
-      "Gilbert syndrome"
-    ],
-    "impact": [
-      "Jaundice",
-      "Yellowing of skin and eyes",
-      "Underlying liver or blood disorder"
-    ],
-    "lifestyle": [
-      "Avoid alcohol",
-      "Maintain liver-friendly diet"
-    ],
-    "otc_support": {
-      "safe_options": [],
-      "note": "Underlying cause must be identified before treatment."
-    },
-    "prescription_required": {
-      "conditions": [
-        "Visible jaundice",
-        "Rapid bilirubin rise"
+    "high": {
+      "causes": [
+        "Fatty liver disease",
+        "Viral hepatitis",
+        "Alcohol-related liver injury",
+        "Medication-induced liver damage"
       ],
-      "instruction": "Immediate medical evaluation recommended."
-    },
-    "trend_hint": "Rapid increase may indicate acute liver or bile duct problem"
-  },
-  "when_to_consult": "If jaundice or persistent elevation is observed",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
- "tsh": {
-  "display_name": "Thyroid Stimulating Hormone (TSH)",
-  "category": "Thyroid Function",
-  "unit": "mIU/L",
-  "function": "Regulates thyroid hormone production (T3 and T4)",
-  "normal_range": { "min": 0.4, "max": 4.0 },
-  "severity_rules": {
-    "low": { "severity": "Medium" },
-    "high": { "severity": "Medium" }
-  },
-  "low": {
-    "causes": [
-      "Hyperthyroidism",
-      "Excess thyroid hormone medication",
-      "Pituitary dysfunction"
-    ],
-    "impact": [
-      "Increased heart rate",
-      "Weight loss",
-      "Anxiety",
-      "Bone loss risk"
-    ],
-    "lifestyle": [
-      "Avoid excess iodine supplementation",
-      "Monitor thyroid medication doses"
-    ],
-    "trend_hint": "Low TSH may indicate hyperthyroidism"
-  },
-  "high": {
-    "causes": [
-      "Hypothyroidism",
-      "Iodine deficiency",
-      "Autoimmune thyroiditis"
-    ],
-    "impact": [
-      "Fatigue",
-      "Weight gain",
-      "Cold intolerance",
-      "Elevated cholesterol"
-    ],
-    "lifestyle": [
-      "Ensure adequate iodine intake",
-      "Regular thyroid monitoring"
-    ],
-    "trend_hint": "High TSH may indicate hypothyroidism"
-  },
-  "prescription_required": {
-    "conditions": [
-      "Persistent abnormal TSH",
-      "Symptomatic thyroid dysfunction"
-    ],
-    "instruction": "Thyroid hormone therapy may be required."
-  },
-  "when_to_consult": "If TSH remains outside range or symptoms of thyroid imbalance occur",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-  "crp_hs": {
-  "display_name": "High-Sensitivity C-Reactive Protein (hs-CRP)",
-  "category": "Inflammatory Marker",
-  "unit": "mg/L",
-  "function": "Detects low-grade systemic inflammation and cardiovascular risk",
-  "normal_range": { "max": 1.0 },
-  "severity_rules": {
-    "high": { "severity": "Medium" }
-  },
-  "high": {
-    "causes": [
-      "Chronic inflammation",
-      "Infection",
-      "Obesity",
-      "Smoking",
-      "Autoimmune disorders"
-    ],
-    "impact": [
-      "Cardiovascular risk factor",
-      "Marker of systemic inflammation"
-    ],
-    "lifestyle": [
-      "Weight reduction",
-      "Smoking cessation",
-      "Regular physical activity",
-      "Anti-inflammatory diet"
-    ],
-    "otc_support": {
-      "safe_options": [
-        "Omega-3 fatty acids"
+      "impact": [
+        "Liver cell inflammation or damage",
+        "Progression to chronic liver disease if persistent"
       ],
-      "note": "Underlying cause must be addressed."
-    },
-    "prescription_required": {
-      "conditions": [
-        "Persistently >3 mg/L",
-        "High cardiovascular risk profile"
+      "lifestyle": [
+        "Weight management",
+        "Limit alcohol intake",
+        "Control blood sugar",
+        "Avoid unnecessary hepatotoxic drugs"
       ],
-      "instruction": "Further cardiovascular evaluation recommended."
+      "otc_support": {
+        "safe_options": [
+          "Avoid alcohol",
+          "Maintain healthy diet"
+        ],
+        "note": "No OTC medication should replace medical evaluation."
+      },
+      "prescription_required": {
+        "conditions": [
+          "ALT persistently >2x normal",
+          "Symptoms of liver disease"
+        ],
+        "instruction": "Doctor evaluation required for liver assessment."
+      },
+      "trend_hint": "Rising ALT suggests active liver injury"
     },
-    "trend_hint": "Persistently elevated hs-CRP indicates ongoing inflammation"
+    "when_to_consult": "If ALT remains elevated or symptoms like jaundice or abdominal pain occur",
+    "confidence_note": "Educational information only, not a medical diagnosis"
   },
-  "when_to_consult": "If hs-CRP remains elevated without clear cause",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-
- "troponin_i": {
-  "display_name": "Troponin I",
-  "category": "Cardiac Enzyme",
-  "unit": "ng/mL",
-  "function": "Cardiac-specific protein released into bloodstream during myocardial injury",
-  "normal_range": { "max": 0.04 },
-  "severity_rules": {
-    "high": { "severity": "Critical" }
-  },
-  "high": {
-    "causes": [
-      "Myocardial infarction (heart attack)",
-      "Myocarditis",
-      "Severe arrhythmia",
-      "Cardiac trauma",
-      "Severe sepsis"
-    ],
-    "impact": [
-      "Acute heart muscle damage",
-      "Life-threatening cardiac event"
-    ],
-    "lifestyle": [],
-    "otc_support": {
-      "safe_options": [],
-      "note": "No self-treatment appropriate."
+  "sgot_ast": {
+    "display_name": "AST / SGOT",
+    "category": "Liver Function Test",
+    "unit": "U/L",
+    "function": "Aspartate aminotransferase enzyme found in liver, heart, and muscle tissue",
+    "normal_range": {
+      "min": 10,
+      "max": 40
     },
-    "prescription_required": {
-      "conditions": [
-        "Any elevation above reference range"
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "Medium"
+      }
+    },
+    "low": {
+      "causes": [
+        "Vitamin B6 deficiency"
       ],
-      "instruction": "Emergency medical evaluation required immediately."
-    },
-    "trend_hint": "Rising troponin levels indicate ongoing myocardial injury",
-    "medical_attention": "Emergency evaluation required"
-  },
-  "when_to_consult": "Immediately if elevated or if chest pain, shortness of breath, or sweating occurs",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"testosterone_total": {
-  "display_name": "Total Testosterone",
-  "category": "Hormones",
-  "unit": "ng/dL",
-  "function": "Primary male sex hormone; regulates reproductive function, muscle mass, bone density, and libido",
-  "normal_range": {
-    "male": { "min": 300, "max": 1000 },
-    "female": { "min": 15, "max": 70 }
-  },
-  "severity_rules": {
-    "low": { "severity": "Medium" },
-    "high": { "severity": "Medium" }
-  },
-  "low": {
-    "causes": [
-      "Primary hypogonadism",
-      "Pituitary dysfunction",
-      "Aging",
-      "Chronic illness"
-    ],
-    "impact": [
-      "Low libido",
-      "Fatigue",
-      "Reduced muscle mass",
-      "Infertility"
-    ],
-    "lifestyle": [
-      "Resistance training",
-      "Adequate sleep",
-      "Weight optimization"
-    ],
-    "trend_hint": "Persistently low levels may indicate hypogonadism"
-  },
-  "high": {
-    "causes": [
-      "Anabolic steroid use",
-      "Testicular tumor",
-      "Polycystic ovary syndrome (in females)"
-    ],
-    "impact": [
-      "Acne",
-      "Mood changes",
-      "Cardiovascular risk",
-      "Infertility"
-    ],
-    "lifestyle": [
-      "Avoid anabolic steroid misuse"
-    ],
-    "trend_hint": "Marked elevation requires endocrine evaluation"
-  },
-  "prescription_required": {
-    "conditions": [
-      "Symptomatic hormone imbalance",
-      "Persistently abnormal values"
-    ],
-    "instruction": "Endocrinology consultation recommended."
-  },
-  "when_to_consult": "If symptoms of hormonal imbalance are present",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"estradiol": {
-  "display_name": "Estradiol (E2)",
-  "category": "Hormones",
-  "unit": "pg/mL",
-  "function": "Primary estrogen hormone regulating reproductive and bone health",
-  "normal_range": {
-    "female_premenopausal": { "min": 30, "max": 400 },
-    "female_postmenopausal": { "max": 30 },
-    "male": { "min": 10, "max": 40 }
-  },
-  "severity_rules": {
-    "low": { "severity": "Medium" },
-    "high": { "severity": "Medium" }
-  },
-  "low": {
-    "causes": [
-      "Menopause",
-      "Ovarian failure",
-      "Excessive exercise",
-      "Eating disorders"
-    ],
-    "impact": [
-      "Hot flashes",
-      "Bone loss",
-      "Irregular menstruation"
-    ],
-    "lifestyle": [
-      "Adequate calcium and vitamin D intake",
-      "Healthy body weight"
-    ],
-    "trend_hint": "Low levels in women may indicate ovarian insufficiency"
-  },
-  "high": {
-    "causes": [
-      "Pregnancy",
-      "Estrogen therapy",
-      "Hormone-secreting tumors",
-      "Obesity"
-    ],
-    "impact": [
-      "Menstrual irregularities",
-      "Breast tenderness",
-      "Thrombotic risk (if excessive)"
-    ],
-    "lifestyle": [
-      "Weight management"
-    ],
-    "trend_hint": "Persistent elevation requires hormonal evaluation"
-  },
-  "when_to_consult": "If reproductive or hormonal symptoms are present",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"serum_vitamin_d": {
-  "display_name": "25-Hydroxy Vitamin D",
-  "category": "Vitamin Profile",
-  "unit": "ng/mL",
-  "function": "Reflects body vitamin D status; essential for bone and immune health",
-  "normal_range": { "min": 30, "max": 100 },
-  "severity_rules": {
-    "low": { "severity": "Medium" },
-    "high": { "severity": "Low" }
-  },
-  "low": {
-    "causes": [
-      "Low sun exposure",
-      "Malabsorption",
-      "Obesity",
-      "Chronic kidney disease"
-    ],
-    "impact": [
-      "Bone weakness",
-      "Fracture risk",
-      "Muscle weakness"
-    ],
-    "lifestyle": [
-      "Sun exposure",
-      "Vitamin D rich foods",
-      "Supplementation if needed"
-    ],
-    "otc_support": {
-      "safe_options": [
-        "Vitamin D3 supplements"
+      "impact": [
+        "Typically not clinically significant"
       ],
-      "note": "Dose should follow medical guidance."
-    },
-    "trend_hint": "Persistent deficiency increases osteoporosis risk"
-  },
-  "high": {
-    "causes": [
-      "Excess supplementation"
-    ],
-    "impact": [
-      "Hypercalcemia",
-      "Kidney stones"
-    ],
-    "lifestyle": [
-      "Avoid excessive supplementation"
-    ],
-    "trend_hint": "Very high levels may cause toxicity"
-  },
-  "when_to_consult": "If deficiency persists or symptoms of toxicity occur",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"serum_vitamin_b12": {
-  "display_name": "Vitamin B12",
-  "category": "Vitamin Profile",
-  "unit": "pg/mL",
-  "function": "Essential for red blood cell formation and nerve function",
-  "normal_range": { "min": 200, "max": 900 },
-  "severity_rules": {
-    "low": { "severity": "Medium" },
-    "high": { "severity": "Low" }
-  },
-  "low": {
-    "causes": [
-      "Poor dietary intake",
-      "Pernicious anemia",
-      "Malabsorption",
-      "Vegetarian/vegan diet without supplementation"
-    ],
-    "impact": [
-      "Anemia",
-      "Neuropathy",
-      "Fatigue",
-      "Cognitive changes"
-    ],
-    "lifestyle": [
-      "Increase B12-rich foods",
-      "Supplementation if required"
-    ],
-    "otc_support": {
-      "safe_options": [
-        "Oral Vitamin B12 supplements"
+      "lifestyle": [
+        "Balanced diet"
       ],
-      "note": "Severe deficiency may require injections."
+      "otc_support": {
+        "safe_options": [
+          "Vitamin B6 supplement if deficiency confirmed"
+        ],
+        "note": "Isolated low AST rarely requires intervention."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Not typically required"
+        ],
+        "instruction": "Consult doctor if associated with other abnormal markers."
+      },
+      "trend_hint": "Isolated low AST rarely requires intervention"
     },
-    "trend_hint": "Persistent low levels risk irreversible nerve damage"
+    "high": {
+      "causes": [
+        "Liver disease",
+        "Muscle injury",
+        "Heart injury",
+        "Alcohol use"
+      ],
+      "impact": [
+        "Liver or muscle tissue damage",
+        "Requires correlation with ALT"
+      ],
+      "lifestyle": [
+        "Limit alcohol",
+        "Avoid intense muscle strain before testing"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Rest if muscle injury suspected"
+        ],
+        "note": "Persistent elevation requires medical evaluation."
+      },
+      "prescription_required": {
+        "conditions": [
+          "AST persistently elevated",
+          "AST/ALT ratio abnormal"
+        ],
+        "instruction": "Further liver or cardiac evaluation may be required."
+      },
+      "trend_hint": "AST higher than ALT may suggest alcohol-related liver disease"
+    },
+    "when_to_consult": "If AST remains elevated or symptoms of liver/heart issues occur",
+    "confidence_note": "Educational information only, not a medical diagnosis"
   },
-  "high": {
-    "causes": [
-      "Excess supplementation",
-      "Liver disease",
-      "Myeloproliferative disorders"
-    ],
-    "impact": [
-      "Usually not harmful alone",
-      "May indicate underlying disorder"
-    ],
-    "trend_hint": "Marked elevation warrants evaluation"
+  "creatinine": {
+    "display_name": "Serum Creatinine",
+    "category": "Kidney Function Test",
+    "unit": "mg/dL",
+    "function": "Indicates kidney filtration efficiency and waste clearance",
+    "normal_range": {
+      "male": {
+        "min": 0.74,
+        "max": 1.35
+      },
+      "female": {
+        "min": 0.59,
+        "max": 1.04
+      }
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "High"
+      }
+    },
+    "low": {
+      "causes": [
+        "Low muscle mass",
+        "Malnutrition"
+      ],
+      "impact": [
+        "Usually clinically insignificant"
+      ],
+      "lifestyle": [
+        "Ensure adequate nutrition",
+        "Maintain healthy muscle mass"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No specific OTC intervention needed."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Persistent low creatinine with other abnormal markers"
+        ],
+        "instruction": "Consult doctor if associated with other symptoms."
+      },
+      "trend_hint": "Persistently low creatinine may reflect low muscle mass"
+    },
+    "high": {
+      "causes": [
+        "Kidney dysfunction",
+        "Chronic kidney disease",
+        "Dehydration",
+        "Urinary obstruction"
+      ],
+      "impact": [
+        "Waste accumulation in blood",
+        "Fluid imbalance",
+        "Electrolyte disturbances"
+      ],
+      "lifestyle": [
+        "Stay adequately hydrated",
+        "Limit excess protein intake",
+        "Control blood pressure and blood sugar"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Oral hydration solutions"
+        ],
+        "note": "OTC support is limited and does not treat kidney disease."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Chronic kidney disease",
+          "Rapid rise in creatinine"
+        ],
+        "instruction": "Nephrologist consultation required."
+      },
+      "trend_hint": "Progressively rising creatinine suggests declining kidney function"
+    },
+    "when_to_consult": "If levels remain elevated or increase rapidly",
+    "confidence_note": "Educational information only, not a medical diagnosis"
   },
-  "when_to_consult": "If neurological symptoms or persistent abnormal levels occur",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"serum_potassium": {
-  "display_name": "Potassium",
-  "category": "Electrolytes",
-  "unit": "mEq/L",
-  "function": "Critical electrolyte for nerve conduction, muscle contraction, and heart rhythm",
-  "normal_range": { "min": 3.6, "max": 5.2 },
-  "severity_rules": {
-    "low": { "severity": "High" },
-    "high": { "severity": "High" }
+  "blood_urea_nitrogen": {
+    "display_name": "Blood Urea Nitrogen (BUN)",
+    "category": "Kidney Function Test",
+    "unit": "mg/dL",
+    "function": "Measures urea nitrogen levels in the blood to assess kidney function and protein metabolism",
+    "normal_range": {
+      "min": 7,
+      "max": 20
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "Medium"
+      }
+    },
+    "low": {
+      "causes": [
+        "Low protein intake",
+        "Liver disease",
+        "Overhydration"
+      ],
+      "impact": [
+        "Reduced urea production",
+        "Possible liver dysfunction indicator"
+      ],
+      "lifestyle": [
+        "Ensure adequate protein intake",
+        "Maintain balanced hydration"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No specific OTC intervention required."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Persistent low BUN with liver symptoms"
+        ],
+        "instruction": "Consult doctor to rule out liver-related issues."
+      },
+      "trend_hint": "Persistently low BUN may suggest liver-related issues"
+    },
+    "high": {
+      "causes": [
+        "Kidney dysfunction",
+        "Dehydration",
+        "High protein diet",
+        "Gastrointestinal bleeding"
+      ],
+      "impact": [
+        "Waste accumulation in blood",
+        "Possible kidney impairment"
+      ],
+      "lifestyle": [
+        "Stay adequately hydrated",
+        "Avoid excessive protein intake",
+        "Monitor blood pressure"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Oral rehydration solutions"
+        ],
+        "note": "Hydration may help if elevation is due to dehydration."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Persistently elevated BUN",
+          "Suspected kidney disease"
+        ],
+        "instruction": "Doctor evaluation required for renal assessment."
+      },
+      "trend_hint": "Rising BUN may indicate declining kidney function"
+    },
+    "when_to_consult": "If BUN remains outside normal range or symptoms of kidney issues occur",
+    "confidence_note": "Educational information only, not a medical diagnosis"
   },
-  "low": {
-    "causes": [
-      "Diuretics",
-      "Vomiting/diarrhea",
-      "Poor intake"
-    ],
-    "impact": [
-      "Muscle weakness",
-      "Arrhythmia",
-      "Cardiac arrest (severe cases)"
-    ],
-    "lifestyle": [
-      "Increase potassium-rich foods if mild"
-    ],
-    "trend_hint": "Rapid drops increase arrhythmia risk"
+  "tsh": {
+    "display_name": "Thyroid Stimulating Hormone (TSH)",
+    "category": "Thyroid Function",
+    "unit": "mIU/L",
+    "function": "Regulates thyroid hormone production (T3 and T4)",
+    "normal_range": {
+      "min": 0.4,
+      "max": 4.0
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Medium"
+      },
+      "high": {
+        "severity": "Medium"
+      }
+    },
+    "low": {
+      "causes": [
+        "Hyperthyroidism",
+        "Excess thyroid hormone medication",
+        "Pituitary dysfunction"
+      ],
+      "impact": [
+        "Increased heart rate",
+        "Weight loss",
+        "Anxiety",
+        "Bone loss risk"
+      ],
+      "lifestyle": [
+        "Avoid excess iodine supplementation",
+        "Monitor thyroid medication doses"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No OTC intervention appropriate; thyroid conditions require medical management."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Persistent abnormal TSH",
+          "Symptomatic thyroid dysfunction"
+        ],
+        "instruction": "Thyroid hormone therapy may be required; consult endocrinologist."
+      },
+      "trend_hint": "Low TSH may indicate hyperthyroidism"
+    },
+    "high": {
+      "causes": [
+        "Hypothyroidism",
+        "Iodine deficiency",
+        "Autoimmune thyroiditis"
+      ],
+      "impact": [
+        "Fatigue",
+        "Weight gain",
+        "Cold intolerance",
+        "Elevated cholesterol"
+      ],
+      "lifestyle": [
+        "Ensure adequate iodine intake",
+        "Regular thyroid monitoring"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No OTC intervention appropriate; thyroid conditions require medical management."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Persistently elevated TSH",
+          "Symptomatic hypothyroidism"
+        ],
+        "instruction": "Thyroid hormone replacement therapy may be required."
+      },
+      "trend_hint": "High TSH may indicate hypothyroidism"
+    },
+    "when_to_consult": "If TSH remains outside range or symptoms of thyroid imbalance occur",
+    "confidence_note": "Educational information only, not a medical diagnosis"
   },
-  "high": {
-    "causes": [
-      "Kidney failure",
-      "ACE inhibitors",
-      "Cell breakdown"
-    ],
-    "impact": [
-      "Dangerous cardiac arrhythmias",
-      "Cardiac arrest"
-    ],
-    "lifestyle": [
-      "Avoid high-potassium diet if elevated"
-    ],
-    "trend_hint": "Levels >6.0 mEq/L are medical emergencies"
+  "sodium": {
+    "display_name": "Sodium",
+    "category": "Electrolytes",
+    "unit": "mEq/L",
+    "function": "Primary extracellular electrolyte regulating fluid balance, nerve signaling, and muscle function",
+    "normal_range": {
+      "min": 135,
+      "max": 145
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "High"
+      },
+      "high": {
+        "severity": "High"
+      }
+    },
+    "low": {
+      "causes": [
+        "Excess fluid intake",
+        "Heart failure",
+        "SIADH",
+        "Kidney disease"
+      ],
+      "impact": [
+        "Confusion",
+        "Seizures",
+        "Cerebral edema"
+      ],
+      "lifestyle": [
+        "Fluid restriction if advised by doctor"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "Low sodium is a medical emergency at severe levels; do not self-treat."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Sodium <130 mEq/L",
+          "Neurological symptoms"
+        ],
+        "instruction": "Urgent medical evaluation required."
+      },
+      "trend_hint": "Rapid drops increase neurological risk"
+    },
+    "high": {
+      "causes": [
+        "Dehydration",
+        "Diabetes insipidus",
+        "Excess salt intake"
+      ],
+      "impact": [
+        "Thirst",
+        "Neurological symptoms",
+        "Intracellular dehydration"
+      ],
+      "lifestyle": [
+        "Increase water intake",
+        "Limit excess salt"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Oral rehydration solutions if mild dehydration"
+        ],
+        "note": "Severe hypernatremia requires immediate medical care."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Sodium >150 mEq/L",
+          "Neurological symptoms"
+        ],
+        "instruction": "Urgent medical evaluation required."
+      },
+      "trend_hint": "Rapid elevation increases neurological complications"
+    },
+    "when_to_consult": "Immediately if severe symptoms or significant abnormality occurs",
+    "confidence_note": "Educational information only, not a medical diagnosis"
   },
-  "prescription_required": {
-    "conditions": [
-      "Potassium <3.0 or >5.5 mEq/L",
-      "Symptoms of arrhythmia"
-    ],
-    "instruction": "Urgent medical evaluation required."
+  "potassium": {
+    "display_name": "Potassium",
+    "category": "Electrolytes",
+    "unit": "mEq/L",
+    "function": "Critical electrolyte for nerve conduction, muscle contraction, and heart rhythm",
+    "normal_range": {
+      "min": 3.5,
+      "max": 5.0
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "High"
+      },
+      "high": {
+        "severity": "High"
+      }
+    },
+    "low": {
+      "causes": [
+        "Diuretics",
+        "Vomiting or diarrhea",
+        "Poor dietary intake"
+      ],
+      "impact": [
+        "Muscle weakness",
+        "Arrhythmia",
+        "Cardiac arrest in severe cases"
+      ],
+      "lifestyle": [
+        "Increase potassium-rich foods (bananas, potatoes) if mild"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Oral potassium supplements (only under medical guidance)"
+        ],
+        "note": "Do not self-supplement potassium without medical guidance; overdose is dangerous."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Potassium <3.0 mEq/L",
+          "Symptoms of arrhythmia"
+        ],
+        "instruction": "Urgent medical evaluation required."
+      },
+      "trend_hint": "Rapid drops increase arrhythmia risk"
+    },
+    "high": {
+      "causes": [
+        "Kidney failure",
+        "ACE inhibitors",
+        "Cell breakdown"
+      ],
+      "impact": [
+        "Dangerous cardiac arrhythmias",
+        "Cardiac arrest"
+      ],
+      "lifestyle": [
+        "Avoid high-potassium diet if elevated"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "High potassium is a medical emergency; do not self-treat."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Potassium >5.5 mEq/L",
+          "Symptoms of arrhythmia"
+        ],
+        "instruction": "Urgent medical evaluation required."
+      },
+      "trend_hint": "Levels >6.0 mEq/L are medical emergencies"
+    },
+    "when_to_consult": "Immediately if significant abnormality or cardiac symptoms occur",
+    "confidence_note": "Educational information only, not a medical diagnosis"
   },
-  "when_to_consult": "Immediately if significant abnormality or cardiac symptoms occur",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"serum_sodium": {
-  "display_name": "Sodium",
-  "category": "Electrolytes",
-  "unit": "mEq/L",
-  "function": "Primary extracellular electrolyte regulating fluid balance, nerve signaling, and muscle function",
-  "normal_range": { "min": 135, "max": 145 },
-  "severity_rules": {
-    "low": { "severity": "High" },
-    "high": { "severity": "High" }
+  "vitamin_d": {
+    "display_name": "25-Hydroxy Vitamin D",
+    "category": "Vitamin Profile",
+    "unit": "ng/mL",
+    "function": "Reflects body vitamin D status; essential for bone and immune health",
+    "normal_range": {
+      "min": 30,
+      "max": 100
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Medium"
+      },
+      "high": {
+        "severity": "Low"
+      }
+    },
+    "low": {
+      "causes": [
+        "Low sun exposure",
+        "Malabsorption",
+        "Obesity",
+        "Chronic kidney disease"
+      ],
+      "impact": [
+        "Bone weakness",
+        "Fracture risk",
+        "Muscle weakness"
+      ],
+      "lifestyle": [
+        "Sun exposure (15\u201320 min daily)",
+        "Vitamin D rich foods (fatty fish, fortified milk)"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Vitamin D3 supplements"
+        ],
+        "note": "Dose should follow medical guidance; do not exceed recommended levels."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Severe deficiency (<10 ng/mL)",
+          "Malabsorption disorder"
+        ],
+        "instruction": "Doctor-supervised high-dose supplementation may be required."
+      },
+      "trend_hint": "Persistent deficiency increases osteoporosis risk"
+    },
+    "high": {
+      "causes": [
+        "Excess supplementation"
+      ],
+      "impact": [
+        "Hypercalcemia",
+        "Kidney stones",
+        "Nausea"
+      ],
+      "lifestyle": [
+        "Avoid excessive supplementation"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "Discontinue supplements and consult doctor."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Vitamin D toxicity (>100 ng/mL with symptoms)"
+        ],
+        "instruction": "Consult doctor immediately."
+      },
+      "trend_hint": "Very high levels may cause toxicity"
+    },
+    "when_to_consult": "If deficiency persists or symptoms of toxicity occur",
+    "confidence_note": "Educational information only, not a medical diagnosis"
   },
-  "low": {
-    "causes": [
-      "Excess fluid intake",
-      "Heart failure",
-      "SIADH",
-      "Kidney disease"
-    ],
-    "impact": [
-      "Confusion",
-      "Seizures",
-      "Cerebral edema"
-    ],
-    "lifestyle": [
-      "Fluid restriction if advised"
-    ],
-    "trend_hint": "Rapid drops increase neurological risk"
+  "vitamin_b12": {
+    "display_name": "Vitamin B12",
+    "category": "Vitamin Profile",
+    "unit": "pg/mL",
+    "function": "Essential for red blood cell formation and nerve function",
+    "normal_range": {
+      "min": 200,
+      "max": 900
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Medium"
+      },
+      "high": {
+        "severity": "Low"
+      }
+    },
+    "low": {
+      "causes": [
+        "Poor dietary intake",
+        "Pernicious anemia",
+        "Malabsorption",
+        "Vegetarian or vegan diet without supplementation"
+      ],
+      "impact": [
+        "Anemia",
+        "Neuropathy",
+        "Fatigue",
+        "Cognitive changes"
+      ],
+      "lifestyle": [
+        "Increase B12-rich foods (meat, eggs, dairy)",
+        "Supplementation if required"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Oral Vitamin B12 supplements"
+        ],
+        "note": "Severe deficiency may require B12 injections prescribed by doctor."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Severe B12 deficiency",
+          "Neurological symptoms"
+        ],
+        "instruction": "Doctor evaluation required; injections may be needed."
+      },
+      "trend_hint": "Persistent low levels risk irreversible nerve damage"
+    },
+    "high": {
+      "causes": [
+        "Excess supplementation",
+        "Liver disease",
+        "Myeloproliferative disorders"
+      ],
+      "impact": [
+        "Usually not harmful alone",
+        "May indicate underlying disorder"
+      ],
+      "lifestyle": [
+        "Review supplement dosage"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "Reduce supplementation and consult doctor."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Markedly elevated B12 without supplementation"
+        ],
+        "instruction": "Evaluate for underlying liver or blood disorder."
+      },
+      "trend_hint": "Marked elevation without supplementation warrants evaluation"
+    },
+    "when_to_consult": "If neurological symptoms or persistent abnormal levels occur",
+    "confidence_note": "Educational information only, not a medical diagnosis"
   },
-  "high": {
-    "causes": [
-      "Dehydration",
-      "Diabetes insipidus",
-      "Excess salt intake"
-    ],
-    "impact": [
-      "Thirst",
-      "Neurological symptoms",
-      "Intracellular dehydration"
-    ],
-    "lifestyle": [
-      "Increase water intake",
-      "Limit excess salt"
-    ],
-    "trend_hint": "Rapid elevation increases neurological complications"
-  },
-  "prescription_required": {
-    "conditions": [
-      "Sodium <130 or >150 mEq/L",
-      "Neurological symptoms"
-    ],
-    "instruction": "Urgent medical evaluation required."
-  },
-  "when_to_consult": "Immediately if severe symptoms or significant abnormality occurs",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-
   "urine_ph": {
-  "display_name": "Urine pH",
-  "category": "Urine Analysis",
-  "unit": "",
-  "function": "Indicates urine acidity or alkalinity",
-  "normal_range": { "min": 4.5, "max": 8.0 },
-  "severity_rules": {
-    "low": { "severity": "Low" },
-    "high": { "severity": "Low" }
-  },
-  "low": {
-    "causes": [
-      "Dehydration",
-      "High protein diet",
-      "Metabolic acidosis"
-    ],
-    "impact": [
-      "Acidic urine",
-      "Kidney stone risk (uric acid stones)"
-    ],
-    "lifestyle": [
-      "Increase water intake",
-      "Increase fruits and vegetables"
-    ],
-    "trend_hint": "Persistently acidic urine may increase stone risk"
-  },
-  "high": {
-    "causes": [
-      "Urinary tract infection",
-      "Vegetarian diet",
-      "Renal tubular acidosis"
-    ],
-    "impact": [
-      "Alkaline urine",
-      "Stone risk (struvite stones)"
-    ],
-    "lifestyle": [
-      "Hydration",
-      "Balanced diet"
-    ],
-    "trend_hint": "Alkaline urine with symptoms suggests UTI"
-  },
-  "when_to_consult": "If urinary symptoms or persistent abnormal pH occurs",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"urine_protein": {
-  "display_name": "Urine Protein",
-  "category": "Urine Analysis",
-  "unit": "",
-  "function": "Detects abnormal protein leakage in urine",
-  "normal_range": "Negative / Trace",
-  "severity_rules": {
-    "high": { "severity": "High" }
-  },
-  "high": {
-    "causes": [
-      "Kidney stress",
-      "Glomerulonephritis",
-      "Diabetes",
-      "Hypertension"
-    ],
-    "impact": [
-      "Possible kidney damage",
-      "Progression to chronic kidney disease"
-    ],
-    "lifestyle": [
-      "Control blood pressure",
-      "Control blood sugar",
-      "Reduce salt intake"
-    ],
-    "trend_hint": "Persistent proteinuria suggests kidney disease",
-    "prescription_required": {
-      "conditions": [
-        "Persistent proteinuria",
-        "Associated abnormal kidney markers"
+    "display_name": "Urine pH",
+    "category": "Urine Analysis",
+    "unit": "",
+    "function": "Indicates urine acidity or alkalinity",
+    "normal_range": {
+      "min": 4.5,
+      "max": 8.0
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "Low"
+      }
+    },
+    "low": {
+      "causes": [
+        "Dehydration",
+        "High protein diet",
+        "Metabolic acidosis"
       ],
-      "instruction": "Doctor evaluation required."
-    }
-  },
-  "when_to_consult": "If protein is repeatedly detected",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"urine_glucose": {
-  "display_name": "Urine Glucose",
-  "category": "Urine Analysis",
-  "unit": "",
-  "function": "Detects glucose excreted in urine",
-  "normal_range": "Negative",
-  "severity_rules": {
-    "high": { "severity": "High" }
-  },
-  "high": {
-    "causes": [
-      "Hyperglycemia",
-      "Diabetes mellitus",
-      "Renal glycosuria"
-    ],
-    "impact": [
-      "Poor glucose control",
-      "Risk of diabetic complications"
-    ],
-    "lifestyle": [
-      "Reduce refined carbohydrates",
-      "Monitor blood sugar"
-    ],
-    "trend_hint": "Repeated presence suggests uncontrolled diabetes",
-    "prescription_required": {
-      "conditions": [
-        "Confirmed diabetes",
-        "Persistent glucosuria"
+      "impact": [
+        "Acidic urine",
+        "Kidney stone risk (uric acid stones)"
       ],
-      "instruction": "Consult doctor for glucose management."
-    }
-  },
-  "when_to_consult": "If glucose appears frequently in urine",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-
-"urine_specific_gravity": {
-  "display_name": "Urine Specific Gravity",
-  "category": "Urine Analysis",
-  "unit": "ratio",
-  "function": "Reflects hydration status and kidney concentrating ability",
-  "normal_range": { "min": 1.005, "max": 1.030 },
-  "severity_rules": {
-    "low": { "severity": "Low" },
-    "high": { "severity": "Medium" }
-  },
-  "low": {
-    "causes": [
-      "Excess fluid intake",
-      "Diabetes insipidus",
-      "Kidney dysfunction"
-    ],
-    "impact": [
-      "Diluted urine",
-      "Reduced concentrating ability"
-    ],
-    "lifestyle": [
-      "Avoid excessive water intake"
-    ],
-    "trend_hint": "Persistently low SG may indicate renal concentrating defect"
-  },
-  "high": {
-    "causes": [
-      "Dehydration",
-      "Glucosuria",
-      "Proteinuria"
-    ],
-    "impact": [
-      "Concentrated urine"
-    ],
-    "lifestyle": [
-      "Increase fluid intake"
-    ],
-    "trend_hint": "High SG with glucose/protein suggests metabolic disorder"
-  },
-  "when_to_consult": "If abnormal values persist",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-
-"urine_ketones": {
-  "display_name": "Urine Ketones",
-  "category": "Urine Analysis",
-  "unit": "",
-  "function": "Detects ketone bodies produced during fat metabolism",
-  "normal_range": "Negative",
-  "severity_rules": {
-    "high": { "severity": "High" }
-  },
-  "high": {
-    "causes": [
-      "Diabetic ketoacidosis (DKA)",
-      "Starvation",
-      "Low-carbohydrate diet",
-      "Prolonged vomiting"
-    ],
-    "impact": [
-      "Metabolic acidosis",
-      "Life-threatening if DKA"
-    ],
-    "trend_hint": "High ketones with high glucose suggests DKA",
-    "prescription_required": {
-      "conditions": [
-        "Diabetes with positive ketones",
-        "Symptoms of DKA"
+      "lifestyle": [
+        "Increase water intake",
+        "Include more fruits and vegetables"
       ],
-      "instruction": "Emergency medical evaluation required."
-    }
-  },
-  "when_to_consult": "Immediately if diabetic and ketones are present",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"urine_leukocytes": {
-  "display_name": "Urine Leukocyte Esterase",
-  "category": "Urine Analysis",
-  "unit": "",
-  "function": "Indicates presence of white blood cells in urine",
-  "normal_range": "Negative",
-  "severity_rules": {
-    "high": { "severity": "Medium" }
-  },
-  "high": {
-    "causes": [
-      "Urinary tract infection",
-      "Kidney infection",
-      "Inflammation"
-    ],
-    "impact": [
-      "Potential infection"
-    ],
-    "trend_hint": "Positive leukocytes with nitrites strongly suggests bacterial UTI",
-    "prescription_required": {
-      "conditions": [
-        "Symptomatic UTI"
+      "otc_support": {
+        "safe_options": [
+          "Oral hydration solutions"
+        ],
+        "note": "Hydration is the primary intervention for mild acidic urine."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Recurrent kidney stones",
+          "Metabolic acidosis"
+        ],
+        "instruction": "Doctor evaluation required."
+      },
+      "trend_hint": "Persistently acidic urine may increase kidney stone risk"
+    },
+    "high": {
+      "causes": [
+        "Urinary tract infection",
+        "Vegetarian diet",
+        "Renal tubular acidosis"
       ],
-      "instruction": "Medical evaluation and possible antibiotics required."
-    }
-  },
-  "when_to_consult": "If burning urination, fever, or flank pain occurs",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-},
-"urine_nitrite": {
-  "display_name": "Urine Nitrite",
-  "category": "Urine Analysis",
-  "unit": "",
-  "function": "Detects nitrite-producing bacteria in urine",
-  "normal_range": "Negative",
-  "severity_rules": {
-    "high": { "severity": "High" }
-  },
-  "high": {
-    "causes": [
-      "Gram-negative bacterial UTI"
-    ],
-    "impact": [
-      "Highly specific for bacterial urinary tract infection"
-    ],
-    "trend_hint": "Positive nitrite strongly suggests bacterial UTI",
-    "prescription_required": {
-      "conditions": [
-        "Positive nitrite with symptoms"
+      "impact": [
+        "Alkaline urine",
+        "Stone risk (struvite stones)"
       ],
-      "instruction": "Medical evaluation and antibiotic therapy required."
-    }
+      "lifestyle": [
+        "Adequate hydration",
+        "Balanced diet"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Oral hydration solutions"
+        ],
+        "note": "Consult doctor if UTI symptoms are present."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Suspected urinary tract infection",
+          "Renal tubular acidosis"
+        ],
+        "instruction": "Doctor evaluation required."
+      },
+      "trend_hint": "Alkaline urine with symptoms suggests urinary tract infection"
+    },
+    "when_to_consult": "If urinary symptoms or persistent abnormal pH occurs",
+    "confidence_note": "Educational information only, not a medical diagnosis"
   },
-  "when_to_consult": "If urinary symptoms are present",
-  "confidence_note": "Educational information only, not a medical diagnosis"
-}
+  "urine_specific_gravity": {
+    "display_name": "Urine Specific Gravity",
+    "category": "Urine Analysis",
+    "unit": "",
+    "function": "Reflects hydration status and kidney concentrating ability",
+    "normal_range": {
+      "min": 1.005,
+      "max": 1.03
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "Medium"
+      }
+    },
+    "low": {
+      "causes": [
+        "Excess fluid intake",
+        "Diabetes insipidus",
+        "Kidney dysfunction"
+      ],
+      "impact": [
+        "Diluted urine",
+        "Reduced concentrating ability"
+      ],
+      "lifestyle": [
+        "Avoid excessive water intake"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No specific OTC intervention; evaluate for underlying cause."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Persistent very low specific gravity",
+          "Suspected diabetes insipidus"
+        ],
+        "instruction": "Doctor evaluation required."
+      },
+      "trend_hint": "Persistently low SG may indicate renal concentrating defect"
+    },
+    "high": {
+      "causes": [
+        "Dehydration",
+        "Glucosuria",
+        "Proteinuria"
+      ],
+      "impact": [
+        "Concentrated urine",
+        "May mask underlying metabolic disorder"
+      ],
+      "lifestyle": [
+        "Increase fluid intake"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Oral hydration solutions"
+        ],
+        "note": "Hydration is the primary intervention."
+      },
+      "prescription_required": {
+        "conditions": [
+          "High SG with glucose or protein in urine"
+        ],
+        "instruction": "Doctor evaluation required to rule out metabolic disorder."
+      },
+      "trend_hint": "High SG with glucose or protein suggests metabolic disorder"
+    },
+    "when_to_consult": "If abnormal values persist or urinary symptoms occur",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+  "urine_protein": {
+    "display_name": "Urine Protein",
+    "category": "Urine Analysis",
+    "unit": "",
+    "function": "Detects abnormal protein leakage in urine",
+    "normal_range": {
+      "expected": "negative"
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "High"
+      }
+    },
+    "low": {
+      "causes": [
+        "Not applicable; protein in urine is not expected"
+      ],
+      "impact": [
+        "No concern when absent"
+      ],
+      "lifestyle": [
+        "Maintain kidney-healthy diet"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No intervention needed when result is negative."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Not applicable"
+        ],
+        "instruction": "No action needed for absent urine protein."
+      },
+      "trend_hint": "Absent urine protein is the expected normal finding"
+    },
+    "high": {
+      "causes": [
+        "Kidney stress",
+        "Glomerulonephritis",
+        "Diabetes",
+        "Hypertension"
+      ],
+      "impact": [
+        "Possible kidney damage",
+        "Progression to chronic kidney disease"
+      ],
+      "lifestyle": [
+        "Control blood pressure",
+        "Control blood sugar",
+        "Reduce salt intake"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No OTC intervention appropriate; requires medical evaluation."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Persistent proteinuria",
+          "Associated abnormal kidney markers"
+        ],
+        "instruction": "Doctor evaluation required."
+      },
+      "trend_hint": "Persistent proteinuria suggests kidney disease"
+    },
+    "when_to_consult": "If protein is repeatedly detected in urine",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+  "urine_glucose": {
+    "display_name": "Urine Glucose",
+    "category": "Urine Analysis",
+    "unit": "",
+    "function": "Detects glucose excreted in urine",
+    "normal_range": {
+      "expected": "negative"
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "High"
+      }
+    },
+    "low": {
+      "causes": [
+        "Not applicable; glucose in urine is not expected"
+      ],
+      "impact": [
+        "No concern when absent"
+      ],
+      "lifestyle": [
+        "Maintain balanced diet and healthy blood sugar levels"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No intervention needed when result is negative."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Not applicable"
+        ],
+        "instruction": "No action needed for absent urine glucose."
+      },
+      "trend_hint": "Absent urine glucose is the expected normal finding"
+    },
+    "high": {
+      "causes": [
+        "Hyperglycemia",
+        "Diabetes mellitus",
+        "Renal glycosuria"
+      ],
+      "impact": [
+        "Poor glucose control",
+        "Risk of diabetic complications"
+      ],
+      "lifestyle": [
+        "Reduce refined carbohydrates",
+        "Monitor blood sugar"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "Requires medical evaluation; OTC glucose monitors can assist monitoring."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Confirmed diabetes",
+          "Persistent glucosuria"
+        ],
+        "instruction": "Consult doctor for glucose management."
+      },
+      "trend_hint": "Repeated presence suggests uncontrolled diabetes"
+    },
+    "when_to_consult": "If glucose appears frequently in urine",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+  "urine_ketones": {
+    "display_name": "Urine Ketones",
+    "category": "Urine Analysis",
+    "unit": "",
+    "function": "Detects ketone bodies produced during fat metabolism",
+    "normal_range": {
+      "expected": "negative"
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "High"
+      }
+    },
+    "low": {
+      "causes": [
+        "Not applicable; ketones in urine are not expected"
+      ],
+      "impact": [
+        "No concern when absent"
+      ],
+      "lifestyle": [
+        "Maintain balanced carbohydrate intake"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No intervention needed when result is negative."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Not applicable"
+        ],
+        "instruction": "No action needed for absent urine ketones."
+      },
+      "trend_hint": "Absent urine ketones is the expected normal finding"
+    },
+    "high": {
+      "causes": [
+        "Diabetic ketoacidosis (DKA)",
+        "Starvation",
+        "Low-carbohydrate diet",
+        "Prolonged vomiting"
+      ],
+      "impact": [
+        "Metabolic acidosis",
+        "Life-threatening if DKA"
+      ],
+      "lifestyle": [
+        "Ensure adequate carbohydrate intake if not diabetic",
+        "Monitor blood glucose if diabetic"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "DKA is a medical emergency; do not self-treat."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Diabetes with positive ketones",
+          "Symptoms of DKA"
+        ],
+        "instruction": "Emergency medical evaluation required."
+      },
+      "trend_hint": "High ketones with high glucose suggests DKA"
+    },
+    "when_to_consult": "Immediately if diabetic and ketones are present",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+  "urine_bilirubin": {
+    "display_name": "Urine Bilirubin",
+    "category": "Urine Analysis",
+    "unit": "",
+    "function": "Detects conjugated bilirubin in urine indicating liver or bile duct dysfunction",
+    "normal_range": {
+      "expected": "negative"
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "Medium"
+      }
+    },
+    "low": {
+      "causes": [
+        "Not applicable; bilirubin in urine is not expected"
+      ],
+      "impact": [
+        "No concern when absent"
+      ],
+      "lifestyle": [
+        "Maintain liver-healthy diet and avoid excessive alcohol"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No intervention needed when result is negative."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Not applicable"
+        ],
+        "instruction": "No action needed for absent urine bilirubin."
+      },
+      "trend_hint": "Absent urine bilirubin is the expected normal finding"
+    },
+    "high": {
+      "causes": [
+        "Liver disease",
+        "Bile duct obstruction",
+        "Hepatitis"
+      ],
+      "impact": [
+        "Suggests liver dysfunction or bile duct blockage",
+        "May present with jaundice"
+      ],
+      "lifestyle": [
+        "Avoid alcohol",
+        "Maintain liver-friendly diet"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "Requires medical evaluation; no OTC treatment appropriate."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Positive urine bilirubin with symptoms",
+          "Suspected hepatitis or obstruction"
+        ],
+        "instruction": "Doctor evaluation required immediately."
+      },
+      "trend_hint": "Persistent positive urine bilirubin indicates liver or bile duct problem"
+    },
+    "when_to_consult": "If bilirubin is detected in urine or jaundice is present",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+  "urine_nitrite": {
+    "display_name": "Urine Nitrite",
+    "category": "Urine Analysis",
+    "unit": "",
+    "function": "Detects nitrite-producing bacteria in urine",
+    "normal_range": {
+      "expected": "negative"
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "High"
+      }
+    },
+    "low": {
+      "causes": [
+        "Not applicable; nitrites in urine are not expected"
+      ],
+      "impact": [
+        "No concern when absent"
+      ],
+      "lifestyle": [
+        "Maintain good hydration and hygiene"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No intervention needed when result is negative."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Not applicable"
+        ],
+        "instruction": "No action needed for absent urine nitrite."
+      },
+      "trend_hint": "Absent nitrite is the expected normal finding"
+    },
+    "high": {
+      "causes": [
+        "Gram-negative bacterial urinary tract infection"
+      ],
+      "impact": [
+        "Highly specific for bacterial urinary tract infection"
+      ],
+      "lifestyle": [
+        "Increase fluid intake",
+        "Maintain good urinary hygiene"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Urinary analgesics for discomfort (as per label)"
+        ],
+        "note": "OTC analgesics relieve symptoms only; antibiotics are required."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Positive nitrite with symptoms"
+        ],
+        "instruction": "Medical evaluation and antibiotic therapy required."
+      },
+      "trend_hint": "Positive nitrite strongly suggests bacterial urinary tract infection"
+    },
+    "when_to_consult": "If urinary symptoms are present",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+  "urine_urobilinogen": {
+    "display_name": "Urine Urobilinogen",
+    "category": "Urine Analysis",
+    "unit": "",
+    "function": "Byproduct of bilirubin metabolism; reflects liver and red cell function",
+    "normal_range": {
+      "expected": "negative"
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "Medium"
+      }
+    },
+    "low": {
+      "causes": [
+        "Not applicable; absent urobilinogen is expected"
+      ],
+      "impact": [
+        "No concern when absent"
+      ],
+      "lifestyle": [
+        "Maintain liver-healthy diet"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No intervention needed."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Not applicable"
+        ],
+        "instruction": "No action needed."
+      },
+      "trend_hint": "Absent urobilinogen is normal"
+    },
+    "high": {
+      "causes": [
+        "Liver disease",
+        "Hemolytic anemia",
+        "Increased red cell destruction"
+      ],
+      "impact": [
+        "Indicates increased bilirubin production or liver dysfunction"
+      ],
+      "lifestyle": [
+        "Avoid alcohol",
+        "Maintain balanced diet"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "Requires medical evaluation."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Persistent elevated urobilinogen with symptoms"
+        ],
+        "instruction": "Doctor evaluation required."
+      },
+      "trend_hint": "Elevated urobilinogen suggests liver dysfunction or hemolysis"
+    },
+    "when_to_consult": "If detected with other abnormal liver markers",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+  "urine_wbc": {
+    "display_name": "Urine WBC (Pus Cells)",
+    "category": "Urine Analysis",
+    "unit": "cells/hpf",
+    "function": "Indicates white blood cells in urine; marker of urinary tract infection or inflammation",
+    "normal_range": {
+      "min": 0,
+      "max": 5
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "Medium"
+      }
+    },
+    "low": {
+      "causes": [
+        "No significant cause; absence is normal"
+      ],
+      "impact": [
+        "No concern"
+      ],
+      "lifestyle": [
+        "Maintain adequate hydration"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No intervention needed."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Not applicable"
+        ],
+        "instruction": "No action needed."
+      },
+      "trend_hint": "Low or absent WBC in urine is the expected normal finding"
+    },
+    "high": {
+      "causes": [
+        "Urinary tract infection",
+        "Kidney infection",
+        "Inflammation",
+        "Sexually transmitted infection"
+      ],
+      "impact": [
+        "Active infection or inflammatory process in urinary tract"
+      ],
+      "lifestyle": [
+        "Increase fluid intake",
+        "Maintain urinary hygiene"
+      ],
+      "otc_support": {
+        "safe_options": [
+          "Urinary analgesics for symptom relief (as per label)"
+        ],
+        "note": "Analgesics relieve symptoms only; antibiotics may be required."
+      },
+      "prescription_required": {
+        "conditions": [
+          "WBC >10 cells/hpf with symptoms",
+          "Suspected urinary tract infection"
+        ],
+        "instruction": "Medical evaluation required."
+      },
+      "trend_hint": "Elevated urine WBC with symptoms strongly suggests urinary infection"
+    },
+    "when_to_consult": "If burning urination, fever, or flank pain occurs",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  },
+  "urine_rbc": {
+    "display_name": "Urine RBC (Red Cells)",
+    "category": "Urine Analysis",
+    "unit": "cells/hpf",
+    "function": "Detects red blood cells in urine; may indicate bleeding in urinary tract",
+    "normal_range": {
+      "min": 0,
+      "max": 2
+    },
+    "severity_rules": {
+      "low": {
+        "severity": "Low"
+      },
+      "high": {
+        "severity": "High"
+      }
+    },
+    "low": {
+      "causes": [
+        "No significant cause; absence is normal"
+      ],
+      "impact": [
+        "No concern"
+      ],
+      "lifestyle": [
+        "Maintain adequate hydration"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "No intervention needed."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Not applicable"
+        ],
+        "instruction": "No action needed."
+      },
+      "trend_hint": "Absent RBC in urine is the expected normal finding"
+    },
+    "high": {
+      "causes": [
+        "Urinary tract infection",
+        "Kidney stones",
+        "Bladder or kidney injury",
+        "Glomerulonephritis",
+        "Bladder cancer (in persistent cases)"
+      ],
+      "impact": [
+        "Blood in urine (hematuria)",
+        "May indicate serious urinary tract pathology"
+      ],
+      "lifestyle": [
+        "Increase fluid intake",
+        "Avoid strenuous exercise before testing"
+      ],
+      "otc_support": {
+        "safe_options": [],
+        "note": "Hematuria requires medical evaluation; do not self-treat."
+      },
+      "prescription_required": {
+        "conditions": [
+          "Persistent hematuria",
+          "RBC >5 cells/hpf without clear cause"
+        ],
+        "instruction": "Doctor evaluation required to rule out serious pathology."
+      },
+      "trend_hint": "Persistent RBC in urine requires investigation for underlying cause"
+    },
+    "when_to_consult": "If blood is visible in urine or RBC count is persistently elevated",
+    "confidence_note": "Educational information only, not a medical diagnosis"
+  }
 }

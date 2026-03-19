@@ -291,7 +291,7 @@ export default function ReportViewPage() {
       doc.setFont("helvetica", "bold");
       doc.setFontSize(8);
       doc.setTextColor(146, 64, 14);
-      doc.text("⚠ Medical Disclaimer", margin + 4, y + 5.5);
+      doc.text("! Medical Disclaimer", margin + 4, y + 5.5);
       doc.setFont("helvetica", "normal");
       doc.setFontSize(7.5);
       doc.setTextColor(120, 53, 15);

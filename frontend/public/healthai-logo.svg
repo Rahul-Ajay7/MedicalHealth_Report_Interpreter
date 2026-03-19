@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+
+  <!-- Background -->
+  <rect width="80" height="80" rx="20" fill="#065F46"/>
+
+  <!-- ECG heartbeat line -->
+  <polyline
+    points="10,40  24,40  28,30  32,50  37,16  42,56  46,40  62,40  68,40  72,40"
+    fill="none" stroke="white" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- AI spark dot -->
+  <circle cx="72" cy="40" r="4.5" fill="#6EE7B7"/>
+
+  <!-- Sparkle above dot -->
+  <line x1="72" y1="29" x2="72" y2="25" stroke="#6EE7B7" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="68" y1="32" x2="65" y2="29" stroke="#6EE7B7" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="76" y1="32" x2="79" y2="29" stroke="#6EE7B7" stroke-width="1.8" stroke-linecap="round"/>
+
+</svg>

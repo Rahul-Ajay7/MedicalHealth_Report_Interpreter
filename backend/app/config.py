@@ -25,8 +25,8 @@ PORT = int(os.getenv("PORT", 8000))
 # ===============================
 # FILE UPLOAD
 # ===============================
-UPLOAD_DIR        = os.getenv("UPLOAD_DIR", "uploads")
-MAX_FILE_SIZE_MB  = int(os.getenv("MAX_FILE_SIZE_MB", 10))
+UPLOAD_DIR         = os.getenv("UPLOAD_DIR", "uploads")
+MAX_FILE_SIZE_MB   = int(os.getenv("MAX_FILE_SIZE_MB", 10))
 ALLOWED_EXTENSIONS = os.getenv(
     "ALLOWED_EXTENSIONS", "pdf,png,jpg,jpeg"
 ).split(",")
@@ -84,8 +84,25 @@ LOG_FILE  = os.getenv("LOG_FILE", "logs/app.log")
 # ===============================
 # LLM CHAT
 # ===============================
+
+# ── Ollama (Backup 2 — local only) ───────────────────────────────────────────
+# Used as final fallback when Groq and Gemini are both unavailable.
+# Only works when ollama serve is running on the machine.
 LLM_BASE_URL      = os.getenv("LLM_BASE_URL",      "http://localhost:11434")
 LLM_CHAT_ENDPOINT = os.getenv("LLM_CHAT_ENDPOINT", "/v1/chat/completions")
 LLM_MODEL         = os.getenv("LLM_MODEL",         "healthai")
-LLM_TIMEOUT       = int(os.getenv("LLM_TIMEOUT",   120))   # increased for multi-user queue
-LLM_MAX_RETRIES   = int(os.getenv("LLM_MAX_RETRIES", 2))   # retry attempts on timeout
+LLM_TIMEOUT       = int(os.getenv("LLM_TIMEOUT",   120))
+LLM_MAX_RETRIES   = int(os.getenv("LLM_MAX_RETRIES", 2))
+
+# ── Groq (Primary) ────────────────────────────────────────────────────────────
+# Fastest response. Free tier: ~950 questions/day.
+# Get key: https://console.groq.com
+GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+GROQ_MODEL   = os.getenv("GROQ_MODEL",   "llama-3.1-8b-instant")
+GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
+
+# ── Gemini Flash (Backup 1) ───────────────────────────────────────────────────
+# Better quality than Groq 8B. Free tier: ~1400 questions/day.
+# Get key: https://aistudio.google.com
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+GEMINI_MODEL   = os.getenv("GEMINI_MODEL",   "gemini-2.5-flash-lite")  # ← change this

@@ -16,18 +16,14 @@ type QuestionType =
   | "general_health";
 
 type Message = {
-  role:          "user" | "assistant";
-  content:       string;
-  flagged?:      boolean;
+  role:           "user" | "assistant";
+  content:        string;
+  flagged?:       boolean;
   question_type?: QuestionType;
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-/**
- * Returns styling + icon config based on question type.
- * Emergency = red, Sensitive/Blocked = amber, normal = slate.
- */
 function getMessageStyle(msg: Message): {
   bubble: string;
   banner: string | null;
@@ -49,11 +45,12 @@ function getMessageStyle(msg: Message): {
     };
   }
 
+  // sensitive — no banner, just a warm bubble style
   if (msg.question_type === "sensitive") {
     return {
-      bubble: "bg-amber-50 text-amber-900 border border-amber-200 rounded-bl-sm",
-      banner: "bg-amber-50 text-amber-700 border border-amber-200",
-      icon:   <AlertTriangle size={13} className="text-amber-500 shrink-0 mt-0.5" />,
+      bubble: "bg-blue-50 text-slate-700 rounded-bl-sm",
+      banner: null,
+      icon:   null,
     };
   }
 
@@ -74,19 +71,14 @@ function getMessageStyle(msg: Message): {
 
 function getBannerLabel(type: QuestionType | undefined): string {
   switch (type) {
-    case "emergency": return "🚨 Emergency — please call 112 or 108 immediately";
-    case "sensitive":  return "This question has been handled with care";
-    case "blocked":    return "This question is outside the assistant's scope";
-    default:           return "";
+    case "emergency": return "Please seek medical attention if symptoms are severe";
+    case "blocked":   return "This question is outside the assistant's scope";
+    default:          return "";
   }
 }
 
 // ─── Disclaimer renderer ──────────────────────────────────────────────────────
 
-/**
- * Splits the answer from the disclaimer line (starts with ⚕️).
- * Renders the disclaimer in a muted italic style below the bubble.
- */
 function MessageContent({ content }: { content: string }) {
   const disclaimerMarker = "⚕️";
   const idx = content.indexOf(disclaimerMarker);
@@ -117,7 +109,8 @@ export default function ChatAssistant() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput]       = useState("");
   const [loading, setLoading]   = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
   // ── Initialise chat when report loads ──────────────────────────────────────
   useEffect(() => {
@@ -139,9 +132,12 @@ export default function ChatAssistant() {
     }
   }, [nlpExplanation, report, messages]);
 
-  // ── Auto-scroll ────────────────────────────────────────────────────────────
+  // ── Auto-scroll inside chat box only ──────────────────────────────────────
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop =
+        messagesContainerRef.current.scrollHeight;
+    }
   }, [messages]);
 
   // ── Send message ───────────────────────────────────────────────────────────
@@ -151,7 +147,6 @@ export default function ChatAssistant() {
     setInput("");
     setLoading(true);
 
-    // Add user message + loading placeholder
     setMessages((prev) => [
       ...prev,
       { role: "user", content: question },
@@ -209,7 +204,10 @@ export default function ChatAssistant() {
       </div>
 
       {/* ── Messages ── */}
-      <div className="flex-1 overflow-y-auto min-h-0 px-5 py-4 space-y-3">
+      <div
+        ref={messagesContainerRef}
+        className="flex-1 overflow-y-auto min-h-0 px-5 py-4 space-y-3"
+      >
 
         {/* Empty state */}
         {messages.length === 0 && (
@@ -234,15 +232,11 @@ export default function ChatAssistant() {
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center mr-2 mt-1 flex-shrink-0 ${
                   msg.question_type === "emergency"
                     ? "bg-red-100"
-                    : msg.flagged
-                    ? "bg-amber-100"
                     : "bg-blue-100"
                 }`}>
                   <Bot size={12} className={
                     msg.question_type === "emergency"
                       ? "text-red-600"
-                      : msg.flagged
-                      ? "text-amber-600"
                       : "text-blue-600"
                   } />
                 </div>
@@ -250,8 +244,10 @@ export default function ChatAssistant() {
 
               <div className="flex flex-col gap-1 max-w-[78%]">
 
-                {/* Flagged banner — shown above bubble */}
-                {msg.flagged && style.banner && (
+                {/* Banner — only for emergency and blocked, NOT sensitive */}
+                {msg.flagged &&
+                 style.banner &&
+                 msg.question_type !== "sensitive" && (
                   <div className={`flex items-start gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium ${style.banner}`}>
                     {style.icon}
                     <span>{getBannerLabel(msg.question_type)}</span>
@@ -282,7 +278,6 @@ export default function ChatAssistant() {
           );
         })}
 
-        <div ref={messagesEndRef} />
       </div>
 
       {/* ── Input ── */}
@@ -303,6 +298,7 @@ export default function ChatAssistant() {
           <Send size={15} />
         </button>
       </div>
+
     </div>
   );
 }
