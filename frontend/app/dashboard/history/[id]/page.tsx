@@ -87,7 +87,8 @@ export default function ReportViewPage() {
       try {
         const { data: { session } } = await supabase.auth.getSession();
         if (!session) { router.push("/login"); return; }
-        const res = await fetch(`http://localhost:8000/report/${id}`, {
+        const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+        const res = await fetch(`${API_BASE}/report/${id}`, {
           headers: { Authorization: `Bearer ${session.access_token}` },
         });
         if (!res.ok) { const err = await res.json(); throw new Error(err.detail || "Failed to load report"); }
