@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/chat", tags=["Chat"])
 
-# Single instance — shared across all requests
+
 llm = PatientChatLLM(
     base_url      = LLM_BASE_URL,
     chat_endpoint = LLM_CHAT_ENDPOINT,
@@ -60,7 +60,7 @@ async def chat_with_llm(data: ChatRequest):
         result = llm.answer_question(
             question        = data.question,
             report_summary  = session["analysis"],
-            explanations    = session["nlp_explanation"],  # NLP grounding layer
+            explanations    = session["nlp_explanation"],  
             recommendations = session.get("recommendations", {}),
             gender          = session.get("gender"),
             patient_age     = session.get("age"),

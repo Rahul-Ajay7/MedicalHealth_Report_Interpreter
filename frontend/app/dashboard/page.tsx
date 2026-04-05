@@ -6,7 +6,7 @@ import ChatAssistant from "@/components/ChatAssistant";
 import LifestyleTips from "@/components/LifestyleTips";
 import NonPrescription from "@/components/NonPrescriptionInfo";
 
-// ✅ No auth logic here — handled by dashboard/layout.tsx
+//  No auth logic here — handled by dashboard/layout.tsx
 export default function Dashboard() {
   return (
     <div className="min-h-screen bg-[#F0F4F9] px-4 md:px-8 py-8">

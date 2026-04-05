@@ -44,3 +44,29 @@ async def get_history(user=Depends(verify_token)):
 @router.get("/test")
 def test_history():
     return {"message": "History route works"}
+
+@router.delete("/{report_id}")
+async def delete_report(report_id: str, user=Depends(verify_token)):
+    user_id = user["sub"]
+
+    # Verify ownership
+    response = supabase.from_("reports") \
+        .select("id") \
+        .eq("id", report_id) \
+        .eq("user_id", user_id) \
+        .execute()
+
+    if not response.data:
+        raise HTTPException(status_code=404, detail="Report not found")
+
+    # Delete report
+    delete_res = supabase.from_("reports") \
+        .delete() \
+        .eq("id", report_id) \
+        .execute()
+
+   
+    if not delete_res.data:
+        raise HTTPException(status_code=500, detail="Failed to delete report")
+
+    return {"message": "Deleted successfully"}

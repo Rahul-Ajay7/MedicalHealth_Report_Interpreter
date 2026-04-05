@@ -109,8 +109,8 @@ def analyze_report(
         supabase.table("analysis").insert({
             "report_id":       report_id,
             "user_id":         user_id,
-            "parameters":      parameters_list,   # ✅ list for frontend table
-            "analysis_map":    final_results,      # ✅ dict for quick lookup
+            "parameters":      parameters_list,   # list for frontend table
+            "analysis_map":    final_results,      #  dict for quick lookup
             "nlp_explanation": nlp_explanation if isinstance(nlp_explanation, list)
                                else [nlp_explanation],
             "severity":        severity,

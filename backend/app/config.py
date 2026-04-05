@@ -56,7 +56,7 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 # ===============================
 # NLP / AI
 # ===============================
-NLP_ENGINE             = os.getenv("NLP_ENGINE", "rules")  # rules | llama | openai
+NLP_ENGINE             = os.getenv("NLP_ENGINE", "rules")  # rules 
 MAX_EXPLANATION_LENGTH = int(os.getenv("MAX_EXPLANATION_LENGTH", 400))
 
 LLAMA_MODEL_PATH = os.getenv("LLAMA_MODEL_PATH")
@@ -96,13 +96,13 @@ LLM_MAX_RETRIES   = int(os.getenv("LLM_MAX_RETRIES", 2))
 
 # ── Groq (Primary) ────────────────────────────────────────────────────────────
 # Fastest response. Free tier: ~950 questions/day.
-# Get key: https://console.groq.com
+
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 GROQ_MODEL   = os.getenv("GROQ_MODEL",   "llama-3.1-8b-instant")
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 # ── Gemini Flash (Backup 1) ───────────────────────────────────────────────────
 # Better quality than Groq 8B. Free tier: ~1400 questions/day.
-# Get key: https://aistudio.google.com
+
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
-GEMINI_MODEL   = os.getenv("GEMINI_MODEL",   "gemini-2.5-flash-lite")  # ← change this
+GEMINI_MODEL   = os.getenv("GEMINI_MODEL",   "gemini-2.5-flash-lite")  
