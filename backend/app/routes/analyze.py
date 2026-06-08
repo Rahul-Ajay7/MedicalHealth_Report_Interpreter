@@ -11,6 +11,7 @@ from app.services.analyzer import analyze_parameters
 from app.services.recommendations import generate_recommendations
 from app.services.nlp import generate_nlp_explanations
 from app.state.chat_sessions import CHAT_SESSIONS
+from app.state.chat_sessions import set_session
 
 router = APIRouter(prefix="/analyze", tags=["Analyze"])
 
@@ -125,11 +126,11 @@ def analyze_report(
         }).execute()
 
         # ── 14. Store chat session ─────────────────────────────────────
-        CHAT_SESSIONS[file_id] = {
+        
+        set_session(file_id, {
             "analysis":        final_results,
             "nlp_explanation": nlp_explanation,
-            "gender":          gender,
-        }
+            "gender":          gender,})
 
     finally:
         # ── 15. Always cleanup temp file ───────────────────────────────

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Activity, LayoutDashboard, Clock, LogOut } from "lucide-react";
+import { Activity, LayoutDashboard, Clock, LogOut, Shield } from "lucide-react";
 import { supabase } from "../lib/superbaseClient";
 
 type NavItem = {
@@ -13,7 +13,8 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { href: "/dashboard",         label: "Dashboard", icon: LayoutDashboard },
-  { href: "/dashboard/history", label: "History",   icon: Clock },   // ✅ fixed
+  { href: "/dashboard/history", label: "History",   icon: Clock },
+  { href: "/privacy",           label: "Privacy",   icon: Shield },
 ];
 
 export default function Navbar() {

@@ -229,7 +229,7 @@ export default function HistoryPage() {
 
     const flat: FlatReport[] = (reportData as Report[]).map((r) => ({
       id:     r.id,
-      name:   r.file_name.replace(/\.[^/.]+$/, "").replace(/_/g, " "),
+      name:   (r.file_name.replace(/\.[^/.]+$/, "").replace(/_/g, " ")) + " · " + formatDate(r.uploaded_at),
       date:   r.uploaded_at,
       status: r.analysis?.[0]?.severity ?? "Normal",
     }));

@@ -6,12 +6,19 @@ from app.routes.analyze import router as analyze_router
 from app.routes.history import router as history_router
 from app.routes.chat import router as chat_router
 from app.routes.report import router as report_router
-
+import os
 app = FastAPI(title="Medical Report Interpreter")
+
+
+
+CORS_ORIGINS = os.getenv(
+    "CORS_ORIGINS",
+    "http://localhost:3000"
+).split(",")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=CORS_ORIGINS,
     allow_methods=["*"],
     allow_headers=["*"],
 )

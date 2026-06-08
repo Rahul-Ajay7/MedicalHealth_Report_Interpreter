@@ -1,3 +1,19 @@
+"""
+llm_chat.py  —  HealthAI upgraded chat service
+================================================
+Key upgrades vs original:
+  1. CONVERSATION HISTORY — multi-turn memory per session (up to 10 turns)
+  2. Claude API as primary LLM (best medical reasoning)
+  3. Groq → Gemini → Ollama fallback chain preserved
+  4. History persisted in CHAT_SESSIONS (drop-in compatible)
+  5. Deduplication in lifestyle recommendations
+  6. Age passed into context for age-aware reference ranges
+
+Add to .env:
+  ANTHROPIC_API_KEY=sk-ant-...
+  CLAUDE_CHAT_MODEL=claude-sonnet-4-6    # fast + smart
+"""
+
 import re
 import requests
 import logging
@@ -5,14 +21,20 @@ import hashlib
 import time
 from typing import Dict, Any, List, Optional
 from enum import Enum
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from app.config import (
     GROQ_API_KEY, GROQ_MODEL, GROQ_API_URL,
     GEMINI_API_KEY, GEMINI_MODEL,
 )
+import os
+
+ANTHROPIC_API_KEY  = os.getenv("ANTHROPIC_API_KEY", "")
+CLAUDE_CHAT_MODEL  = os.getenv("CLAUDE_CHAT_MODEL", "claude-sonnet-4-6")
 
 logger = logging.getLogger(__name__)
+
+MAX_HISTORY_TURNS = 10   # keep last N user+assistant pairs
 
 
 # ─── Enums ───────────────────────────────────────────────────────────────────
@@ -43,31 +65,20 @@ class LLMResponse:
     llm_source:    str
 
 
-# ─── Hard blocks — these never reach the LLM ─────────────────────────────────
-#
-# Only block what is genuinely dangerous:
-#   1. Specific drug dosage requests
-#   2. Self-harm
-#
-# Everything else — medicine names, normal ranges, causes, diet, symptoms,
-# future risk, emergency symptoms — the LLM handles gracefully.
+# ─── Keyword lists ───────────────────────────────────────────────────────────
 
 BLOCKED_KEYWORDS = [
-    # Dosage amounts
-    "how many mg", "how much mg", "mg of",
-    "ml of", "what dosage", "how much dosage",
-    "what dose", "how much dose", "dosage of", "dose of",
-    "how much should i take", "how much to take",
+    "how many mg", "how much mg", "mg of", "ml of",
+    "what dosage", "how much dosage", "what dose", "how much dose",
+    "dosage of", "dose of", "how much should i take", "how much to take",
     "how much medicine", "how much medication",
     "loading dose", "maintenance dose", "iv dose",
-    # Self-harm
     "how to overdose", "overdose on",
     "harm myself", "hurt myself",
     "kill myself", "end my life",
     "commit suicide", "how to die",
 ]
 
-# Distress / panic — handled with empathy, no LLM
 SENSITIVE_KEYWORDS = [
     "will i die", "am i dying", "am i going to die",
     "how long do i have", "will i survive",
@@ -79,7 +90,6 @@ SENSITIVE_KEYWORDS = [
     "nothing can help", "no point", "give up",
 ]
 
-# Emergency — LLM answers calmly (not blocked)
 EMERGENCY_KEYWORDS = [
     "chest pain", "can't breathe", "cannot breathe",
     "difficulty breathing", "heart attack", "stroke",
@@ -102,19 +112,19 @@ SMALL_TALK_KEYWORDS = [
 ]
 
 SMALL_TALK_RESPONSES = {
-    "thank":       "You're welcome! Feel free to ask anything about your health or lab results. 😊",
-    "hello":       "Hello! I'm your health assistant. Ask me anything about your lab results or general health.",
-    "hi":          "Hi there! I'm here to help you understand your health. What would you like to know?",
-    "hey":         "Hey! How can I help you understand your health today?",
-    "bye":         "Take care! Remember to follow up with your doctor about your results. 👋",
-    "goodbye":     "Goodbye! Wishing you good health. 👋",
-    "how are you": "I'm doing great, thank you! How can I help you with your health today?",
-    "who are you": "I'm your Health Assistant — I can answer questions about your lab results, normal ranges, symptoms, medicines, diet, and any health-related topic.",
+    "thank":        "You're welcome! Feel free to ask anything about your health or lab results. 😊",
+    "hello":        "Hello! I'm your HealthAI assistant. Ask me anything about your lab results or general health.",
+    "hi":           "Hi there! I'm here to help you understand your health. What would you like to know?",
+    "hey":          "Hey! How can I help you understand your health today?",
+    "bye":          "Take care! Remember to follow up with your doctor about your results. 👋",
+    "goodbye":      "Goodbye! Wishing you good health. 👋",
+    "how are you":  "I'm doing great, thank you! How can I help you with your health today?",
+    "who are you":  "I'm your HealthAI assistant — I can answer questions about your lab results, normal ranges, symptoms, diet, and any health-related topic.",
     "what are you": "I'm an AI health assistant. I can explain lab results, answer medical questions, suggest lifestyle changes, and help you understand your health better.",
-    "okay":        "Got it! Ask me anything about your health or lab results.",
-    "ok":          "Sure! What would you like to know about your health?",
-    "nice":        "Thank you! Let me know if you have any health questions.",
-    "great":       "Glad to help! Feel free to ask more questions.",
+    "okay":         "Got it! Ask me anything about your health or lab results.",
+    "ok":           "Sure! What would you like to know about your health?",
+    "nice":         "Thank you! Let me know if you have any health questions.",
+    "great":        "Glad to help! Feel free to ask more questions.",
 }
 
 def _get_small_talk_response(question: str) -> str:
@@ -150,18 +160,13 @@ LLM_FALLBACK_RESPONSE = (
     "Please try again in a moment, or speak directly with your healthcare provider."
 )
 
-
-# ─── Post-check — last safety net against dosage in LLM output ───────────────
+# ─── Dosage post-check patterns ───────────────────────────────────────────────
 
 _ACTION = r"(?:take|taking|administer|prescribe|give|apply|inject|use|consume)"
-
 DOSAGE_PATTERNS = [
     rf"{_ACTION}\s+\d+(?:\.\d+)?\s*(?:mg|mcg|iu|ml|units?)(?!/)",
     rf"{_ACTION}\s+\d+\s*(?:tablet[s]?|capsule[s]?|pill[s]?)",
-    r"\bdosage\b",
-    r"\bloading dose\b",
-    r"\bmaintenance dose\b",
-    r"\biv dose\b",
+    r"\bdosage\b", r"\bloading dose\b", r"\bmaintenance dose\b", r"\biv dose\b",
     r"\bintravenous\b",
     r"\b\d+(?:\.\d+)?\s*mg(?!/)",
     r"\b\d+(?:\.\d+)?\s*mcg(?!/)",
@@ -199,32 +204,15 @@ class PatientChatLLM:
         return hashlib.sha256(text.encode()).hexdigest()[:12]
 
     def _classify_question(self, question: str) -> QuestionType:
-        """
-        Minimal classifier — only intercepts what the LLM must NOT handle.
-        Everything else goes to the LLM with a powerful system prompt.
-
-        Priority:
-          Small talk → instant friendly response
-          Blocked    → dosage requests + self-harm → fixed safe response
-          Sensitive  → distress/panic → fixed empathy response
-          Emergency  → active symptoms → LLM answers calmly
-          Everything else → LLM answers as medical AI agent
-        """
         q = question.lower().strip()
-
         if any(k in q for k in SMALL_TALK_KEYWORDS):
             return QuestionType.GENERAL_HEALTH
-
         if any(k in q for k in BLOCKED_KEYWORDS):
             return QuestionType.BLOCKED
-
         if any(k in q for k in SENSITIVE_KEYWORDS):
             return QuestionType.SENSITIVE
-
         if any(k in q for k in EMERGENCY_KEYWORDS):
             return QuestionType.EMERGENCY
-
-        # Everything else — LLM decides if it is medical or not
         return QuestionType.REPORT_BASED
 
     def _derive_severity(self, analysis: Dict[str, Any]) -> Severity:
@@ -240,17 +228,15 @@ class PatientChatLLM:
         if "low"      in statuses or "abnormal" in statuses: return Severity.MEDIUM
         return Severity.NORMAL
 
-    # ─────────────────────────────────────────────────────────────────────────
-    # PROMPT OPTIMIZATION — this is where the agent intelligence lives
-    # ─────────────────────────────────────────────────────────────────────────
-
     def _build_system_prompt(
         self,
-        severity: Severity,
-        gender:   Optional[str],
+        severity:     Severity,
+        gender:       Optional[str],
+        patient_age:  Optional[int] = None,
         is_emergency: bool = False,
     ) -> str:
         gender_note = f"Patient gender: {gender}." if gender else ""
+        age_note    = f"Patient age: {patient_age} years." if patient_age else ""
 
         base = (
             "You are HealthAI — a knowledgeable, warm, and trustworthy medical assistant "
@@ -267,6 +253,11 @@ class PatientChatLLM:
             "• Future risk — explain risk factors calmly and factually\n"
             "• Any general health or medical question\n\n"
 
+            "CONVERSATION AWARENESS:\n"
+            "• You have access to the conversation history below.\n"
+            "• Use it to answer follow-up questions like 'what about that?' or 'explain more'.\n"
+            "• Never ask the user to repeat information they already gave.\n\n"
+
             "STRICT RULES — never break these:\n"
             "1. NEVER give specific medication dosages, amounts, or frequencies.\n"
             "2. NEVER diagnose a medical condition definitively.\n"
@@ -279,8 +270,7 @@ class PatientChatLLM:
             "• Keep responses to 3–5 sentences unless more detail is needed.\n"
             "• When giving normal ranges, always include the unit.\n\n"
 
-            "OUT OF SCOPE — if a question is clearly unrelated to health, medicine, "
-            "the human body, or lab results, politely decline and redirect:\n"
+            "OUT OF SCOPE — if a question is clearly unrelated to health, politely redirect:\n"
             "Say: 'I'm designed to help with health and medical questions. "
             "Try asking me about your lab results, symptoms, diet, or any health topic.'\n\n"
         )
@@ -293,23 +283,25 @@ class PatientChatLLM:
                 "Never dismiss symptoms. Never use alarming language.\n\n"
             )
 
-        base += f"Report severity context: {severity.value}. {gender_note}"
+        base += f"Report severity context: {severity.value}. {gender_note} {age_note}".strip()
         return base
 
-    def _build_main_prompt(
+    def _build_messages_with_history(
         self,
         question:        str,
         report_summary:  Dict[str, Any],
         explanations:    List[str],
         recommendations: Dict[str, Any],
+        history:         List[Dict[str, str]],
         is_emergency:    bool = False,
-    ) -> str:
+    ) -> List[Dict[str, str]]:
         """
-        Single unified prompt for all non-blocked questions.
-        Provides full context — the LLM decides how much to use.
+        Build messages array with:
+          - Report context injected as first user message
+          - Full conversation history
+          - New question as final user message
         """
-
-        # Build compact report context — only include if available
+        # ── Report context (injected once as system-like first turn) ──────────
         report_context = ""
         if report_summary:
             compact = {
@@ -318,54 +310,102 @@ class PatientChatLLM:
                 if isinstance(v, dict) and v.get('value') is not None
             }
             if compact:
-                report_context = f"\n\nPatient lab results:\n{compact}"
+                report_context = f"Patient lab results:\n{compact}\n\n"
 
         nlp_context = ""
         if explanations:
-            nlp_context = f"\n\nMedical context from report:\n" + "\n".join(explanations[:5])
+            nlp_context = "Medical context from report:\n" + "\n".join(explanations[:5]) + "\n\n"
 
+        # Deduplicate lifestyle tips
         rec_context = ""
         if recommendations:
-            tips = recommendations.get("lifestyle_tips", [])
+            tips = list(dict.fromkeys(recommendations.get("lifestyle_tips", [])))  # dedup
             if tips:
-                rec_context = f"\n\nRecommendations on file:\n" + "\n".join(tips[:3])
+                rec_context = "Recommendations on file:\n" + "\n".join(tips[:5]) + "\n\n"
 
         emergency_prefix = (
             "IMPORTANT: Patient may have active symptoms. Respond calmly.\n\n"
             if is_emergency else ""
         )
 
-        return (
+        context_block = (
             f"{emergency_prefix}"
-            f"Patient question: {question}"
             f"{report_context}"
             f"{nlp_context}"
-            f"{rec_context}\n\n"
-            "Instructions:\n"
-            "- Answer the patient's question directly and helpfully.\n"
-            "- If asked about normal ranges, give the ACTUAL numbers with units.\n"
-            "- Use the lab results above if relevant, but answer even if the parameter "
-            "is not in the report — use your medical knowledge.\n"
-            "- If the question is not health-related, politely redirect to health topics.\n"
-            "- Never give dosage amounts. Never diagnose definitively.\n"
-            "- Be warm, clear, and concise."
+            f"{rec_context}"
+            "Instructions: Answer the patient's question directly. "
+            "Use lab results if relevant. Give actual numbers for normal ranges. "
+            "Never give dosages. Never diagnose definitively. Be warm and clear."
+        ).strip()
+
+        messages = []
+
+        # Inject report context as a silent first exchange (if no history yet)
+        if not history and context_block:
+            messages.append({
+                "role": "user",
+                "content": f"[Report context — use this to answer my questions]\n{context_block}"
+            })
+            messages.append({
+                "role": "assistant",
+                "content": "Understood. I've reviewed your lab report and I'm ready to help. What would you like to know?"
+            })
+
+        # Append conversation history (trimmed to MAX_HISTORY_TURNS)
+        trimmed_history = history[-(MAX_HISTORY_TURNS * 2):]
+        messages.extend(trimmed_history)
+
+        # If history exists but context block not injected, prepend to question
+        if history and context_block:
+            messages.append({
+                "role": "user",
+                "content": f"{question}\n\n[Report context for reference]\n{context_block}"
+            })
+        else:
+            messages.append({"role": "user", "content": question})
+
+        return messages
+
+    # ─── LLM Providers ───────────────────────────────────────────────────────
+
+    def _call_claude(
+        self,
+        system_prompt: str,
+        messages:      List[Dict[str, str]],
+    ) -> str:
+        if not ANTHROPIC_API_KEY:
+            raise ValueError("ANTHROPIC_API_KEY not configured")
+
+        response = requests.post(
+            "https://api.anthropic.com/v1/messages",
+            headers={
+                "x-api-key":         ANTHROPIC_API_KEY,
+                "anthropic-version": "2023-06-01",
+                "content-type":      "application/json",
+            },
+            json={
+                "model":      CLAUDE_CHAT_MODEL,
+                "max_tokens": 800,
+                "system":     system_prompt,
+                "messages":   messages,
+            },
+            timeout=30,
         )
+        response.raise_for_status()
+        content = response.json().get("content", [])
+        return " ".join(
+            block.get("text", "") for block in content if block.get("type") == "text"
+        ).strip()
 
-    # ─────────────────────────────────────────────────────────────────────────
-    # LLM PROVIDERS
-    # ─────────────────────────────────────────────────────────────────────────
-
-    def _call_groq(self, system_prompt: str, user_prompt: str) -> str:
+    def _call_groq(self, system_prompt: str, messages: List[Dict[str, str]]) -> str:
         if not GROQ_API_KEY:
             raise ValueError("GROQ_API_KEY not configured")
+        full_messages = [{"role": "system", "content": system_prompt}] + messages
         response = requests.post(
             GROQ_API_URL,
             json={
-                "model":    GROQ_MODEL,
-                "messages": [
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user",   "content": user_prompt},
-                ],
+                "model":       GROQ_MODEL,
+                "messages":    full_messages,
                 "temperature": 0.3,
                 "max_tokens":  600,
             },
@@ -384,15 +424,21 @@ class PatientChatLLM:
             .strip()
         )
 
-    def _call_gemini(self, system_prompt: str, user_prompt: str) -> str:
+    def _call_gemini(self, system_prompt: str, messages: List[Dict[str, str]]) -> str:
         if not GEMINI_API_KEY:
             raise ValueError("GEMINI_API_KEY not configured")
+        # Convert messages to Gemini format
+        gemini_contents = []
+        for msg in messages:
+            role = "user" if msg["role"] == "user" else "model"
+            gemini_contents.append({"role": role, "parts": [{"text": msg["content"]}]})
+
         response = requests.post(
             f"https://generativelanguage.googleapis.com/v1beta/models/"
             f"{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}",
             json={
                 "system_instruction": {"parts": [{"text": system_prompt}]},
-                "contents": [{"role": "user", "parts": [{"text": user_prompt}]}],
+                "contents": gemini_contents,
                 "generationConfig": {"temperature": 0.3, "maxOutputTokens": 600},
             },
             timeout=30,
@@ -407,13 +453,11 @@ class PatientChatLLM:
             .strip()
         )
 
-    def _call_ollama(self, system_prompt: str, user_prompt: str) -> str:
+    def _call_ollama(self, system_prompt: str, messages: List[Dict[str, str]]) -> str:
+        full_messages = [{"role": "system", "content": system_prompt}] + messages
         payload = {
-            "model": self.model,
-            "messages": [
-                {"role": "system", "content": system_prompt},
-                {"role": "user",   "content": user_prompt},
-            ],
+            "model":       self.model,
+            "messages":    full_messages,
             "temperature": 0.3,
             "max_tokens":  600,
         }
@@ -434,7 +478,6 @@ class PatientChatLLM:
                 logger.warning(f"Ollama timeout attempt {attempt}/{self.max_retries}")
             except requests.exceptions.ConnectionError:
                 last_error = "unreachable"
-                logger.warning("Ollama not running")
                 break
             except Exception as e:
                 last_error = str(e)
@@ -443,15 +486,21 @@ class PatientChatLLM:
                 time.sleep(1.5 * attempt)
         raise ConnectionError(f"Ollama failed: {last_error}")
 
-    def _call_llm(self, system_prompt: str, user_prompt: str) -> tuple[str, str]:
+    def _call_llm(
+        self,
+        system_prompt: str,
+        messages:      List[Dict[str, str]],
+    ) -> tuple[str, str]:
+        """Claude → Groq → Gemini → Ollama fallback chain."""
         providers = [
-            ("groq",   self._call_groq),
-            ("gemini", self._call_gemini),
-            ("ollama", self._call_ollama),
+            ("claude", lambda s, m: self._call_claude(s, m)),
+            ("groq",   lambda s, m: self._call_groq(s, m)),
+            ("gemini", lambda s, m: self._call_gemini(s, m)),
+            ("ollama", lambda s, m: self._call_ollama(s, m)),
         ]
         for name, caller in providers:
             try:
-                answer = caller(system_prompt, user_prompt)
+                answer = caller(system_prompt, messages)
                 if answer:
                     logger.info(f"LLM answered by {name} ✅")
                     return answer, name
@@ -470,7 +519,6 @@ class PatientChatLLM:
         return LLM_FALLBACK_RESPONSE, "fallback"
 
     def _post_check(self, answer: str) -> str:
-        """Last safety net — catches dosage info that slipped through."""
         lower = answer.lower()
         if any(re.search(p, lower) for p in DOSAGE_PATTERNS):
             logger.warning("Post-check: dosage info detected — sanitizing")
@@ -481,9 +529,7 @@ class PatientChatLLM:
             )
         return answer
 
-    # ─────────────────────────────────────────────────────────────────────────
-    # PUBLIC METHOD
-    # ─────────────────────────────────────────────────────────────────────────
+    # ─── PUBLIC METHOD ────────────────────────────────────────────────────────
 
     def answer_question(
         self,
@@ -494,8 +540,10 @@ class PatientChatLLM:
         gender:          Optional[str] = None,
         patient_age:     Optional[int] = None,
         language:        Optional[str] = None,
+        history:         Optional[List[Dict[str, str]]] = None,  # NEW: conversation history
     ) -> LLMResponse:
         start_time = time.time()
+        history    = history or []
 
         question = self._sanitize_input(question)
         if not question:
@@ -509,12 +557,10 @@ class PatientChatLLM:
                 llm_source="none",
             )
 
-        logger.info(f"Question received | hash={self._hash_for_log(question)}")
+        logger.info(f"Question received | hash={self._hash_for_log(question)} | history_turns={len(history)//2}")
 
         q_type   = self._classify_question(question)
         severity = self._derive_severity(report_summary)
-
-        logger.info(f"Classified | type={q_type.value} | severity={severity.value}")
 
         # ── Small talk ────────────────────────────────────────────────────────
         if q_type == QuestionType.GENERAL_HEALTH:
@@ -552,31 +598,25 @@ class PatientChatLLM:
                 llm_source="none",
             )
 
-        # ── All other questions → LLM ─────────────────────────────────────────
-        # Emergency and report-based both go through the LLM.
-        # The system prompt + user prompt tell the LLM how to handle each.
-
-        is_emergency = (q_type == QuestionType.EMERGENCY)
-
-        system_prompt = self._build_system_prompt(severity, gender, is_emergency)
+        # ── LLM path (emergency + report_based) ───────────────────────────────
+        is_emergency  = (q_type == QuestionType.EMERGENCY)
+        system_prompt = self._build_system_prompt(severity, gender, patient_age, is_emergency)
 
         if language:
             system_prompt += f"\nIMPORTANT: Respond in {language} only."
         else:
             system_prompt += "\nIMPORTANT: Respond in the same language the patient used."
 
-        if patient_age:
-            system_prompt += f" Patient age: {patient_age} years."
-
-        user_prompt = self._build_main_prompt(
+        messages = self._build_messages_with_history(
             question        = question,
             report_summary  = report_summary,
             explanations    = explanations,
             recommendations = recommendations,
+            history         = history,
             is_emergency    = is_emergency,
         )
 
-        answer, llm_source = self._call_llm(system_prompt, user_prompt)
+        answer, llm_source = self._call_llm(system_prompt, messages)
         answer = self._post_check(answer)
 
         response_time = time.time() - start_time
