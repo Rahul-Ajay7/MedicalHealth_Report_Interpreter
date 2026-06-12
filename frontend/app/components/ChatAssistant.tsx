@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useReport } from "@/context/ReportContext";
-import { askLLMChat } from "@/services/api";
+import { askLLMChat, getLanguages, type Language } from "@/services/api";
 import { Send, Bot, Sparkles, AlertTriangle, ShieldAlert, Info } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -110,7 +110,15 @@ export default function ChatAssistant() {
   const [input, setInput]       = useState("");
   const [loading, setLoading]   = useState(false);
 
+  const [languages, setLanguages] = useState<Language[]>([]);
+  const [language, setLanguage]   = useState("en");
+
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
+
+  // ── Load supported languages once ──────────────────────────────────────────
+  useEffect(() => {
+    getLanguages().then(setLanguages).catch(() => {});
+  }, []);
 
   // ── Initialise chat when report loads ──────────────────────────────────────
   useEffect(() => {
@@ -154,7 +162,7 @@ export default function ChatAssistant() {
     ]);
 
     try {
-      const res = await askLLMChat({ file_id: report.file_id, question });
+      const res = await askLLMChat({ file_id: report.file_id, question, language });
 
       setMessages((prev) => {
         const updated = [...prev];
@@ -200,7 +208,24 @@ export default function ChatAssistant() {
           <p className="text-sm font-semibold text-slate-800">Health Assistant</p>
           <p className="text-xs text-slate-400">Ask about your results</p>
         </div>
-        <div className={`ml-auto w-2 h-2 rounded-full ${report ? "bg-green-400" : "bg-slate-300"}`} />
+
+        {/* Language selector — replies come back in the chosen language */}
+        {languages.length > 0 && (
+          <select
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+            title="Answer language"
+            className="ml-auto text-xs text-slate-600 border border-slate-200 rounded-lg px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+          >
+            {languages.map((l) => (
+              <option key={l.code} value={l.code}>
+                {l.native}
+              </option>
+            ))}
+          </select>
+        )}
+
+        <div className={`ml-2 w-2 h-2 rounded-full ${report ? "bg-green-400" : "bg-slate-300"}`} />
       </div>
 
       {/* ── Messages ── */}

@@ -106,3 +106,10 @@ app.include_router(report_router)
 @app.get("/")
 def root():
     return {"status": "API is running!"}
+
+
+@app.get("/languages")
+def languages():
+    """Supported output languages for the report explanation + chat."""
+    from app.services.languages import supported_languages
+    return {"languages": supported_languages()}

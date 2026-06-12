@@ -5,6 +5,7 @@ import tempfile
 
 from app.dependencies import verify_token
 from app.services.audit import audit, client_ip
+from app.services.languages import normalize_language
 from app.supabase_client import supabase
 from app.services.ocr import extract_text_from_file
 from app.services.parser import parse_report_text
@@ -28,10 +29,14 @@ def analyze_report(
     file_id: str,
     gender: str,
     request: Request,
+    language: str = "english",
     user=Depends(verify_token)
 ):
     user_id = user["sub"]
     audit("report_analyze", user_id=user_id, report_id=file_id, ip=client_ip(request))
+
+    # Preferred chat/output language for this report (defaults to English)
+    language = normalize_language(language) or "English"
 
     # ── 1. Fetch report row from Supabase ──────────────────────────────
     report_row = supabase.table("reports") \
@@ -134,7 +139,8 @@ def analyze_report(
             "analysis":        final_results,
             "nlp_explanation": nlp_explanation,
             "recommendations": recommendations,
-            "gender":          gender,})
+            "gender":          gender,
+            "language":        language,})
 
     finally:
         # ── 15. Always cleanup temp file ───────────────────────────────
