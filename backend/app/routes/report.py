@@ -1,12 +1,14 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Request
 from app.dependencies import verify_token
 from app.supabase_client import supabase
+from app.services.audit import audit, client_ip
 
 router = APIRouter(prefix="/report", tags=["Report"])
 
 @router.get("/{report_id}")
-async def get_full_report(report_id: str, user=Depends(verify_token)):
+async def get_full_report(report_id: str, request: Request, user=Depends(verify_token)):
     user_id = user["sub"]
+    audit("report_view", user_id=user_id, report_id=report_id, ip=client_ip(request))
 
     data = supabase.from_("reports").select("""
         id, file_name, uploaded_at,

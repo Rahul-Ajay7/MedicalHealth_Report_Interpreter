@@ -26,7 +26,10 @@ Unit conversions performed so Analyzer gets values in NORMAL_RANGES units:
 """
 
 import re
+import logging
 from app.utils.normal_ranges import NORMAL_RANGES
+
+logger = logging.getLogger(__name__)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -273,6 +276,104 @@ UNIT_CONVERSIONS: dict[tuple[str, str], float] = {
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+#  UNIT NORMALIZATION
+#  Collapse the many ways labs write the same unit into one canonical token,
+#  so conversion lookups don't need an entry per spelling.
+#    "µ" / "μ" / "micro" / "mc"  → "u"      (micromol/l, mcg/dl, µg/dL → umol/l ...)
+#    spaces stripped, lowercased, litre/liter → l
+#  NOTE: "mIU" (milli-IU, e.g. TSH) stays "miu" — only "micro" collapses to "u".
+# ══════════════════════════════════════════════════════════════════════════════
+
+def _norm_unit(u: str) -> str:
+    if not u:
+        return ""
+    s = u.lower().strip()
+    s = s.replace("μ", "u").replace("µ", "u")
+    s = s.replace("micro", "u")
+    s = s.replace("mcg", "ug").replace("mc", "u")
+    s = s.replace("litre", "l").replace("liter", "l")
+    s = s.replace(" ", "")
+    return s
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  PARAMETER-AWARE UNIT CONVERSIONS  (SI ↔ conventional)
+#  Key: param_key → { normalized_raw_unit → multiplier to the param's canonical
+#  (NORMAL_RANGES) unit }.  canonical_value = raw_value × multiplier.
+#  These are analyte-specific because molar mass differs — e.g. mmol/L → mg/dL
+#  is ×18.0 for glucose but ×38.67 for cholesterol.  Checked BEFORE the generic
+#  UNIT_CONVERSIONS table so the right factor always wins.
+#  Factors are standard clinical conversion constants (molar-mass based).
+# ══════════════════════════════════════════════════════════════════════════════
+
+_GLUCOSE_CONV = {"mmol/l": 18.0182, "g/l": 100.0}
+
+PARAM_UNIT_CONVERSIONS: dict[str, dict[str, float]] = {
+    # ── Glucose family → mg/dL ────────────────────────────────────────────────
+    "fasting_blood_glucose": _GLUCOSE_CONV,
+    "postprandial_glucose":  _GLUCOSE_CONV,
+    "random_blood_glucose":  _GLUCOSE_CONV,
+    "mean_blood_glucose":    _GLUCOSE_CONV,
+
+    # ── Lipids → mg/dL  (cholesterols share 38.67; TG differs) ───────────────
+    "total_cholesterol": {"mmol/l": 38.67},
+    "ldl":               {"mmol/l": 38.67},
+    "hdl":               {"mmol/l": 38.67},
+    "vldl":              {"mmol/l": 38.67},
+    "triglycerides":     {"mmol/l": 88.57},
+
+    # ── Kidney → mg/dL ────────────────────────────────────────────────────────
+    "creatinine":          {"umol/l": 0.0113, "mg/l": 0.1},
+    "blood_urea":          {"mmol/l": 6.006,  "g/l": 100.0},
+    "blood_urea_nitrogen": {"mmol/l": 2.801},
+    "uric_acid":           {"umol/l": 0.01681, "mmol/l": 16.81},
+    "calcium":             {"mmol/l": 4.008,   "meq/l": 2.004},
+
+    # ── Liver: bilirubin → mg/dL ──────────────────────────────────────────────
+    "bilirubin_total":    {"umol/l": 0.05847},
+    "bilirubin_direct":   {"umol/l": 0.05847},
+    "bilirubin_indirect": {"umol/l": 0.05847},
+
+    # ── Proteins → g/dL ───────────────────────────────────────────────────────
+    "total_protein": {"g/l": 0.1},
+    "albumin":       {"g/l": 0.1},
+    "globulin":      {"g/l": 0.1},
+    "hemoglobin":    {"g/l": 0.1, "mmol/l": 1.6114},
+    "mchc":          {"g/l": 0.1},
+
+    # ── Iron studies → µg/dL ──────────────────────────────────────────────────
+    "serum_iron": {"umol/l": 5.587},
+    "tibc":       {"umol/l": 5.587},
+
+    # ── Electrolytes → mEq/L (monovalent: mmol/L ≡ mEq/L) ────────────────────
+    "sodium":    {"mmol/l": 1.0},
+    "potassium": {"mmol/l": 1.0},
+    "chloride":  {"mmol/l": 1.0},
+
+    # ── Thyroid ───────────────────────────────────────────────────────────────
+    "t4":      {"nmol/l": 0.0777},               # → µg/dL
+    "free_t4": {"pmol/l": 0.0777},               # → ng/dL
+    "t3":      {"nmol/l": 65.1, "ng/ml": 100.0}, # → ng/dL  (1 ng/mL = 100 ng/dL)
+    "free_t3": {"pmol/l": 0.651},                # → pg/mL
+
+    # ── Vitamins ──────────────────────────────────────────────────────────────
+    "vitamin_d":   {"nmol/l": 0.4006},                 # → ng/mL
+    "vitamin_b12": {"pmol/l": 1.355, "ng/l": 1.0},     # → pg/mL
+    "folate":      {"nmol/l": 0.4413, "ug/l": 1.0},    # → ng/mL
+}
+
+# HbA1c is AFFINE, not multiplicative: NGSP% = IFCC(mmol/mol) × 0.09148 + 2.152
+_HBA1C_IFCC_SLOPE = 0.09148
+_HBA1C_IFCC_INTERCEPT = 2.152
+
+# Generic table, pre-normalized once so lookups are spelling-insensitive.
+_GENERIC_NORM: dict[tuple[str, str], float] = {
+    (_norm_unit(src), _norm_unit(tgt)): f
+    for (src, tgt), f in UNIT_CONVERSIONS.items()
+}
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 #  DEFAULT UNITS
 #  Injected when OCR misses the unit column
 # ══════════════════════════════════════════════════════════════════════════════
@@ -451,26 +552,44 @@ def _extract_range_max(text: str) -> float | None:
     return _extract_number(t)
 
 
-def _convert(value: float, raw_unit: str, target_unit: str) -> float:
+def _convert(value: float, raw_unit: str, target_unit: str, param_key: str = "") -> float:
     """
-    Convert value from report unit to NORMAL_RANGES target unit.
+    Convert a value from the report's unit to the param's canonical
+    (NORMAL_RANGES) unit.
+
+    Resolution order:
+      1. raw == target (or raw missing)         → no change
+      2. HbA1c IFCC mmol/mol                     → affine NGSP % formula
+      3. T4 "mg/mL" lab-notation quirk           → treat as µg/dL (×1)
+      4. PARAM_UNIT_CONVERSIONS[param_key]       → analyte-specific SI factor
+      5. generic UNIT_CONVERSIONS (normalized)   → exact, then fuzzy
+      6. give up                                 → return value unchanged
     """
-    ru = raw_unit.lower().strip()
-    tu = target_unit.lower().strip()
+    ru = _norm_unit(raw_unit)
+    tu = _norm_unit(target_unit)
 
     if not ru or ru == tu:
         return value
 
-    # Special T4 case: lab writes "mg/mL" but means µg/dL (identical numeric value)
-    if ru == "mg/ml" and ("µg" in tu or "ug" in tu) and value < 30:
-        return value  # already in µg/dL range, no conversion needed
+    # HbA1c IFCC (mmol/mol) → NGSP (%) — affine, not a simple multiply
+    if param_key == "hba1c" and ru in ("mmol/mol", "mol/mol"):
+        return value * _HBA1C_IFCC_SLOPE + _HBA1C_IFCC_INTERCEPT
 
-    # Exact match
-    if (ru, tu) in UNIT_CONVERSIONS:
-        return value * UNIT_CONVERSIONS[(ru, tu)]
+    # T4 quirk: some labs print "mg/mL" but the value is already in µg/dL range
+    if ru == "mg/ml" and "ug" in tu and value < 30:
+        return value
 
-    # Fuzzy: raw unit contains known key or vice versa
-    for (src, tgt), factor in UNIT_CONVERSIONS.items():
+    # Analyte-specific conversion (must win over the generic table)
+    pmap = PARAM_UNIT_CONVERSIONS.get(param_key)
+    if pmap and ru in pmap:
+        return value * pmap[ru]
+
+    # Generic exact match
+    if (ru, tu) in _GENERIC_NORM:
+        return value * _GENERIC_NORM[(ru, tu)]
+
+    # Generic fuzzy: raw unit contains a known key or vice versa
+    for (src, tgt), factor in _GENERIC_NORM.items():
         if tgt == tu and (src in ru or ru in src):
             return value * factor
 
@@ -543,7 +662,7 @@ def _parse_single_row(lines: list[str], idx: int, param_key: str) -> dict | None
 
     ref_data    = NORMAL_RANGES.get(param_key, {})
     target_unit = ref_data.get("unit", raw_unit)
-    converted   = _convert(value, raw_unit, target_unit)
+    converted   = _convert(value, raw_unit, target_unit, param_key)
 
     if not _sanity_ok(param_key, converted):
         return None
@@ -720,7 +839,7 @@ def _parse_multicolumn_line(line: str, already_parsed: set[str]) -> dict:
         raw_unit    = units[vi] if vi < len(units) else ""
         ref_data    = NORMAL_RANGES.get(pk, {})
         target_unit = ref_data.get("unit", raw_unit)
-        converted   = _convert(raw_val, raw_unit, target_unit)
+        converted   = _convert(raw_val, raw_unit, target_unit, pk)
         if _sanity_ok(pk, converted):
             result[pk] = {"value": round(converted, 4), "unit": target_unit}
 
@@ -779,5 +898,6 @@ def parse_report_text(raw_text: str) -> dict[str, dict[str, any]]:
             if res is not None:
                 parsed[pk] = res
 
-    print(f"\n✅ PARSED VALUES: {parsed}")
+    # DEBUG only — parsed values are patient PII, never log at INFO+
+    logger.debug("Parsed %d parameters from report", len(parsed))
     return parsed
