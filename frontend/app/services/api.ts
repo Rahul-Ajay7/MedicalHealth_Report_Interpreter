@@ -98,6 +98,7 @@ export type ChatResponse = {
 export async function askLLMChat(payload: {
   file_id:  string;
   question: string;
+  language?: string;
 }): Promise<ChatResponse> {
   const token = await getToken();
 
@@ -116,5 +117,15 @@ export async function askLLMChat(payload: {
   }
 
   return res.json();
+}
+
+/* ---------------- SUPPORTED LANGUAGES ---------------- */
+export type Language = { code: string; name: string; native: string };
+
+export async function getLanguages(): Promise<Language[]> {
+  const res = await fetch(`${API_BASE}/languages`);
+  if (!res.ok) return [{ code: "en", name: "English", native: "English" }];
+  const data = await res.json();
+  return data.languages ?? [];
 }
 

@@ -15,8 +15,11 @@ import logging
 
 from fastapi import Request
 
+from typing import Optional
+
 from app.dependencies import verify_token
 from app.services.audit import audit, client_ip
+from app.services.languages import normalize_language
 from app.services.llm_chat import PatientChatLLM
 from app.state.chat_sessions import get_session, set_session
 from app.config import LLM_BASE_URL, LLM_CHAT_ENDPOINT, LLM_MODEL, LLM_TIMEOUT
@@ -40,6 +43,7 @@ llm = PatientChatLLM(
 class ChatRequest(BaseModel):
     file_id:  str
     question: str
+    language: Optional[str] = None   # code / name / native; defaults to report's
 
 
 class ChatResponse(BaseModel):
@@ -85,6 +89,9 @@ async def chat_with_llm(data: ChatRequest, request: Request, user=Depends(verify
 
     history: list = session["chat_history"]
 
+    # Language precedence: request override → language chosen at analyze time.
+    language = normalize_language(data.language) or session.get("language")
+
     try:
         result = llm.answer_question(
             question        = data.question,
@@ -93,7 +100,7 @@ async def chat_with_llm(data: ChatRequest, request: Request, user=Depends(verify
             recommendations = session.get("recommendations", {}),
             gender          = session.get("gender"),
             patient_age     = session.get("age"),
-            language        = session.get("language"),
+            language        = language,
             history         = history,         # ← NEW: pass history
         )
 
