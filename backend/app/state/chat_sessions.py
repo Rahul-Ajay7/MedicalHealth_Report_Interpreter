@@ -19,6 +19,9 @@ if REDIS_URL:
     def set_session(file_id: str, data: Dict, ttl: int = 3600):
         _redis.setex(f"chat:{file_id}", ttl, json.dumps(data))
 
+    def delete_session(file_id: str) -> None:
+        _redis.delete(f"chat:{file_id}")
+
 else:
     # Fallback: in-memory (dev only)
     _store: Dict[str, Any] = {}
@@ -28,6 +31,9 @@ else:
 
     def set_session(file_id: str, data: Dict, ttl: int = 3600):
         _store[file_id] = data
+
+    def delete_session(file_id: str) -> None:
+        _store.pop(file_id, None)
 
 # Keep CHAT_SESSIONS dict for backward compat
 CHAT_SESSIONS: Dict[str, Any] = {}

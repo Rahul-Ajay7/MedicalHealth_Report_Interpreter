@@ -1,16 +1,16 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Request
 import os
 import json
 import tempfile
 
 from app.dependencies import verify_token
+from app.services.audit import audit, client_ip
 from app.supabase_client import supabase
 from app.services.ocr import extract_text_from_file
 from app.services.parser import parse_report_text
 from app.services.analyzer import analyze_parameters
 from app.services.recommendations import generate_recommendations
 from app.services.nlp import generate_nlp_explanations
-from app.state.chat_sessions import CHAT_SESSIONS
 from app.state.chat_sessions import set_session
 
 router = APIRouter(prefix="/analyze", tags=["Analyze"])
@@ -27,9 +27,11 @@ JSON_PATH = os.path.join(
 def analyze_report(
     file_id: str,
     gender: str,
+    request: Request,
     user=Depends(verify_token)
 ):
     user_id = user["sub"]
+    audit("report_analyze", user_id=user_id, report_id=file_id, ip=client_ip(request))
 
     # ── 1. Fetch report row from Supabase ──────────────────────────────
     report_row = supabase.table("reports") \
@@ -128,8 +130,10 @@ def analyze_report(
         # ── 14. Store chat session ─────────────────────────────────────
         
         set_session(file_id, {
+            "user_id":         user_id,          # for chat ownership check
             "analysis":        final_results,
             "nlp_explanation": nlp_explanation,
+            "recommendations": recommendations,
             "gender":          gender,})
 
     finally:

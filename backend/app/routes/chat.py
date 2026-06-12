@@ -9,12 +9,16 @@ Changes vs original:
   - History capped at MAX_HISTORY_TURNS * 2 messages
 """
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 import logging
 
+from fastapi import Request
+
+from app.dependencies import verify_token
+from app.services.audit import audit, client_ip
 from app.services.llm_chat import PatientChatLLM
-from app.state.chat_sessions import CHAT_SESSIONS
+from app.state.chat_sessions import get_session, set_session
 from app.config import LLM_BASE_URL, LLM_CHAT_ENDPOINT, LLM_MODEL, LLM_TIMEOUT
 
 logger = logging.getLogger(__name__)
@@ -49,20 +53,31 @@ class ChatResponse(BaseModel):
 # ─── Chat Route ───────────────────────────────────────────────────────────────
 
 @router.post("/", response_model=ChatResponse)
-async def chat_with_llm(data: ChatRequest):
+async def chat_with_llm(data: ChatRequest, request: Request, user=Depends(verify_token)):
     """
     Ask a question about an analyzed report.
     Maintains conversation history across turns within the same session.
 
-    LLM chain: Claude → Groq → Gemini → Ollama
+    Auth: requires a valid Supabase JWT; the session must belong to the
+    authenticated user (ownership enforced via user_id stored at analyze time).
+
+    LLM chain: Groq → Gemini → Ollama
     """
-    session = CHAT_SESSIONS.get(data.file_id)
+    session = get_session(data.file_id)
 
     if not session:
         raise HTTPException(
             status_code=404,
             detail="Chat session not found. Please analyze your report first.",
         )
+
+    # ── Ownership check — never serve another user's report data ──────────────
+    if session.get("user_id") != user["sub"]:
+        audit("authz_denied", user_id=user["sub"], report_id=data.file_id,
+              ip=client_ip(request), status="forbidden", route="chat")
+        raise HTTPException(status_code=403, detail="Not authorized for this report.")
+
+    audit("chat_query", user_id=user["sub"], report_id=data.file_id, ip=client_ip(request))
 
     # ── Get existing history (or init) ────────────────────────────────────────
     if "chat_history" not in session:
@@ -98,8 +113,11 @@ async def chat_with_llm(data: ChatRequest):
 
             # Trim to cap
             max_msgs = MAX_HISTORY_TURNS * 2
-            if len(history) > max_msgs:
-                session["chat_history"] = history[-max_msgs:]
+            session["chat_history"] = history[-max_msgs:]
+
+            # Persist back to the store (required for the Redis backend —
+            # get_session returns a copy there, so in-place edits are lost)
+            set_session(data.file_id, session)
 
         logger.info(
             f"Chat response | file_id={data.file_id} "

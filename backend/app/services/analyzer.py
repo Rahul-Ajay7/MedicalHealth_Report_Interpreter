@@ -1,5 +1,8 @@
+import logging
 from typing import Dict, Any
-from app.utils.normal_ranges import NORMAL_RANGES   
+from app.utils.normal_ranges import NORMAL_RANGES
+
+logger = logging.getLogger(__name__)
 
 # -------- STATUS CHECK ----------
 def get_status(value, normal_range):
@@ -74,5 +77,6 @@ def analyze_parameters(parsed_values: Dict[str, Dict[str, Any]], gender="male") 
             "normal_range": normal_range
         }
 
-    print("\nFINAL ANALYSIS:", final_results)
+    # DEBUG only — analysis values are patient PII, never log at INFO+
+    logger.debug("Analyzed %d parameters", len(final_results))
     return final_results
