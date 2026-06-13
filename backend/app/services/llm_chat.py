@@ -222,12 +222,9 @@ class PatientChatLLM:
     def _derive_severity(self, analysis: Dict[str, Any]) -> Severity:
         if not analysis:
             return Severity.NORMAL
-        statuses = [
-            str(v.get("status", "")).lower()
-            for v in analysis.values()
-            if isinstance(v, dict)
-        ]
-        if "critical" in statuses: return Severity.CRITICAL
+        dicts = [v for v in analysis.values() if isinstance(v, dict)]
+        statuses = [str(v.get("status", "")).lower() for v in dicts]
+        if any(v.get("critical") for v in dicts): return Severity.CRITICAL
         if "high"     in statuses: return Severity.HIGH
         if "low"      in statuses or "abnormal" in statuses: return Severity.MEDIUM
         return Severity.NORMAL
@@ -313,6 +310,17 @@ class PatientChatLLM:
                 "them with long explanations.\n\n"
             )
 
+        if severity == Severity.CRITICAL:
+            base += (
+                "CRITICAL VALUE PRESENT: One or more results are at a level that can "
+                "need urgent attention (marked 'CRITICAL/PANIC VALUE' below). Stay calm "
+                "and non-alarming, but clearly and early advise the patient to contact a "
+                "doctor promptly, and if they feel unwell to seek urgent care now — in "
+                "India dial 112 or 108. Still do NOT diagnose or name prescription "
+                "medicines. OCR can misread, so also suggest confirming against the "
+                "original printed report.\n\n"
+            )
+
         base += f"Report severity context: {severity.value}. {gender_note} {age_note}".strip()
         return base
 
@@ -335,7 +343,8 @@ class PatientChatLLM:
         report_context = ""
         if report_summary:
             compact = {
-                k: f"{v.get('value')} {v.get('unit','')} ({v.get('status','unknown')})"
+                k: (f"{v.get('value')} {v.get('unit','')} ({v.get('status','unknown')})"
+                    + (" — CRITICAL/PANIC VALUE" if v.get('critical') else ""))
                 for k, v in report_summary.items()
                 if isinstance(v, dict) and v.get('value') is not None
             }

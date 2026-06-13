@@ -101,12 +101,11 @@ def analyze_report(
         ]
 
         # ── 11. Determine severity from dict values ─────────────────────
-        statuses = [
-            v.get("status", "normal").lower()
-            for v in final_results.values()
-            if isinstance(v, dict)
-        ]
-        if any(s == "high" for s in statuses):
+        dict_vals = [v for v in final_results.values() if isinstance(v, dict)]
+        statuses  = [v.get("status", "normal").lower() for v in dict_vals]
+        if any(v.get("critical") for v in dict_vals):
+            severity = "Critical"            # panic value → urgent attention
+        elif any(s == "high" for s in statuses):
             severity = "High"
         elif any(s in ("low", "abnormal") for s in statuses):
             severity = "Medium"
