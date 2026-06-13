@@ -69,8 +69,3 @@ async def upload_report(
         "file_url":  file_url,
         "status":    "uploaded"
     }
-
-
-@router.get("/")
-def test_upload():
-    return {"message": "Upload route works"}

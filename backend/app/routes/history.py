@@ -55,10 +55,6 @@ async def get_history(request: Request, user=Depends(verify_token)):
     return { "reports": reports }
 
 
-@router.get("/test")
-def test_history():
-    return {"message": "History route works"}
-
 @router.delete("/{report_id}")
 async def delete_report(report_id: str, request: Request, user=Depends(verify_token)):
     """
