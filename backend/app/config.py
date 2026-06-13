@@ -34,6 +34,10 @@ ALLOWED_EXTENSIONS = os.getenv(
 UPLOAD_PATH = BASE_DIR / UPLOAD_DIR
 UPLOAD_PATH.mkdir(parents=True, exist_ok=True)
 
+# Lifetime (seconds) of signed URLs minted for private-bucket objects.
+# Short by design — the file is medical PII; the link should not outlive its use.
+SIGNED_URL_TTL = int(os.getenv("SIGNED_URL_TTL", 60))
+
 
 # ===============================
 # OCR CONFIGURATION

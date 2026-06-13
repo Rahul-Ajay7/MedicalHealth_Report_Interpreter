@@ -552,6 +552,36 @@ def _extract_range_max(text: str) -> float | None:
     return _extract_number(t)
 
 
+def _extract_printed_range(
+    text: str,
+    raw_unit: str,
+    target_unit: str,
+    param_key: str,
+    after_pos: int = 0,
+) -> dict | None:
+    """
+    Capture a two-sided reference range printed on the report line
+    (e.g. "13.0 - 17.0") and convert it to the param's canonical unit.
+
+    Conservative on purpose — only two-sided lo–hi ranges, never one-sided
+    "< X" / "> X" bounds (those collide with the result-value extractor and
+    risk silently widening the abnormal threshold). Returns {"min","max"}
+    in canonical units, or None. The analyzer validates before trusting it.
+    """
+    seg = text[after_pos:]
+    m = re.search(r"(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)", seg)
+    if not m:
+        return None
+    lo, hi = float(m.group(1)), float(m.group(2))
+    if lo >= hi:
+        return None
+    lo_c = round(_convert(lo, raw_unit, target_unit, param_key), 4)
+    hi_c = round(_convert(hi, raw_unit, target_unit, param_key), 4)
+    if lo_c >= hi_c:
+        return None
+    return {"min": lo_c, "max": hi_c}
+
+
 def _convert(value: float, raw_unit: str, target_unit: str, param_key: str = "") -> float:
     """
     Convert a value from the report's unit to the param's canonical
@@ -643,6 +673,8 @@ def _parse_single_row(lines: list[str], idx: int, param_key: str) -> dict | None
 
     value    = _extract_number(line, after_pos=alias_end)
     raw_unit = _extract_unit(line[alias_end:]) if alias_end else _extract_unit(line)
+    val_line = line                # line the result value was read from
+    val_off  = alias_end           # search printed range after the param name
 
     # Look ahead up to 3 lines if value not found on label line
     if value is None:
@@ -655,6 +687,8 @@ def _parse_single_row(lines: list[str], idx: int, param_key: str) -> dict | None
                 if v is not None:
                     value    = v
                     raw_unit = _extract_unit(nxt)
+                    val_line = nxt
+                    val_off  = 0
                     break
 
     if value is None:
@@ -671,7 +705,15 @@ def _parse_single_row(lines: list[str], idx: int, param_key: str) -> dict | None
     if not target_unit and param_key in DEFAULT_UNITS:
         target_unit = DEFAULT_UNITS[param_key]
 
-    return {"value": round(converted, 4), "unit": target_unit}
+    out = {"value": round(converted, 4), "unit": target_unit}
+
+    printed = _extract_printed_range(
+        val_line, raw_unit, target_unit, param_key, after_pos=val_off
+    )
+    if printed:
+        out["printed_range"] = printed
+
+    return out
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -840,8 +882,18 @@ def _parse_multicolumn_line(line: str, already_parsed: set[str]) -> dict:
         ref_data    = NORMAL_RANGES.get(pk, {})
         target_unit = ref_data.get("unit", raw_unit)
         converted   = _convert(raw_val, raw_unit, target_unit, pk)
-        if _sanity_ok(pk, converted):
-            result[pk] = {"value": round(converted, 4), "unit": target_unit}
+        if not _sanity_ok(pk, converted):
+            continue
+        out = {"value": round(converted, 4), "unit": target_unit}
+        # Printed reference range for this column, if one was parsed
+        if vi < len(ref_ranges):
+            lo_s, hi_s = ref_ranges[vi]
+            printed = _extract_printed_range(
+                f"{lo_s} - {hi_s}", raw_unit, target_unit, pk
+            )
+            if printed:
+                out["printed_range"] = printed
+        result[pk] = out
 
     return result
 
