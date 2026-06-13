@@ -39,9 +39,13 @@ export default function Signup() {
   const [confirm,      setConfirm]      = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm,  setShowConfirm]  = useState(false);
+  const [consent,      setConsent]      = useState(false);
   const [error,        setError]        = useState('');
   const [loading,      setLoading]      = useState(false);
   const router = useRouter();
+
+  // Bump when the privacy policy text materially changes (matches /privacy "Last updated").
+  const CONSENT_VERSION = "2026-05-22";
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,6 +53,7 @@ export default function Signup() {
 
     if (password.length < 6) return setError("Password must be at least 6 characters.");
     if (password !== confirm) return setError("Passwords do not match.");
+    if (!consent) return setError("Please accept the Privacy Policy to continue.");
 
     setLoading(true);
 
@@ -63,6 +68,10 @@ export default function Signup() {
         data: {
           username,
           gender: gender || null,
+          // Provable consent trail for DPDP Act 2023
+          consent_accepted: true,
+          consent_at:       new Date().toISOString(),
+          consent_version:  CONSENT_VERSION,
         },
       },
     });
@@ -287,10 +296,33 @@ export default function Signup() {
               )}
             </AnimatePresence>
 
+            {/* Consent — required for DPDP Act 2023 */}
+            <label className="flex items-start gap-2.5 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={consent}
+                onChange={(e) => setConsent(e.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-teal-600 focus:ring-teal-500/30 cursor-pointer"
+              />
+              <span className="text-xs text-slate-500 leading-relaxed">
+                I agree to the{" "}
+                <a
+                  href="/privacy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-teal-600 font-semibold hover:text-teal-700 underline"
+                >
+                  Privacy Policy
+                </a>{" "}
+                and understand HealthAI gives informational insights only — not
+                medical advice, diagnosis, or treatment.
+              </span>
+            </label>
+
             <button
               type="submit"
-              disabled={loading}
-              className="w-full h-12 flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 active:scale-[0.99] disabled:opacity-60 text-white font-bold text-sm rounded-xl shadow-lg shadow-teal-600/20 transition-all duration-200"
+              disabled={loading || !consent}
+              className="w-full h-12 flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold text-sm rounded-xl shadow-lg shadow-teal-600/20 transition-all duration-200"
             >
               {loading ? <Loader2 size={18} className="animate-spin" /> : "Create Account"}
             </button>
