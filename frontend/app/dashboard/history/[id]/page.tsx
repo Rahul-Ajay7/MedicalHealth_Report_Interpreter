@@ -278,7 +278,7 @@ export default function ReportViewPage() {
       y += 4;
 
       // ── NON-PRESCRIPTION ──────────────────────────────────────────────
-      sectionTitle("NON-PRESCRIPTION SUGGESTIONS");
+      sectionTitle("TO DISCUSS WITH YOUR DOCTOR OR PHARMACIST");
       const items = data.recommendations.non_prescription;
       let px = margin;
       items.forEach((item) => {
@@ -500,7 +500,7 @@ export default function ReportViewPage() {
           className="rounded-2xl border border-amber-200 bg-amber-50 p-6">
           <div className="flex items-center gap-2.5 mb-3">
             <Pill size={16} className="text-amber-600" />
-            <h2 className="text-sm font-bold text-amber-800">Non-Prescription Suggestions</h2>
+            <h2 className="text-sm font-bold text-amber-800">To Discuss With Your Doctor or Pharmacist</h2>
           </div>
           <div className="flex flex-wrap gap-2 mb-4">
             {recommendations.non_prescription.map((item, i) => (
@@ -513,7 +513,7 @@ export default function ReportViewPage() {
             <AlertTriangle size={15} className="text-amber-500 flex-shrink-0 mt-0.5" />
             <p className="text-xs text-amber-700 leading-relaxed">
               <span className="font-bold">Medical Disclaimer: </span>
-              These suggestions are for informational purposes only and do not constitute medical advice. Always consult a qualified healthcare professional before starting any supplement or making changes to your health routine.
+              These are general, commonly-discussed options shown for awareness only — NOT a recommendation to take anything and NOT medical advice. Always ask a registered doctor or pharmacist before starting any supplement or changing your health routine.
             </p>
           </div>
         </motion.div>
