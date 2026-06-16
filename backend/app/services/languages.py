@@ -1,61 +1,58 @@
 """
 languages.py  —  supported output languages for HealthAI
 =========================================================
-Covers the Duolingo course set. Each entry: ISO-ish code → (English name,
-native name). The English name is what we feed the LLM ("Respond in Hindi"),
-which it understands more reliably than a code.
+India-first. Covers all 22 languages of the Eighth Schedule of the Indian
+Constitution (the project's core audience), plus English and a few common
+international languages for the diaspora. Each entry: ISO-ish code → (English
+name, native name). The English name is what we feed the LLM ("Respond in
+Tamil"), which it understands more reliably than a code.
 
 `normalize_language()` accepts a code, English name, or native name (any case)
 and returns the canonical English name, or None if unsupported. Callers treat
 None / "English" as the default (no translation).
+
+NOTE: LLM translation quality is strong for high-resource Indian languages
+(Hindi, Bengali, Tamil, Telugu, Marathi, Gujarati, Kannada, Malayalam, Punjabi,
+Urdu, Odia) and weaker for low-resource ones (Bodo, Santali, Dogri, Maithili,
+Konkani, Manipuri, Sindhi, Kashmiri, Sanskrit). Per-language MEDICAL accuracy is
+NOT clinician-verified — surface a "machine-translated" note for non-English.
 """
 
 from typing import Optional
 
 # code → (english_name, native_name)
 LANGUAGES: dict[str, tuple[str, str]] = {
-    "en":  ("English",            "English"),
-    "es":  ("Spanish",            "Español"),
-    "fr":  ("French",             "Français"),
-    "de":  ("German",             "Deutsch"),
-    "it":  ("Italian",            "Italiano"),
-    "pt":  ("Portuguese",         "Português"),
-    "nl":  ("Dutch",              "Nederlands"),
-    "ga":  ("Irish",              "Gaeilge"),
-    "da":  ("Danish",             "Dansk"),
-    "sv":  ("Swedish",            "Svenska"),
-    "no":  ("Norwegian",          "Norsk"),
-    "ru":  ("Russian",            "Русский"),
-    "pl":  ("Polish",             "Polski"),
-    "cs":  ("Czech",              "Čeština"),
-    "uk":  ("Ukrainian",          "Українська"),
-    "el":  ("Greek",              "Ελληνικά"),
-    "hu":  ("Hungarian",          "Magyar"),
-    "ro":  ("Romanian",           "Română"),
-    "tr":  ("Turkish",            "Türkçe"),
-    "he":  ("Hebrew",             "עברית"),
-    "ar":  ("Arabic",             "العربية"),
-    "hi":  ("Hindi",              "हिन्दी"),
-    "ja":  ("Japanese",           "日本語"),
-    "ko":  ("Korean",             "한국어"),
-    "zh":  ("Chinese",            "中文"),
-    "vi":  ("Vietnamese",         "Tiếng Việt"),
-    "id":  ("Indonesian",         "Bahasa Indonesia"),
-    "haw": ("Hawaiian",           "ʻŌlelo Hawaiʻi"),
-    "nv":  ("Navajo",             "Diné bizaad"),
-    "cy":  ("Welsh",              "Cymraeg"),
-    "eo":  ("Esperanto",          "Esperanto"),
-    "la":  ("Latin",              "Latina"),
-    "hv":  ("High Valyrian",      "High Valyrian"),
-    "tlh": ("Klingon",            "tlhIngan Hol"),
-    "sw":  ("Swahili",            "Kiswahili"),
-    "gd":  ("Scottish Gaelic",    "Gàidhlig"),
-    "yi":  ("Yiddish",            "ייִדיש"),
-    "ht":  ("Haitian Creole",     "Kreyòl ayisyen"),
-    "zu":  ("Zulu",               "isiZulu"),
-    "fi":  ("Finnish",            "Suomi"),
-    "ca":  ("Catalan",            "Català"),
-    "gn":  ("Guarani",            "Guaraní"),
+    "en":  ("English",   "English"),
+
+    # ── India — 22 Eighth Schedule languages ────────────────────────────────
+    "hi":  ("Hindi",     "हिन्दी"),
+    "bn":  ("Bengali",   "বাংলা"),
+    "te":  ("Telugu",    "తెలుగు"),
+    "mr":  ("Marathi",   "मराठी"),
+    "ta":  ("Tamil",     "தமிழ்"),
+    "ur":  ("Urdu",      "اردو"),
+    "gu":  ("Gujarati",  "ગુજરાતી"),
+    "kn":  ("Kannada",   "ಕನ್ನಡ"),
+    "ml":  ("Malayalam", "മലയാളം"),
+    "pa":  ("Punjabi",   "ਪੰਜਾਬੀ"),
+    "or":  ("Odia",      "ଓଡ଼ିଆ"),
+    "as":  ("Assamese",  "অসমীয়া"),
+    "mai": ("Maithili",  "मैथिली"),
+    "sa":  ("Sanskrit",  "संस्कृतम्"),
+    "kok": ("Konkani",   "कोंकणी"),
+    "ne":  ("Nepali",    "नेपाली"),
+    "sd":  ("Sindhi",    "سنڌي"),
+    "ks":  ("Kashmiri",  "کٲشُر"),
+    "doi": ("Dogri",     "डोगरी"),
+    "mni": ("Manipuri",  "মৈতৈলোন্"),
+    "brx": ("Bodo",      "बड़ो"),
+    "sat": ("Santali",   "ᱥᱟᱱᱛᱟᱲᱤ"),
+
+    # ── Common international (diaspora / broader reach) ──────────────────────
+    "es":  ("Spanish",   "Español"),
+    "fr":  ("French",    "Français"),
+    "ar":  ("Arabic",    "العربية"),
+    "zh":  ("Chinese",   "中文"),
 }
 
 # Reverse lookups built once (all lowercase).
