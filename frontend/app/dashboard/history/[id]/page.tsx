@@ -18,10 +18,12 @@ type Parameter = {
   unit:         string;
   status:       string;
   normal_range?: NormalRange;
+  critical?:     boolean;
+  range_source?: "report" | "reference";
 };
 
 type ReportData = {
-  report: { name: string; date: string; status: "Normal" | "Medium" | "High" };
+  report: { name: string; date: string; status: "Normal" | "Medium" | "High" | "Critical" };
   parameters:      Parameter[];
   nlp_explanation: string[];
   recommendations: { lifestyle: string[]; non_prescription: string[] };
@@ -40,9 +42,10 @@ function formatNormalRange(range: NormalRange): string {
 
 function SeverityBadge({ status }: { status: string }) {
   const cfg: Record<string, { bg: string; text: string; dot: string }> = {
-    Normal: { bg: "bg-emerald-50", text: "text-emerald-700", dot: "bg-emerald-500" },
-    Medium: { bg: "bg-amber-50",   text: "text-amber-700",   dot: "bg-amber-500"   },
-    High:   { bg: "bg-red-50",     text: "text-red-700",     dot: "bg-red-500"     },
+    Normal:   { bg: "bg-emerald-50", text: "text-emerald-700", dot: "bg-emerald-500" },
+    Medium:   { bg: "bg-amber-50",   text: "text-amber-700",   dot: "bg-amber-500"   },
+    High:     { bg: "bg-red-50",     text: "text-red-700",     dot: "bg-red-500"     },
+    Critical: { bg: "bg-red-600",    text: "text-white",       dot: "bg-white"       },
   };
   const s = cfg[status] ?? cfg.Normal;
   return (
@@ -59,7 +62,15 @@ function StatusIcon({ status }: { status: string }) {
   return                    <Minus       size={14} className="text-emerald-500" />;
 }
 
-function StatusCell({ status }: { status: string }) {
+function StatusCell({ status, critical }: { status: string; critical?: boolean }) {
+  if (critical) {
+    return (
+      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-red-600 text-white">
+        <AlertTriangle size={12} className="shrink-0" />
+        Critical
+      </span>
+    );
+  }
   const s = status.toLowerCase();
   const cfg = s === "high" ? "bg-red-50 text-red-700" : s === "low" ? "bg-amber-50 text-amber-700" : "bg-emerald-50 text-emerald-700";
   return (
@@ -185,11 +196,13 @@ export default function ReportViewPage() {
 
       const sev = data.report.status;
       const sevColor: [number,number,number] =
-        sev === "High"   ? [220, 38, 38]  :
-        sev === "Medium" ? [217, 119, 6]  : [5, 150, 105];
+        sev === "Critical" ? [255, 255, 255] :
+        sev === "High"     ? [220, 38, 38]  :
+        sev === "Medium"   ? [217, 119, 6]  : [5, 150, 105];
       const sevBg: [number,number,number] =
-        sev === "High"   ? [254, 226, 226] :
-        sev === "Medium" ? [254, 243, 199] : [209, 250, 229];
+        sev === "Critical" ? [220, 38, 38]  :
+        sev === "High"     ? [254, 226, 226] :
+        sev === "Medium"   ? [254, 243, 199] : [209, 250, 229];
       pill(`Severity: ${sev}`, W - margin - 35, y, sevBg, sevColor);
       y += 8;
 
@@ -233,9 +246,10 @@ export default function ReportViewPage() {
 
         // Status pill
         const st = p.status.toLowerCase();
-        const stBg: [number,number,number]  = st === "high" ? [254,226,226] : st === "low" ? [254,243,199] : [209,250,229];
-        const stFg: [number,number,number]  = st === "high" ? [185,28,28]   : st === "low" ? [180,83,9]    : [6,95,70];
-        pill(p.status.charAt(0).toUpperCase() + p.status.slice(1), cx, y + 4.5, stBg, stFg);
+        const stBg: [number,number,number]  = p.critical ? [220,38,38] : st === "high" ? [254,226,226] : st === "low" ? [254,243,199] : [209,250,229];
+        const stFg: [number,number,number]  = p.critical ? [255,255,255] : st === "high" ? [185,28,28]   : st === "low" ? [180,83,9]    : [6,95,70];
+        const stLabel = p.critical ? "Critical" : p.status.charAt(0).toUpperCase() + p.status.slice(1);
+        pill(stLabel, cx, y + 4.5, stBg, stFg);
         y += 7.5;
       });
 
@@ -347,6 +361,7 @@ export default function ReportViewPage() {
 
   if (!data) return null;
   const { report, parameters, nlp_explanation, recommendations } = data;
+  const criticalCount = parameters.filter((p) => p.critical).length;
 
   return (
     <div className="min-h-screen bg-[#F0F4F9] px-4 md:px-8 py-8">
@@ -388,6 +403,19 @@ export default function ReportViewPage() {
           </div>
         </motion.div>
 
+        {/* Critical banner */}
+        {criticalCount > 0 && (
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.05 }}
+            className="flex items-start gap-3 bg-red-50 border border-red-200 text-red-800 rounded-2xl px-5 py-4">
+            <AlertTriangle size={18} className="text-red-600 shrink-0 mt-0.5" />
+            <p className="text-sm leading-relaxed">
+              <span className="font-bold">{criticalCount} value{criticalCount > 1 ? "s" : ""} may need urgent attention.</span>{" "}
+              Please contact a doctor promptly — if you feel unwell, seek urgent care now
+              (in India, dial 112 or 108). This is not a diagnosis; confirm against your original printed report.
+            </p>
+          </motion.div>
+        )}
+
         {/* 2. PARAMETERS TABLE */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }}
           className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
@@ -407,11 +435,21 @@ export default function ReportViewPage() {
               </thead>
               <tbody className="divide-y divide-slate-50">
                 {parameters.map((p, i) => (
-                  <tr key={i} className="hover:bg-slate-50/60 transition-colors">
-                    <td className="px-6 py-3.5 font-semibold text-slate-700 capitalize">{p.name}</td>
+                  <tr key={i} className={`transition-colors ${p.critical ? "bg-red-50/70 hover:bg-red-50" : "hover:bg-slate-50/60"}`}>
+                    <td className="px-6 py-3.5 font-semibold text-slate-700 capitalize">
+                      {p.name.replace(/_/g, " ")}
+                      {p.range_source === "report" && (
+                        <span
+                          title="Compared against the reference range printed on your own lab report"
+                          className="ml-1.5 align-middle inline-block px-1.5 py-0.5 text-[10px] font-medium bg-blue-50 text-blue-600 rounded normal-case"
+                        >
+                          per your lab
+                        </span>
+                      )}
+                    </td>
                     <td className="px-6 py-3.5 text-slate-600">{p.value} <span className="text-slate-400 text-xs">{p.unit}</span></td>
                     <td className="px-6 py-3.5 text-slate-400 text-xs">{formatNormalRange(p.normal_range ?? null)}</td>
-                    <td className="px-6 py-3.5 text-center"><StatusCell status={p.status} /></td>
+                    <td className="px-6 py-3.5 text-center"><StatusCell status={p.status} critical={p.critical} /></td>
                   </tr>
                 ))}
               </tbody>

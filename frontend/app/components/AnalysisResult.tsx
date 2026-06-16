@@ -1,14 +1,15 @@
 "use client";
 import { useReport } from "@/context/ReportContext";
 import { ReportParameterWithName } from "@/types";
-import { Activity } from "lucide-react";
+import { Activity, AlertTriangle } from "lucide-react";
 
 export default function AnalysisResult() {
   const { report } = useReport();
   const parameters: ReportParameterWithName[] = report?.parameters || [];
 
-  const normalCount   = parameters.filter((p) => p.status === "normal").length;
-  const abnormalCount = parameters.filter((p) => p.status !== "normal").length;
+  const criticalCount = parameters.filter((p) => p.critical).length;
+  const normalCount   = parameters.filter((p) => p.status === "normal" && !p.critical).length;
+  const abnormalCount = parameters.filter((p) => p.status !== "normal" && !p.critical).length;
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col h-[520px]">
@@ -31,9 +32,28 @@ export default function AnalysisResult() {
               <span className="w-1.5 h-1.5 rounded-full bg-red-500 inline-block" />
               {abnormalCount} Abnormal
             </span>
+            {criticalCount > 0 && (
+              <span className="inline-flex items-center gap-1 text-xs font-bold bg-red-600 text-white px-2.5 py-1 rounded-full">
+                <AlertTriangle size={11} className="shrink-0" />
+                {criticalCount} Critical
+              </span>
+            )}
           </div>
         )}
       </div>
+
+      {/* ── Critical-value banner ── */}
+      {criticalCount > 0 && (
+        <div className="flex items-start gap-2 bg-red-50 border border-red-200 text-red-800 text-xs px-3.5 py-2.5 rounded-xl mb-4 flex-shrink-0">
+          <AlertTriangle size={15} className="text-red-600 shrink-0 mt-0.5" />
+          <span className="leading-relaxed">
+            One or more values may need <span className="font-semibold">urgent attention</span>.
+            Please contact a doctor promptly — if you feel unwell, seek urgent care now
+            (in India, dial 112 or 108). This is not a diagnosis; confirm against your
+            original printed report.
+          </span>
+        </div>
+      )}
 
       {/* ── Scrollable area: takes remaining height ── */}
       <div className="flex-1 overflow-y-auto min-h-0">
@@ -61,18 +81,40 @@ export default function AnalysisResult() {
             </thead>
             <tbody className="divide-y divide-slate-50">
               {parameters.map((p, i) => (
-                <tr key={i} className="hover:bg-slate-50/60 transition-colors">
-                  <td className="py-3 pr-2 font-medium text-slate-700">{formatName(p.name)}</td>
+                <tr
+                  key={i}
+                  className={`transition-colors ${
+                    p.critical ? "bg-red-50/70 hover:bg-red-50" : "hover:bg-slate-50/60"
+                  }`}
+                >
+                  <td className="py-3 pr-2 font-medium text-slate-700">
+                    {formatName(p.name)}
+                    {p.range_source === "report" && (
+                      <span
+                        title="Compared against the reference range printed on your own lab report"
+                        className="ml-1.5 align-middle inline-block px-1.5 py-0.5 text-[10px] font-medium bg-blue-50 text-blue-600 rounded"
+                      >
+                        per your lab
+                      </span>
+                    )}
+                  </td>
                   <td className="py-3 text-center text-slate-600">{p.value}</td>
                   <td className="py-3 text-center text-slate-400 text-xs">{p.unit}</td>
                   <td className="py-3 text-center">
-                    <span className={`inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full ${
-                      p.status === "normal"
-                        ? "bg-green-50 text-green-700"
-                        : "bg-red-50 text-red-600"
-                    }`}>
-                      {p.status === "normal" ? "Normal" : "Abnormal"}
-                    </span>
+                    {p.critical ? (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-bold rounded-full bg-red-600 text-white">
+                        <AlertTriangle size={10} className="shrink-0" />
+                        Critical
+                      </span>
+                    ) : (
+                      <span className={`inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full ${
+                        p.status === "normal"
+                          ? "bg-green-50 text-green-700"
+                          : "bg-red-50 text-red-600"
+                      }`}>
+                        {p.status === "normal" ? "Normal" : "Abnormal"}
+                      </span>
+                    )}
                   </td>
                 </tr>
               ))}

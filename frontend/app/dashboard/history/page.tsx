@@ -13,14 +13,14 @@ type Report = {
   id: string;
   file_name: string;
   uploaded_at: string;
-  analysis: { severity: "Normal" | "Medium" | "High" }[] | null;
+  analysis: { severity: "Normal" | "Medium" | "High" | "Critical" }[] | null;
 };
 
 type FlatReport = {
   id: string;
   name: string;
   date: string;
-  status: "Normal" | "Medium" | "High";
+  status: "Normal" | "Medium" | "High" | "Critical";
 };
 
 type AnalysisRow = {
@@ -92,10 +92,11 @@ function hybridPredictor(data: TrendPoint[], futurePoints = 2): TrendPoint[] {
 
 function StatusBadge({ status }: { status: FlatReport["status"] }) {
   const cfg = {
-    Normal: { bg: "bg-green-50", text: "text-green-700", icon: <CheckCircle2 size={11} /> },
-    Medium: { bg: "bg-amber-50", text: "text-amber-700", icon: <TriangleAlert size={11} /> },
-    High:   { bg: "bg-red-50",   text: "text-red-600",   icon: <AlertCircle   size={11} /> },
-  }[status];
+    Normal:   { bg: "bg-green-50", text: "text-green-700", icon: <CheckCircle2  size={11} /> },
+    Medium:   { bg: "bg-amber-50", text: "text-amber-700", icon: <TriangleAlert size={11} /> },
+    High:     { bg: "bg-red-50",   text: "text-red-600",   icon: <AlertCircle   size={11} /> },
+    Critical: { bg: "bg-red-600",  text: "text-white",     icon: <AlertCircle   size={11} /> },
+  }[status] ?? { bg: "bg-green-50", text: "text-green-700", icon: <CheckCircle2 size={11} /> };
   return (
     <span className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full ${cfg.bg} ${cfg.text}`}>
       {cfg.icon} {status}
