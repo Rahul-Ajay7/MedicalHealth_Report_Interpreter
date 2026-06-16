@@ -12,6 +12,7 @@ from app.services.parser import parse_report_text
 from app.services.analyzer import analyze_parameters
 from app.services.recommendations import generate_recommendations
 from app.services.nlp import generate_nlp_explanations
+from app.services.llm_chat import translate_lines
 from app.state.chat_sessions import set_session
 
 router = APIRouter(prefix="/analyze", tags=["Analyze"])
@@ -85,6 +86,12 @@ def analyze_report(
             analysis_results=final_results,
             medical_data=medical_data
         )
+
+        # Localize the report explanation into the chosen language (graceful
+        # English fallback). Chat already localizes; this closes the gap where
+        # the first analysis bubble stayed English.
+        if isinstance(nlp_explanation, list):
+            nlp_explanation = translate_lines(nlp_explanation, language)
 
         # ── 9. Recommendations ─────────────────────────────────────────
         recommendations = generate_recommendations(
