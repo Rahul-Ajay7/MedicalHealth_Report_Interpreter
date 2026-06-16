@@ -3,6 +3,21 @@ from pathlib import Path
 from typing import Dict, Any
 
 
+# Standard gate applied to every OTC item. The app must never DIRECT a specific
+# patient to take something off their labs (that is medical advice, OTC or not).
+# We present items as general information to raise WITH a professional.
+OTC_GATE_NOTE = (
+    "General information only — ask your doctor or pharmacist whether this is "
+    "right for you before starting. This is not a recommendation to take it."
+)
+OTC_DISCLAIMER = (
+    "These are common, generally available options people discuss for this "
+    "result — shown for awareness, NOT as medical advice. A normal-looking value "
+    "can still have an underlying cause, so always confirm with a registered "
+    "doctor or pharmacist before taking any supplement."
+)
+
+
 # ------------------------------------------------------------------
 # Load medical knowledge (JSON-based clinical rules)
 # ------------------------------------------------------------------
@@ -81,7 +96,9 @@ def generate_recommendations(final_results: dict, gender: str) -> dict:
             non_prescription.append({
                 "parameter": display_name,
                 "options": safe_options,
-                "note": otc_support.get("note")
+                # Always enforce the professional-gate framing, regardless of
+                # the per-entry note in the knowledge base.
+                "note": OTC_GATE_NOTE,
             })
 
         # ----------------------------------------------------------
@@ -105,5 +122,6 @@ def generate_recommendations(final_results: dict, gender: str) -> dict:
     return {
         "lifestyle_tips": lifestyle_tips,
         "non_prescription": non_prescription,
-        "doctor_consultation": doctor_consultation
+        "doctor_consultation": doctor_consultation,
+        "otc_disclaimer": OTC_DISCLAIMER if non_prescription else "",
     }

@@ -40,6 +40,7 @@ export interface LifestyleTip {
 export interface NonPrescriptionSupport {
   parameter: string;
   options:   string[];
+  note?:     string;
 }
 
 export interface DoctorConsultation {
@@ -51,6 +52,7 @@ export interface Recommendations {
   lifestyle_tips:      LifestyleTip[];
   non_prescription:    NonPrescriptionSupport[];
   doctor_consultation: DoctorConsultation[];
+  otc_disclaimer?:     string;
 }
 
 /* ---------------- PARAMETERS FOR TABLE ---------------- */
