@@ -66,6 +66,8 @@ export async function analyzeReport(
       unit:         p.unit,
       status:       p.status,
       normal_range: p.normal_range ?? { min: 0, max: 0 },
+      critical:     p.critical ?? false,
+      range_source: p.range_source ?? "reference",
     })
   );
 

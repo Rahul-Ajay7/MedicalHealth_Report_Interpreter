@@ -697,3 +697,42 @@ class PatientChatLLM:
             response_time=response_time,
             llm_source=llm_source,
         )
+
+
+# ─── Shared instance + helpers for non-chat callers ────────────────────────────
+# Lets other modules (e.g. analyze route, to localize report explanations) reuse
+# the same provider chain + translation cache without re-instantiating.
+
+_shared_llm: Optional[PatientChatLLM] = None
+
+
+def get_chat_llm() -> PatientChatLLM:
+    global _shared_llm
+    if _shared_llm is None:
+        from app.config import LLM_BASE_URL, LLM_CHAT_ENDPOINT, LLM_MODEL, LLM_TIMEOUT
+        _shared_llm = PatientChatLLM(
+            base_url      = LLM_BASE_URL,
+            chat_endpoint = LLM_CHAT_ENDPOINT,
+            model         = LLM_MODEL,
+            timeout       = LLM_TIMEOUT,
+        )
+    return _shared_llm
+
+
+def translate_lines(lines: List[str], language: Optional[str]) -> List[str]:
+    """
+    Translate report-explanation lines into `language`. Degrades gracefully:
+    any line that fails to translate is returned in English (never blocks or
+    crashes the analysis). No-op for English.
+    """
+    if not lines or is_english(language):
+        return lines
+    llm = get_chat_llm()
+    out: List[str] = []
+    for line in lines:
+        try:
+            out.append(llm._translate(line, language))
+        except Exception:
+            logger.warning("Explanation translation failed — using English line")
+            out.append(line)
+    return out

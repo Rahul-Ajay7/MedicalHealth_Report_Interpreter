@@ -19,6 +19,10 @@ export interface ReportParameter {
   unit:         string;
   status:       ParameterStatus;
   normal_range: NormalRange | null;
+  /** True when value crosses an absolute panic threshold (needs urgent attention) */
+  critical?:     boolean;
+  /** Where normal_range came from: the lab's printed range or our hardcoded reference */
+  range_source?: "report" | "reference";
 }
 
 export type AnalysisResults = Record<string, ReportParameter>;
@@ -74,5 +78,5 @@ export interface ReportResponse {
   parameters: ReportParameterWithName[];
 
   /** Overall severity from analysis */
-  severity: "Normal" | "Medium" | "High";  // ✅ added
+  severity: "Normal" | "Medium" | "High" | "Critical";
 }
