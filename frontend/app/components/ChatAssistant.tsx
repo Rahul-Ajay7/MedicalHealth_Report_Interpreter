@@ -48,7 +48,7 @@ function getMessageStyle(msg: Message): {
   // sensitive — no banner, just a warm bubble style
   if (msg.question_type === "sensitive") {
     return {
-      bubble: "bg-blue-50 text-slate-700 rounded-bl-sm",
+      bubble: "bg-teal-50 text-slate-700 rounded-bl-sm",
       banner: null,
       icon:   null,
     };
@@ -201,7 +201,7 @@ export default function ChatAssistant() {
 
       {/* ── Header ── */}
       <div className="flex items-center gap-3 px-5 py-4 border-b border-slate-100 flex-shrink-0">
-        <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-lg bg-teal-600 flex items-center justify-center">
           <Sparkles size={15} className="text-white" />
         </div>
         <div>
@@ -215,7 +215,7 @@ export default function ChatAssistant() {
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
             title="Answer language"
-            className="ml-auto text-xs text-slate-600 border border-slate-200 rounded-lg px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+            className="ml-auto text-xs text-slate-600 border border-slate-200 rounded-lg px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/30"
           >
             {languages.map((l) => (
               <option key={l.code} value={l.code}>
@@ -237,8 +237,8 @@ export default function ChatAssistant() {
         {/* Empty state */}
         {messages.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full gap-3 text-center">
-            <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center">
-              <Bot size={22} className="text-blue-400" />
+            <div className="w-12 h-12 rounded-full bg-teal-50 flex items-center justify-center">
+              <Bot size={22} className="text-teal-400" />
             </div>
             <p className="text-sm text-slate-400 max-w-[200px]">
               Upload a report and ask me anything about your results
@@ -257,12 +257,12 @@ export default function ChatAssistant() {
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center mr-2 mt-1 flex-shrink-0 ${
                   msg.question_type === "emergency"
                     ? "bg-red-100"
-                    : "bg-blue-100"
+                    : "bg-teal-100"
                 }`}>
                   <Bot size={12} className={
                     msg.question_type === "emergency"
                       ? "text-red-600"
-                      : "text-blue-600"
+                      : "text-teal-600"
                   } />
                 </div>
               )}
@@ -282,7 +282,7 @@ export default function ChatAssistant() {
                 {/* Message bubble */}
                 <div className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
                   msg.role === "user"
-                    ? "bg-blue-600 text-white rounded-br-sm"
+                    ? "bg-teal-600 text-white rounded-br-sm"
                     : style.bubble
                 }`}>
                   {msg.content === "..." ? (
@@ -313,12 +313,12 @@ export default function ChatAssistant() {
           onKeyDown={handleKeyDown}
           placeholder="Ask about neutrophils, glucose levels..."
           rows={1}
-          className="flex-1 resize-none border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition"
+          className="flex-1 resize-none border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400 transition"
         />
         <button
           onClick={sendMessage}
           disabled={!input.trim() || !report || loading}
-          className="w-10 h-10 flex items-center justify-center rounded-xl bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 text-white transition flex-shrink-0"
+          className="w-10 h-10 flex items-center justify-center rounded-xl bg-teal-600 hover:bg-teal-700 disabled:bg-slate-200 text-white transition flex-shrink-0"
         >
           <Send size={15} />
         </button>

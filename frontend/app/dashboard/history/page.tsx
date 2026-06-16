@@ -353,7 +353,7 @@ export default function HistoryPage() {
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-teal-600 flex items-center justify-center">
             <Clock size={16} className="text-white" />
           </div>
           <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Report History</h1>
@@ -366,7 +366,7 @@ export default function HistoryPage() {
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
         {[
-          { icon: Clock,        bg: "bg-blue-50",  ic: "text-blue-500",  val: total,    label: "Total Reports"   },
+          { icon: Clock,        bg: "bg-teal-50",  ic: "text-teal-500",  val: total,    label: "Total Reports"   },
           { icon: CheckCircle2, bg: "bg-green-50", ic: "text-green-500", val: normal,   label: "Normal"          },
           { icon: AlertCircle,  bg: "bg-red-50",   ic: "text-red-400",   val: abnormal, label: "Needs Attention" },
         ].map(({ icon: Icon, bg, ic, val, label }) => (
@@ -385,8 +385,8 @@ export default function HistoryPage() {
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-                <TrendingUp size={16} className="text-blue-600" />
+              <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
+                <TrendingUp size={16} className="text-teal-600" />
               </div>
               <div>
                 <h2 className="text-sm font-bold text-slate-700">Parameter Trend</h2>
@@ -396,7 +396,7 @@ export default function HistoryPage() {
             <select
               value={selectedParam}
               onChange={(e) => setSelectedParam(e.target.value)}
-              className="border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 bg-white capitalize"
+              className="border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400 bg-white capitalize"
             >
               {availableParams.map((p) => (
                 <option key={p} value={p}>{p.replace(/_/g, " ")}</option>
@@ -409,7 +409,7 @@ export default function HistoryPage() {
             <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-emerald-400 inline-block" /> Normal value</span>
             <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-red-400 inline-block" /> High value</span>
             <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-amber-400 inline-block" /> Low value</span>
-            <span className="flex items-center gap-1.5"><span className="inline-block w-8 h-0.5 bg-blue-500" /> Actual</span>
+            <span className="flex items-center gap-1.5"><span className="inline-block w-8 h-0.5 bg-teal-500" /> Actual</span>
             <span className="flex items-center gap-1.5"><span className="inline-block w-8 border-t-2 border-dashed border-purple-500" /> Prediction</span>
             {normalRange && (
               <span className="flex items-center gap-1.5">
@@ -481,7 +481,7 @@ export default function HistoryPage() {
                     <td className="px-6 py-4 text-center">
                       <div className="flex items-center justify-center gap-2">
                         <button onClick={() => router.push(`/dashboard/history/${report.id}`)}
-                          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
+                          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold bg-teal-600 hover:bg-teal-700 text-white rounded-lg transition">
                           <Eye size={12} /> View
                         </button>
                         <button onClick={() => setConfirmId(report.id)} disabled={deletingId === report.id}
@@ -509,7 +509,7 @@ export default function HistoryPage() {
                 <div className="flex items-center gap-2 flex-shrink-0">
                   <StatusBadge status={report.status} />
                   <button onClick={() => router.push(`/dashboard/history/${report.id}`)}
-                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition">
+                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-teal-600 hover:bg-teal-700 text-white transition">
                     <Eye size={13} />
                   </button>
                   <button onClick={() => setConfirmId(report.id)} disabled={deletingId === report.id}

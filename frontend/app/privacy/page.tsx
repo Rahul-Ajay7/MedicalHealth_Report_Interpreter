@@ -34,7 +34,7 @@ export default function PrivacyPage() {
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-teal-600 flex items-center justify-center">
             <ShieldCheck size={20} className="text-white" />
           </div>
           <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Privacy Policy</h1>
@@ -57,8 +57,8 @@ export default function PrivacyPage() {
         <div className="space-y-4">
           {policies.map(({ icon: Icon, title, body }) => (
             <div key={title} className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex gap-4">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0 mt-0.5">
-                <Icon size={18} className="text-blue-600" />
+              <div className="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center shrink-0 mt-0.5">
+                <Icon size={18} className="text-teal-600" />
               </div>
               <div>
                 <h2 className="text-sm font-bold text-slate-800 mb-1.5">{title}</h2>
@@ -73,7 +73,7 @@ export default function PrivacyPage() {
           <h2 className="font-bold text-slate-800 mb-2">Contact</h2>
           <p>
             For privacy-related inquiries, data requests, or grievances under the DPDP Act 2023, please contact our Data Protection Officer at{" "}
-            <a href="mailto:privacy@healthai.com" className="text-blue-600 hover:underline">privacy@healthai.com</a>.
+            <a href="mailto:privacy@healthai.com" className="text-teal-600 hover:underline">privacy@healthai.com</a>.
           </p>
         </div>
       </div>

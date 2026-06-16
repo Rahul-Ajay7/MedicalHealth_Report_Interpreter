@@ -1,17 +1,33 @@
 'use client'
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "../lib/superbaseClient";
+import Navbar from "@/components/Navbar";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) router.push("/login");
+      else setReady(true);
     });
   }, []);
 
-  return <>{children}</>;
+  if (!ready) {
+    return (
+      <div className="min-h-screen bg-[#F0F4F9] flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-teal-500 border-t-transparent animate-spin" />
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <Navbar />
+      {children}
+    </>
+  );
 }

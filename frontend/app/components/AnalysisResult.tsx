@@ -92,7 +92,7 @@ export default function AnalysisResult() {
                     {p.range_source === "report" && (
                       <span
                         title="Compared against the reference range printed on your own lab report"
-                        className="ml-1.5 align-middle inline-block px-1.5 py-0.5 text-[10px] font-medium bg-blue-50 text-blue-600 rounded"
+                        className="ml-1.5 align-middle inline-block px-1.5 py-0.5 text-[10px] font-medium bg-teal-50 text-teal-600 rounded"
                       >
                         per your lab
                       </span>

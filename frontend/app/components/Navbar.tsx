@@ -31,7 +31,7 @@ export default function Navbar() {
       <div className="max-w-screen-xl mx-auto px-4 md:px-8 h-14 flex items-center gap-6">
         {/* Logo */}
         <Link href="/dashboard" className="flex items-center gap-2 mr-2">
-          <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center">
+          <div className="w-7 h-7 rounded-lg bg-teal-600 flex items-center justify-center">
             <Activity size={14} className="text-white" />
           </div>
           <span className="text-sm font-bold text-slate-800 tracking-tight">HealthAI</span>
@@ -47,7 +47,7 @@ export default function Navbar() {
                 href={href}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                   active
-                    ? "bg-blue-50 text-blue-700"
+                    ? "bg-teal-50 text-teal-700"
                     : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
                 }`}
               >

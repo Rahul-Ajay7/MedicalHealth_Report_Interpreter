@@ -32,7 +32,7 @@ export default function LifestyleTips() {
                   <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
                     item.status === "low" || item.status === "high"
                       ? item.status === "low"
-                        ? "bg-blue-50 text-blue-700"
+                        ? "bg-teal-50 text-teal-700"
                         : "bg-red-50 text-red-600"
                       : "bg-green-50 text-green-700"
                   }`}>

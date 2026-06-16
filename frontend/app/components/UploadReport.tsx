@@ -61,7 +61,7 @@ export default function UploadReport() {
         </div>
         <p className="text-sm font-medium text-slate-700">Report Analyzed</p>
         <button onClick={resetUpload}
-          className="mt-1 flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 font-medium transition">
+          className="mt-1 flex items-center gap-2 text-sm text-teal-600 hover:text-teal-700 font-medium transition">
           <Plus size={16} /> Upload Another
         </button>
       </div>
@@ -81,8 +81,8 @@ export default function UploadReport() {
           <button onClick={() => setGender("male")}
             className={`py-2.5 rounded-xl text-sm font-medium border transition-all ${
               gender === "male"
-                ? "bg-blue-600 text-white border-blue-600 shadow-sm"
-                : "bg-slate-50 text-slate-600 border-slate-200 hover:border-blue-300"
+                ? "bg-teal-600 text-white border-teal-600 shadow-sm"
+                : "bg-slate-50 text-slate-600 border-slate-200 hover:border-teal-300"
             }`}>♂ Male</button>
           <button onClick={() => setGender("female")}
             className={`py-2.5 rounded-xl text-sm font-medium border transition-all ${
@@ -98,9 +98,9 @@ export default function UploadReport() {
         onDragLeave={() => setDragOver(false)}
         onDrop={handleDrop}
         className={`flex flex-col items-center justify-center gap-3 py-8 rounded-xl border-2 border-dashed cursor-pointer transition-all ${
-          dragOver ? "border-blue-400 bg-blue-50"
+          dragOver ? "border-teal-400 bg-teal-50"
           : file   ? "border-green-300 bg-green-50"
-                   : "border-slate-200 hover:border-blue-300 hover:bg-slate-50"
+                   : "border-slate-200 hover:border-teal-300 hover:bg-slate-50"
         }`}>
         {file ? (
           <>
@@ -114,11 +114,11 @@ export default function UploadReport() {
           </>
         ) : (
           <>
-            <div className="w-11 h-11 rounded-lg bg-blue-50 flex items-center justify-center">
-              <UploadCloud size={22} className="text-blue-500" />
+            <div className="w-11 h-11 rounded-lg bg-teal-50 flex items-center justify-center">
+              <UploadCloud size={22} className="text-teal-500" />
             </div>
             <div className="text-center">
-              <p className="text-sm font-medium text-slate-600">Drag & drop or <span className="text-blue-600">browse</span></p>
+              <p className="text-sm font-medium text-slate-600">Drag & drop or <span className="text-teal-600">browse</span></p>
               <p className="text-xs text-slate-400 mt-0.5">Supported: PDF, JPG, PNG</p>
             </div>
           </>
@@ -134,7 +134,7 @@ export default function UploadReport() {
       )}
 
       <button onClick={handleAnalyze} disabled={!file || loading}
-        className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 disabled:text-slate-400 text-white text-sm font-semibold transition-all shadow-sm">
+        className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 disabled:bg-slate-200 disabled:text-slate-400 text-white text-sm font-semibold transition-all shadow-sm">
         {loading && <Loader2 size={16} className="animate-spin" />}
         {loading ? "Analyzing..." : "Analyze Report"}
       </button>

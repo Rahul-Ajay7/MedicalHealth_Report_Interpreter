@@ -133,11 +133,11 @@ export default function ReportViewPage() {
 
       const sectionTitle = (title: string) => {
         checkY(14);
-        doc.setFillColor(239, 246, 255);
+        doc.setFillColor(240, 253, 250);   // teal-50
         doc.roundedRect(margin, y, contentW, 9, 2, 2, "F");
         doc.setFont("helvetica", "bold");
         doc.setFontSize(10);
-        doc.setTextColor(37, 99, 235);
+        doc.setTextColor(13, 148, 136);    // teal-600
         doc.text(title, margin + 4, y + 6);
         y += 13;
       };
@@ -169,7 +169,7 @@ export default function ReportViewPage() {
       y = margin;
 
       // Top bar
-      doc.setFillColor(37, 99, 235);
+      doc.setFillColor(13, 148, 136);   // teal-600
       doc.rect(0, 0, W, 14, "F");
       doc.setFont("helvetica", "bold");
       doc.setFontSize(13);
@@ -342,7 +342,7 @@ export default function ReportViewPage() {
   if (loading) return (
     <div className="min-h-screen bg-[#F0F4F9] flex items-center justify-center">
       <div className="flex flex-col items-center gap-3 text-slate-400">
-        <Loader2 size={32} className="animate-spin text-blue-500" />
+        <Loader2 size={32} className="animate-spin text-teal-500" />
         <p className="text-sm font-medium">Loading report…</p>
       </div>
     </div>
@@ -354,7 +354,7 @@ export default function ReportViewPage() {
         <AlertTriangle size={32} className="text-red-400 mx-auto mb-3" />
         <p className="text-slate-700 font-semibold mb-1">Failed to load report</p>
         <p className="text-sm text-slate-400 mb-4">{error}</p>
-        <button onClick={() => router.back()} className="text-sm text-blue-600 font-semibold hover:text-blue-700">← Go back</button>
+        <button onClick={() => router.back()} className="text-sm text-teal-600 font-semibold hover:text-teal-700">← Go back</button>
       </div>
     </div>
   );
@@ -372,7 +372,7 @@ export default function ReportViewPage() {
           <ArrowLeft size={16} /> Back to History
         </button>
         <button onClick={handleDownloadPDF} disabled={pdfLoading}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-sm font-semibold rounded-xl shadow-sm transition">
+          className="flex items-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-700 disabled:opacity-60 text-white text-sm font-semibold rounded-xl shadow-sm transition">
           {pdfLoading ? <><Loader2 size={15} className="animate-spin" /> Generating…</> : <><Download size={15} /> Download PDF</>}
         </button>
       </div>
@@ -384,8 +384,8 @@ export default function ReportViewPage() {
           className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                <FlaskConical size={22} className="text-blue-600" />
+              <div className="w-12 h-12 rounded-xl bg-teal-50 flex items-center justify-center flex-shrink-0">
+                <FlaskConical size={22} className="text-teal-600" />
               </div>
               <div>
                 <h1 className="text-xl font-bold text-slate-800 capitalize">
@@ -420,7 +420,7 @@ export default function ReportViewPage() {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }}
           className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
           <div className="px-6 py-4 border-b border-slate-100 flex items-center gap-2.5">
-            <Activity size={16} className="text-blue-600" />
+            <Activity size={16} className="text-teal-600" />
             <h2 className="text-sm font-bold text-slate-700">Extracted Parameters</h2>
           </div>
           <div className="overflow-x-auto">
@@ -441,7 +441,7 @@ export default function ReportViewPage() {
                       {p.range_source === "report" && (
                         <span
                           title="Compared against the reference range printed on your own lab report"
-                          className="ml-1.5 align-middle inline-block px-1.5 py-0.5 text-[10px] font-medium bg-blue-50 text-blue-600 rounded normal-case"
+                          className="ml-1.5 align-middle inline-block px-1.5 py-0.5 text-[10px] font-medium bg-teal-50 text-teal-600 rounded normal-case"
                         >
                           per your lab
                         </span>
