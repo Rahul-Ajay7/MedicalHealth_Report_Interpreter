@@ -81,4 +81,7 @@ export interface ReportResponse {
 
   /** Overall severity from analysis */
   severity: "Normal" | "Medium" | "High" | "Critical";
+
+  /** Output language chosen at analyze time (chat answers default to this) */
+  language?: string;
 }

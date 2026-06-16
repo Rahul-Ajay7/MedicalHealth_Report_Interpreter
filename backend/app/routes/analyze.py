@@ -162,4 +162,5 @@ def analyze_report(
         "nlp_explanation": nlp_explanation,
         "recommendations": recommendations,
         "severity":        severity,
+        "language":        language,          # chosen output language (chat reuses)
     }

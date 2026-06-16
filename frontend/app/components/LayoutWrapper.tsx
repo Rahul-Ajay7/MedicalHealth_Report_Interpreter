@@ -10,8 +10,9 @@ export default function LayoutWrapper({
 }) {
   const pathname = usePathname();
 
+  // Landing page has its own header; auth pages show no nav.
   const hideNavbar =
-    pathname === "/login" || pathname === "/signup";
+    pathname === "/" || pathname === "/login" || pathname === "/signup";
 
   return (
     <>

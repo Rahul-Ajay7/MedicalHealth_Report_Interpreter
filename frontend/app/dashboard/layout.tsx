@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "../lib/superbaseClient";
-import Navbar from "@/components/Navbar";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -24,10 +23,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     );
   }
 
-  return (
-    <>
-      <Navbar />
-      {children}
-    </>
-  );
+  // Navbar is rendered globally by LayoutWrapper — don't render it again here.
+  return <>{children}</>;
 }

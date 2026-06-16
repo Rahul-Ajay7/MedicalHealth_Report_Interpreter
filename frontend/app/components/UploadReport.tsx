@@ -1,19 +1,26 @@
 "use client";
 
-import { useState } from "react";
-import { Loader2, Plus, FileText, UploadCloud, CheckCircle2 } from "lucide-react";
-import { uploadReport, analyzeReport } from "@/services/api";  // ✅ JWT handled inside api.ts
+import { useEffect, useState } from "react";
+import { Loader2, Plus, FileText, UploadCloud, CheckCircle2, Languages } from "lucide-react";
+import { uploadReport, analyzeReport, getLanguages, type Language } from "@/services/api";  // ✅ JWT handled inside api.ts
 import { useReport } from "@/context/ReportContext";
 
 export default function UploadReport() {
-  const [file,     setFile]     = useState<File | null>(null);
-  const [gender,   setGender]   = useState<"male" | "female">("male");
-  const [loading,  setLoading]  = useState(false);
-  const [analyzed, setAnalyzed] = useState(false);
-  const [dragOver, setDragOver] = useState(false);
-  const [error,    setError]    = useState<string | null>(null);
+  const [file,      setFile]      = useState<File | null>(null);
+  const [gender,    setGender]    = useState<"male" | "female">("male");
+  const [language,  setLanguage]  = useState("English");
+  const [languages, setLanguages] = useState<Language[]>([]);
+  const [loading,   setLoading]   = useState(false);
+  const [analyzed,  setAnalyzed]  = useState(false);
+  const [dragOver,  setDragOver]  = useState(false);
+  const [error,     setError]     = useState<string | null>(null);
 
   const { setReport } = useReport();
+
+  // Load supported languages once (explanation + chat come back in this language)
+  useEffect(() => {
+    getLanguages().then(setLanguages).catch(() => {});
+  }, []);
 
   const handleAnalyze = async () => {
     if (!file || loading) return;
@@ -26,7 +33,7 @@ export default function UploadReport() {
       const uploadData = await uploadReport(file);
 
       // ── 2. Analyze → JWT handled inside api.ts ─────────────────────
-      const analyzeData = await analyzeReport(uploadData.report_id, gender);
+      const analyzeData = await analyzeReport(uploadData.report_id, gender, language);
 
       // ── 3. Push to context (updates AnalysisResult, LifestyleTips etc)
       setReport(analyzeData);
@@ -91,6 +98,28 @@ export default function UploadReport() {
                 : "bg-slate-50 text-slate-600 border-slate-200 hover:border-pink-300"
             }`}>♀ Female</button>
         </div>
+      </div>
+
+      <div>
+        <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2 flex items-center gap-1.5">
+          <Languages size={13} className="text-teal-500" /> Explanation Language
+        </p>
+        <select
+          value={language}
+          onChange={(e) => setLanguage(e.target.value)}
+          title="The report explanation and chat answers come back in this language"
+          className="w-full py-2.5 px-3 rounded-xl text-sm font-medium bg-slate-50 text-slate-700 border border-slate-200 focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-100 transition-all"
+        >
+          {languages.length === 0 && <option value="English">English</option>}
+          {languages.map((l) => (
+            <option key={l.code} value={l.name}>
+              {l.native}{l.native !== l.name ? ` — ${l.name}` : ""}
+            </option>
+          ))}
+        </select>
+        <p className="text-[11px] text-slate-400 mt-1.5">
+          Abnormal values, causes & consequences will be explained in this language.
+        </p>
       </div>
 
       <label

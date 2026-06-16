@@ -37,12 +37,13 @@ export async function uploadReport(file: File): Promise<{ report_id: string }> {
 /* ---------------- ANALYZE REPORT ---------------- */
 export async function analyzeReport(
   reportId: string,
-  gender: "male" | "female"
+  gender: "male" | "female",
+  language: string = "english"
 ): Promise<ReportResponse> {
   const token = await getToken();
 
   const res = await fetch(
-    `${API_BASE}/analyze/?file_id=${encodeURIComponent(reportId)}&gender=${gender}`,
+    `${API_BASE}/analyze/?file_id=${encodeURIComponent(reportId)}&gender=${gender}&language=${encodeURIComponent(language)}`,
     {
       method: "POST",
       headers: {
@@ -84,6 +85,7 @@ export async function analyzeReport(
     },
     parameters,
     severity:        data.severity,     // ✅ new
+    language:        data.language ?? "english",
   };
 
   return report;

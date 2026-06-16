@@ -111,7 +111,7 @@ export default function ChatAssistant() {
   const [loading, setLoading]   = useState(false);
 
   const [languages, setLanguages] = useState<Language[]>([]);
-  const [language, setLanguage]   = useState("en");
+  const [language, setLanguage]   = useState("English");
 
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -119,6 +119,11 @@ export default function ChatAssistant() {
   useEffect(() => {
     getLanguages().then(setLanguages).catch(() => {});
   }, []);
+
+  // ── Default the answer language to the one chosen at analyze time ───────────
+  useEffect(() => {
+    if (report?.language) setLanguage(report.language);
+  }, [report?.language]);
 
   // ── Initialise chat when report loads ──────────────────────────────────────
   useEffect(() => {
@@ -218,7 +223,7 @@ export default function ChatAssistant() {
             className="ml-auto text-xs text-slate-600 border border-slate-200 rounded-lg px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/30"
           >
             {languages.map((l) => (
-              <option key={l.code} value={l.code}>
+              <option key={l.code} value={l.name}>
                 {l.native}
               </option>
             ))}
