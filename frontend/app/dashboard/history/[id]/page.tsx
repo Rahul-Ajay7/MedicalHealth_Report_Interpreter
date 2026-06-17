@@ -73,6 +73,76 @@ function disclaimerToImage(text: string, widthMm: number): { dataUrl: string; he
   return { dataUrl: canvas.toDataURL("image/png"), heightMm: H / pxPerMm };
 }
 
+// Render an arbitrary text paragraph (including non-Latin scripts jsPDF's
+// Helvetica cannot draw) to a TRANSPARENT PNG via the browser canvas, which
+// uses system fonts that DO have Indian-script glyphs. Word-wraps to `widthMm`
+// and returns a data URL + placement height (mm). Used for body copy that may
+// be in a regional language (AI explanation, lifestyle tips).
+function textBlockToImage(
+  text: string,
+  widthMm: number,
+  opts: { color?: string; bold?: boolean } = {}
+): { dataUrl: string; heightMm: number } {
+  const pxPerMm = 4;
+  const W   = Math.round(widthMm * pxPerMm);
+  const fs  = 20;                 // body font px
+  const lh  = 28;                 // line height px
+  const weight = opts.bold ? "bold " : "";
+
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d")!;
+  ctx.font = `${weight}${fs}px sans-serif`;
+
+  const lines: string[] = [];
+  text.split("\n").forEach((para) => {
+    if (para === "") { lines.push(""); return; }
+    let cur = "";
+    para.split(" ").forEach((word) => {
+      const trial = cur ? cur + " " + word : word;
+      if (ctx.measureText(trial).width > W && cur) { lines.push(cur); cur = word; }
+      else cur = trial;
+    });
+    if (cur) lines.push(cur);
+  });
+
+  const H = Math.max(lh, lines.length * lh);
+  canvas.width = W; canvas.height = H;                 // transparent background
+
+  ctx.font = `${weight}${fs}px sans-serif`;
+  ctx.fillStyle = opts.color ?? "#334155";
+  ctx.textBaseline = "top";
+  lines.forEach((ln, i) => ctx.fillText(ln, 0, i * lh + (lh - fs) / 2));
+
+  return { dataUrl: canvas.toDataURL("image/png"), heightMm: H / pxPerMm };
+}
+
+// Single-line, width-fitted transparent PNG for short labels (e.g. pill chips)
+// that may be non-Latin. Returns the data URL + intrinsic size in mm so the
+// caller can size its box around it.
+function inlineTextImage(
+  text: string,
+  opts: { color?: string; bold?: boolean } = {}
+): { dataUrl: string; widthMm: number; heightMm: number } {
+  const pxPerMm = 4;
+  const fs  = 16;
+  const padY = 4;
+  const weight = opts.bold ? "bold " : "";
+
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d")!;
+  ctx.font = `${weight}${fs}px sans-serif`;
+  const w = Math.ceil(ctx.measureText(text).width);
+  const h = fs + padY * 2;
+
+  canvas.width = Math.max(1, w); canvas.height = h;     // transparent background
+  ctx.font = `${weight}${fs}px sans-serif`;
+  ctx.fillStyle = opts.color ?? "#92400e";
+  ctx.textBaseline = "top";
+  ctx.fillText(text, 0, padY);
+
+  return { dataUrl: canvas.toDataURL("image/png"), widthMm: w / pxPerMm, heightMm: h / pxPerMm };
+}
+
 function formatDate(d: string) {
   return new Date(d).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 }
@@ -202,10 +272,25 @@ export default function ReportViewPage() {
       };
 
       const bodyText = (text: string, indent = 0, color: [number,number,number] = [51,65,85]) => {
+        const safe = pdfSafe(text);
+
+        // jsPDF's built-in Helvetica only covers Latin-1. If the text contains
+        // any non-Latin characters (e.g. a regional Indian language), draw it as
+        // a canvas image so it renders with real glyphs instead of � mojibake.
+        if (/[^ -ÿ]/.test(safe)) {
+          const { dataUrl, heightMm } = textBlockToImage(safe, contentW - indent, {
+            color: `rgb(${color[0]},${color[1]},${color[2]})`,
+          });
+          checkY(heightMm + 2);
+          doc.addImage(dataUrl, "PNG", margin + indent, y - 3.5, contentW - indent, heightMm);
+          y += heightMm + 1;
+          return;
+        }
+
         doc.setFont("helvetica", "normal");
         doc.setFontSize(9);
         doc.setTextColor(...color);
-        const lines = doc.splitTextToSize(pdfSafe(text), contentW - indent);
+        const lines = doc.splitTextToSize(safe, contentW - indent);
         lines.forEach((line: string) => {
           checkY(6);
           doc.text(line, margin + indent, y);
@@ -343,16 +428,25 @@ export default function ReportViewPage() {
       items.forEach((raw) => {
         const item = pdfSafe(raw);
         checkY(10);
-        const w = doc.getTextWidth(item) + 8;
+
+        // Non-Latin label → draw text as image; Helvetica getTextWidth/text
+        // both break on Indic scripts.
+        const nonLatin = /[^ -ÿ]/.test(item);
+        const img = nonLatin ? inlineTextImage(item, { bold: true }) : null;
+        const w = (img ? img.widthMm : doc.getTextWidth(item)) + 8;
         if (px + w > W - margin) { px = margin; y += 8; }
         doc.setFillColor(255, 251, 235);
         doc.roundedRect(px, y - 3, w, 6, 1.5, 1.5, "F");
         doc.setDrawColor(252, 211, 77);
         doc.roundedRect(px, y - 3, w, 6, 1.5, 1.5, "S");
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(8);
-        doc.setTextColor(146, 64, 14);
-        doc.text(item, px + 4, y + 1.5);
+        if (img) {
+          doc.addImage(img.dataUrl, "PNG", px + 4, y - 3 + (6 - img.heightMm) / 2, img.widthMm, img.heightMm);
+        } else {
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(8);
+          doc.setTextColor(146, 64, 14);
+          doc.text(item, px + 4, y + 1.5);
+        }
         px += w + 4;
       });
       y += 12;
