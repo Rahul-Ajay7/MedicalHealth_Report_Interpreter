@@ -15,4 +15,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# Shell form so $PORT (injected by Render) expands. No --reload in production.
+CMD uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}
