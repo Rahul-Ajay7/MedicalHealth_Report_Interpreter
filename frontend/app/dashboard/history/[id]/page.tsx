@@ -175,6 +175,21 @@ export default function ReportViewPage() {
       const newPage = () => { doc.addPage(); y = margin; };
       const checkY  = (needed = 10) => { if (y + needed > 275) newPage(); };
 
+      // jsPDF's built-in Helvetica only covers WinAnsi. Map common Unicode
+      // punctuation (en/em dash, bullet, ellipsis, smart quotes, ™) to ASCII so
+      // it doesn't render as � in the PDF. Real non-Latin scripts are handled
+      // separately (canvas image).
+      const pdfSafe = (s: unknown): string =>
+        (s ?? "").toString()
+          .replace(/[‐-―]/g, "-")
+          .replace(/[‘’‚‛]/g, "'")
+          .replace(/[“”„‟]/g, '"')
+          .replace(/•/g, "-")
+          .replace(/…/g, "...")
+          .replace(/™/g, "(TM)")
+          .replace(/‰/g, "%")
+          .replace(/ /g, " ");
+
       const sectionTitle = (title: string) => {
         checkY(14);
         doc.setFillColor(240, 253, 250);   // teal-50
@@ -190,7 +205,7 @@ export default function ReportViewPage() {
         doc.setFont("helvetica", "normal");
         doc.setFontSize(9);
         doc.setTextColor(...color);
-        const lines = doc.splitTextToSize(text, contentW - indent);
+        const lines = doc.splitTextToSize(pdfSafe(text), contentW - indent);
         lines.forEach((line: string) => {
           checkY(6);
           doc.text(line, margin + indent, y);
@@ -281,12 +296,12 @@ export default function ReportViewPage() {
         doc.setFontSize(8.5);
         doc.setTextColor(15, 23, 42);
         cx = margin + 3;
-        doc.text(p.name.replace(/_/g, " "), cx, y + 4.5); cx += cols[0];
+        doc.text(pdfSafe(p.name.replace(/_/g, " ")), cx, y + 4.5); cx += cols[0];
 
         doc.setFont("helvetica", "normal");
         doc.setTextColor(51, 65, 85);
-        doc.text(`${p.value} ${p.unit}`, cx, y + 4.5); cx += cols[1];
-        doc.text(formatNormalRange(p.normal_range ?? null), cx, y + 4.5); cx += cols[2];
+        doc.text(pdfSafe(`${p.value} ${p.unit}`), cx, y + 4.5); cx += cols[1];
+        doc.text(pdfSafe(formatNormalRange(p.normal_range ?? null)), cx, y + 4.5); cx += cols[2];
 
         // Status pill
         const st = p.status.toLowerCase();
@@ -325,7 +340,8 @@ export default function ReportViewPage() {
       sectionTitle("TO DISCUSS WITH YOUR DOCTOR OR PHARMACIST");
       const items = data.recommendations.non_prescription;
       let px = margin;
-      items.forEach((item) => {
+      items.forEach((raw) => {
+        const item = pdfSafe(raw);
         checkY(10);
         const w = doc.getTextWidth(item) + 8;
         if (px + w > W - margin) { px = margin; y += 8; }
@@ -342,8 +358,13 @@ export default function ReportViewPage() {
       y += 12;
 
       // ── DISCLAIMER (bilingual: English + selected language) ────────────
-      const disclaimer = data.medical_disclaimer ||
+      const disclaimerRaw = data.medical_disclaimer ||
         "This report is for informational purposes only and does not constitute medical advice. Always consult a qualified healthcare professional before making any health decision or starting any supplement.";
+      // Normalize punctuation up front: an English disclaimer with an em-dash
+      // then stays Latin (vector text) instead of being misread as non-Latin
+      // and pushed to a canvas image. Real Indian scripts survive pdfSafe and
+      // still take the image path below.
+      const disclaimer = pdfSafe(disclaimerRaw);
 
       // jsPDF's built-in fonts can't render Indian scripts → draw any non-Latin
       // disclaimer as a canvas image; keep crisp vector text for plain English.
