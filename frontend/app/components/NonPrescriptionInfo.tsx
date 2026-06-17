@@ -48,7 +48,7 @@ export default function NonPrescriptionInfo() {
           {disclaimer && (
             <div className="flex items-start gap-2 mt-4 px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-100">
               <Info size={14} className="text-slate-400 shrink-0 mt-0.5" />
-              <p className="text-xs text-slate-500 leading-relaxed">{disclaimer}</p>
+              <p className="text-xs text-slate-500 leading-relaxed whitespace-pre-line">{disclaimer}</p>
             </div>
           )}
         </>

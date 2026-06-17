@@ -45,8 +45,12 @@ def _localize_recommendations(rec: dict, language: str) -> dict:
         if doc.get("instruction"):
             doc["instruction"] = t1(doc["instruction"])
 
+    # The medical/OTC disclaimer is legal-safety text — keep the English ALWAYS
+    # readable and add the translation below it (bilingual), never replace.
     if rec.get("otc_disclaimer"):
-        rec["otc_disclaimer"] = t1(rec["otc_disclaimer"])
+        en = rec["otc_disclaimer"]
+        translated = t1(en)
+        rec["otc_disclaimer"] = f"{en}\n\n{translated}" if translated and translated != en else en
 
     return rec
 
