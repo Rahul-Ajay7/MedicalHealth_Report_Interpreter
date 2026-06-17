@@ -167,6 +167,16 @@ export default function UploadReport() {
         {loading && <Loader2 size={16} className="animate-spin" />}
         {loading ? "Analyzing..." : "Analyze Report"}
       </button>
+
+      {loading && (
+        <div className="flex items-start gap-2 text-xs text-slate-500 bg-slate-50 border border-slate-100 rounded-xl px-3.5 py-2.5">
+          <Loader2 size={13} className="text-teal-500 shrink-0 mt-0.5 animate-spin" />
+          <span className="leading-relaxed">
+            Reading your report, checking each value and writing the explanation in
+            your language. This can take up to a minute — please keep this page open.
+          </span>
+        </div>
+      )}
     </div>
   );
 }
