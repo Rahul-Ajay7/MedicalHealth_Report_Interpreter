@@ -499,6 +499,50 @@ def _extract_number(text: str, after_pos: int = 0) -> float | None:
     return float(m.group(1)) if m else None
 
 
+# Two-sided reference range, e.g. "13.0 - 16.5".  Used to BLANK OUT range
+# bounds before reading the result, so a printed range is never mistaken for
+# the patient's value.
+_RANGE_RE = re.compile(r"\d+(?:\.\d+)?\s*[-–]\s*\d+(?:\.\d+)?")
+
+
+def _extract_result_value(text: str, after_pos: int = 0) -> float | None:
+    """
+    Extract the patient's RESULT value, not a reference-range bound.
+
+    Lab lines often print both, in either order:
+        "Hemoglobin 14.5 g/dL 13.0-16.5"   → 14.5
+        "Hemoglobin 13.0-16.5 14.5"        → 14.5  (NOT 13.0)
+    Strategy: blank out any two-sided 'lo-hi' range first, then read the
+    remaining standalone number. If nothing remains outside a range (older
+    single-number layouts), fall back to the plain extractor so a line that
+    previously parsed never regresses.
+    """
+    seg    = text[after_pos:]
+    masked = _RANGE_RE.sub(" ", seg)
+    v = _extract_number(masked)
+    if v is not None:
+        return v
+    return _extract_number(seg)
+
+
+def _extract_percent_value(text: str, after_pos: int = 0) -> float | None:
+    """
+    Differential counts (neutrophils, lymphocytes, ...) — accept only the
+    PERCENTAGE figure (0-100), never the absolute count that often shares the
+    line (e.g. "Neutrophils 65 % 7000 /cmm" must yield 65, not 7000).
+    Ranges are masked out first. Falls back to the range-aware extractor if no
+    0-100 number is present.
+    """
+    seg = _RANGE_RE.sub(" ", text[after_pos:]).replace(",", "")
+    seg = re.sub(r"\b[HL]\b\s*", " ", seg)
+    seg = re.sub(r"[<>]\s*", "", seg)
+    seg = re.sub(r"x?\s*10\s*[\^*]\s*\d+", "", seg, flags=re.IGNORECASE)
+    for m in re.finditer(r"(?<![a-z])(-?\d+(?:\.\d+)?)(?![a-z])", seg):
+        if 0 <= float(m.group(1)) <= 100:
+            return float(m.group(1))
+    return _extract_result_value(text, after_pos)
+
+
 def _extract_unit(text: str) -> str:
     """
     Extract unit string from a single-row line.
@@ -671,7 +715,10 @@ def _parse_single_row(lines: list[str], idx: int, param_key: str) -> dict | None
             alias_end = m_alias.end()
             break
 
-    value    = _extract_number(line, after_pos=alias_end)
+    if param_key in PERCENT_ONLY_PARAMS:
+        value = _extract_percent_value(line, after_pos=alias_end)
+    else:
+        value = _extract_result_value(line, after_pos=alias_end)
     raw_unit = _extract_unit(line[alias_end:]) if alias_end else _extract_unit(line)
     val_line = line                # line the result value was read from
     val_off  = alias_end           # search printed range after the param name
@@ -683,7 +730,9 @@ def _parse_single_row(lines: list[str], idx: int, param_key: str) -> dict | None
                 nxt = lines[idx + j]
                 if not re.search(r"\d", nxt):
                     break           # text-only line → stop
-                v = _extract_number(nxt)
+                v = (_extract_percent_value(nxt)
+                     if param_key in PERCENT_ONLY_PARAMS
+                     else _extract_result_value(nxt))
                 if v is not None:
                     value    = v
                     raw_unit = _extract_unit(nxt)
