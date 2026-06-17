@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends, Request
 import os
 import json
 import tempfile
+import logging
 
 from app.dependencies import verify_token
 from app.services.audit import audit, client_ip
@@ -15,6 +16,8 @@ from app.services.nlp import generate_nlp_explanations
 from app.services.llm_chat import translate_lines
 from app.services.languages import is_english
 from app.state.chat_sessions import set_session
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/analyze", tags=["Analyze"])
 
@@ -188,6 +191,15 @@ def analyze_report(
             "recommendations": recommendations,
             "gender":          gender,
             "language":        language,})
+
+        # ── 14b. Delete the raw uploaded file — privacy by design ──────
+        # We keep only the extracted values + summary (saved above) for the
+        # user's history. The original report (PDF/image) is never retained
+        # once analysis succeeds. Best-effort; never leave orphan PHI.
+        try:
+            supabase.storage.from_("reports").remove([storage_path])
+        except Exception as e:
+            logger.warning("Raw file cleanup failed | report_id=%s | %s", report_id, e)
 
     finally:
         # ── 15. Always cleanup temp file ───────────────────────────────

@@ -1,30 +1,35 @@
-import { ShieldCheck, Lock, Database, Info, Scale, FileCheck } from "lucide-react";
+import { ShieldCheck, Lock, Database, Info, Scale, FileCheck, Globe } from "lucide-react";
 
 const policies = [
   {
     icon: Database,
-    title: "No Raw Health Data Storage",
-    body: "HealthAI does not store raw blood report images or PDFs beyond the duration necessary to generate your analysis. Extracted parameter values are stored in an anonymized, de-identified format. You may delete your reports at any time, which permanently removes all associated data from our systems.",
+    title: "We Don't Keep Your Original Report",
+    body: "Your uploaded file (PDF or image) is used only to read the values, then deleted from our storage as soon as the analysis succeeds — we do not retain the original report. What we keep is the summarized result: the extracted parameter values and analysis, stored securely in our backend (Supabase) and linked to your account so you can see your history and trends. You can permanently delete this summary at any time, which removes all associated data from our systems.",
+  },
+  {
+    icon: Globe,
+    title: "AI Processing Outside India",
+    body: "To explain your results and power the chat assistant, we send de-identified clinical data — your extracted lab values and the gender you selected — along with the questions you type, to third-party AI providers (Groq and Google Gemini) whose servers may be located outside India. We never send your name, email, account ID, or the original report file to these providers. We do not send your age. These transfers rely on the providers' contractual and security commitments.",
   },
   {
     icon: Lock,
-    title: "Data Security & Supabase",
-    body: "All data is encrypted in transit (TLS 1.3) and at rest using AES-256. We use Supabase as our backend, which provides Row-Level Security ensuring each user can only access their own data. Authentication is handled via Supabase Auth with JWT tokens — we never store passwords on our servers.",
+    title: "Data Security & Access Control",
+    body: "Data is encrypted in transit (TLS) and at rest (AES-256) by our backend provider, Supabase. Row-Level Security ensures each user can access only their own data. Authentication uses Supabase Auth with JWT tokens — we never store your password on our servers.",
   },
   {
     icon: Info,
     title: "Informational Use Only",
-    body: "HealthAI is a informational-assistance tool only. It does not provide medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional for medical decisions. The insights generated are based on general population reference ranges and may not be accurate for your individual health condition.",
+    body: "HealthAI is an informational-assistance tool only. It does not provide medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional for medical decisions. Insights are based on general population reference ranges and on values auto-extracted by OCR, which can contain errors — always confirm against your original printed report.",
   },
   {
     icon: Scale,
     title: "DPDP Act 2023 Compliance",
-    body: "We comply with the Digital Personal Data Protection Act, 2023 (DPDP Act 2023). Your personal data is processed only for the specific purpose of blood report analysis with your explicit consent. You have the right to access, correct, and erase your data. Data retention is limited to what is necessary for the stated purpose, and we maintain transparent records of all data processing activities.",
+    body: "We process your personal data only for the specific purpose of lab report analysis, and only with your explicit consent. You have the right to access, correct, and erase your data. Data retention is limited to what is necessary for this purpose, and we keep records of our processing activities. Cross-border processing is limited to the AI explanation described above.",
   },
   {
     icon: FileCheck,
     title: "Your Rights & Choices",
-    body: "You may request a copy of your data, withdraw consent at any time, or request permanent deletion by contacting our Data Protection Officer. We do not sell, rent, or share your personal data with third parties for advertising or marketing purposes. Data is never transferred outside India without adequate safeguards as required under the DPDP Act 2023.",
+    body: "You can permanently delete any report (and all its data) yourself from your History page at any time. You may also request a copy of your data or withdraw your consent by contacting our Data Protection Officer. We do not sell, rent, or share your personal data with third parties for advertising or marketing.",
   },
 ];
 
@@ -40,7 +45,7 @@ export default function PrivacyPage() {
           <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Privacy Policy</h1>
         </div>
         <p className="text-sm text-slate-500 ml-[52px] mb-8">
-          Last updated: May 22, 2026
+          Last updated: June 17, 2026
         </p>
 
         {/* Intro */}
@@ -49,7 +54,7 @@ export default function PrivacyPage() {
             At HealthAI, your privacy is a fundamental commitment. This policy describes how we collect, use, store, and protect your information when you use our blood report analysis platform.
           </p>
           <p>
-            By using HealthAI, you consent to the practices described in this policy. We process your data in accordance with the Digital Personal Data Protection Act, 2023 (DPDP Act 2023) and applicable data protection laws.
+            By using HealthAI, you consent to the practices described in this policy — including the processing of your lab values by AI providers located outside India, as explained below. We process your data in accordance with the Digital Personal Data Protection Act, 2023 (DPDP Act 2023) and applicable data protection laws.
           </p>
         </div>
 
