@@ -13,7 +13,7 @@ from app.services.parser import parse_report_text
 from app.services.analyzer import analyze_parameters
 from app.services.recommendations import generate_recommendations
 from app.services.nlp import generate_nlp_explanations
-from app.services.llm_chat import translate_lines
+from app.services.llm_chat import translate_lines, bilingual_medical_disclaimer
 from app.services.languages import is_english
 from app.state.chat_sessions import set_session
 
@@ -174,15 +174,16 @@ def analyze_report(
             "severity":        severity,
         }).execute()
 
-        # ── 12b. Tag the analysis with its output language (best-effort) ──
-        # Lets the report view localize the PDF disclaimer later. Requires a
-        # nullable `language` column on `analysis`; safely ignored if absent
-        # so older schemas keep working.
+        # ── 12b. Store the bilingual PDF disclaimer (best-effort) ─────────
+        # Computed now (English + chosen language) and saved verbatim so the
+        # PDF always shows both and the record is immutable. Requires a nullable
+        # `medical_disclaimer` column on `analysis`; safely ignored if absent.
         try:
-            supabase.table("analysis").update({"language": language}) \
-                .eq("report_id", report_id).eq("user_id", user_id).execute()
+            supabase.table("analysis").update(
+                {"medical_disclaimer": bilingual_medical_disclaimer(language)}
+            ).eq("report_id", report_id).eq("user_id", user_id).execute()
         except Exception as e:
-            logger.warning("Store analysis language failed | report_id=%s | %s", report_id, e)
+            logger.warning("Store PDF disclaimer failed | report_id=%s | %s", report_id, e)
 
         # ── 13. Save recommendations to Supabase ───────────────────────
         supabase.table("recommendations").insert({
