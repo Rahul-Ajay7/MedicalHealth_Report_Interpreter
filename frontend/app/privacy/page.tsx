@@ -78,7 +78,7 @@ export default function PrivacyPage() {
           <h2 className="font-bold text-slate-800 mb-2">Contact</h2>
           <p>
             For privacy-related inquiries, data requests, or grievances under the DPDP Act 2023, please contact our Data Protection Officer at{" "}
-            <a href="mailto:privacy@healthai.com" className="text-teal-600 hover:underline">privacy@healthai.com</a>.
+            <a href="mailto:healthai.privacy@gmail.com" className="text-teal-600 hover:underline">healthai.privacy@gmail.com</a>.
           </p>
         </div>
       </div>
