@@ -13,9 +13,42 @@ from app.services.analyzer import analyze_parameters
 from app.services.recommendations import generate_recommendations
 from app.services.nlp import generate_nlp_explanations
 from app.services.llm_chat import translate_lines
+from app.services.languages import is_english
 from app.state.chat_sessions import set_session
 
 router = APIRouter(prefix="/analyze", tags=["Analyze"])
+
+
+def _localize_recommendations(rec: dict, language: str) -> dict:
+    """Translate the patient-facing strings in recommendations into `language`.
+    Keeps `parameter` (lab name) and `status` (logic) untouched. Degrades to
+    English per-line on any translation failure (translate_lines handles that)."""
+    if not rec or is_english(language):
+        return rec
+
+    def t1(s: str) -> str:
+        return translate_lines([s], language)[0] if s else s
+
+    for tip in rec.get("lifestyle_tips", []):
+        if tip.get("tips"):
+            tip["tips"] = translate_lines(tip["tips"], language)
+
+    for otc in rec.get("non_prescription", []):
+        if otc.get("options"):
+            otc["options"] = translate_lines(otc["options"], language)
+        if otc.get("note"):
+            otc["note"] = t1(otc["note"])
+
+    for doc in rec.get("doctor_consultation", []):
+        if doc.get("conditions"):
+            doc["conditions"] = translate_lines(doc["conditions"], language)
+        if doc.get("instruction"):
+            doc["instruction"] = t1(doc["instruction"])
+
+    if rec.get("otc_disclaimer"):
+        rec["otc_disclaimer"] = t1(rec["otc_disclaimer"])
+
+    return rec
 
 JSON_PATH = os.path.join(
     os.path.dirname(__file__),
@@ -98,6 +131,10 @@ def analyze_report(
             final_results=final_results,
             gender=gender
         )
+
+        # Localize lifestyle tips + OTC info into the chosen language, matching
+        # the report explanation (graceful English fallback per line).
+        recommendations = _localize_recommendations(recommendations, language)
 
         # ── 10. Convert dict → list for parameters (frontend table) ────
         # { "haemoglobin": { value, unit, status } }
