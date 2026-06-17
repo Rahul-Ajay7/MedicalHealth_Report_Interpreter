@@ -27,7 +27,51 @@ type ReportData = {
   parameters:      Parameter[];
   nlp_explanation: string[];
   recommendations: { lifestyle: string[]; non_prescription: string[] };
+  medical_disclaimer?: string;
 };
+
+// Render text (incl. non-Latin scripts jsPDF can't draw) to a PNG via the
+// browser canvas, which uses system fonts that DO have Indian-script glyphs.
+// Returns a data URL + the height (mm) to place it at, scaled to `widthMm`.
+function disclaimerToImage(text: string, widthMm: number): { dataUrl: string; heightMm: number } {
+  const pxPerMm = 4;
+  const W   = Math.round(widthMm * pxPerMm);
+  const pad = 14;
+  const fs  = 22;        // body font px
+  const lh  = 30;        // line height px
+  const titleH = fs + 14;
+
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d")!;
+  ctx.font = `${fs}px sans-serif`;
+  const maxW = W - pad * 2;
+
+  const lines: string[] = [];
+  text.split("\n").forEach((para) => {
+    if (para === "") { lines.push(""); return; }
+    let cur = "";
+    para.split(" ").forEach((word) => {
+      const trial = cur ? cur + " " + word : word;
+      if (ctx.measureText(trial).width > maxW && cur) { lines.push(cur); cur = word; }
+      else cur = trial;
+    });
+    if (cur) lines.push(cur);
+  });
+
+  const H = titleH + pad + lines.length * lh + pad;
+  canvas.width = W; canvas.height = H;
+
+  ctx.fillStyle = "#fffbeb"; ctx.fillRect(0, 0, W, H);                 // amber-50
+  ctx.strokeStyle = "#fcd34d"; ctx.lineWidth = 2; ctx.strokeRect(1, 1, W - 2, H - 2);
+
+  ctx.fillStyle = "#92400e"; ctx.font = `bold ${fs}px sans-serif`;     // amber-800
+  ctx.fillText("⚠  Medical Disclaimer", pad, pad + fs);
+
+  ctx.fillStyle = "#78350f"; ctx.font = `${fs}px sans-serif`;          // amber-900
+  lines.forEach((ln, i) => ctx.fillText(ln, pad, titleH + pad + fs + i * lh));
+
+  return { dataUrl: canvas.toDataURL("image/png"), heightMm: H / pxPerMm };
+}
 
 function formatDate(d: string) {
   return new Date(d).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
@@ -297,23 +341,36 @@ export default function ReportViewPage() {
       });
       y += 12;
 
-      // ── DISCLAIMER ────────────────────────────────────────────────────
-      checkY(18);
-      doc.setFillColor(255, 251, 235);
-      doc.roundedRect(margin, y, contentW, 16, 2, 2, "F");
-      doc.setDrawColor(252, 211, 77);
-      doc.roundedRect(margin, y, contentW, 16, 2, 2, "S");
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(8);
-      doc.setTextColor(146, 64, 14);
-      doc.text("! Medical Disclaimer", margin + 4, y + 5.5);
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(7.5);
-      doc.setTextColor(120, 53, 15);
-      const disclaimer = "These suggestions are for informational purposes only and do not constitute medical advice. Always consult a qualified healthcare professional before starting any supplement or making changes to your health routine.";
-      const dLines = doc.splitTextToSize(disclaimer, contentW - 8);
-      dLines.forEach((dl: string, i: number) => { doc.text(dl, margin + 4, y + 10.5 + i * 4); });
-      y += 20;
+      // ── DISCLAIMER (bilingual: English + selected language) ────────────
+      const disclaimer = data.medical_disclaimer ||
+        "This report is for informational purposes only and does not constitute medical advice. Always consult a qualified healthcare professional before making any health decision or starting any supplement.";
+
+      // jsPDF's built-in fonts can't render Indian scripts → draw any non-Latin
+      // disclaimer as a canvas image; keep crisp vector text for plain English.
+      if (/[^ -ÿ]/.test(disclaimer)) {
+        const { dataUrl, heightMm } = disclaimerToImage(disclaimer, contentW);
+        checkY(heightMm + 4);
+        doc.addImage(dataUrl, "PNG", margin, y, contentW, heightMm);
+        y += heightMm + 4;
+      } else {
+        doc.setFontSize(7.5);
+        const dLines = doc.splitTextToSize(disclaimer, contentW - 8);
+        const boxH = 9 + dLines.length * 3.8 + 3;
+        checkY(boxH + 4);
+        doc.setFillColor(255, 251, 235);
+        doc.roundedRect(margin, y, contentW, boxH, 2, 2, "F");
+        doc.setDrawColor(252, 211, 77);
+        doc.roundedRect(margin, y, contentW, boxH, 2, 2, "S");
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(8);
+        doc.setTextColor(146, 64, 14);
+        doc.text("! Medical Disclaimer", margin + 4, y + 5.5);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(7.5);
+        doc.setTextColor(120, 53, 15);
+        dLines.forEach((dl: string, i: number) => { doc.text(dl, margin + 4, y + 10.5 + i * 3.8); });
+        y += boxH + 4;
+      }
 
       // ── FOOTER ────────────────────────────────────────────────────────
       const pageCount = (doc as any).internal.getNumberOfPages();

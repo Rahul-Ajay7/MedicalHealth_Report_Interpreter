@@ -174,6 +174,16 @@ def analyze_report(
             "severity":        severity,
         }).execute()
 
+        # ── 12b. Tag the analysis with its output language (best-effort) ──
+        # Lets the report view localize the PDF disclaimer later. Requires a
+        # nullable `language` column on `analysis`; safely ignored if absent
+        # so older schemas keep working.
+        try:
+            supabase.table("analysis").update({"language": language}) \
+                .eq("report_id", report_id).eq("user_id", user_id).execute()
+        except Exception as e:
+            logger.warning("Store analysis language failed | report_id=%s | %s", report_id, e)
+
         # ── 13. Save recommendations to Supabase ───────────────────────
         supabase.table("recommendations").insert({
             "report_id":        report_id,
