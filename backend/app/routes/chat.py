@@ -65,7 +65,7 @@ async def chat_with_llm(data: ChatRequest, request: Request, user=Depends(verify
     Auth: requires a valid Supabase JWT; the session must belong to the
     authenticated user (ownership enforced via user_id stored at analyze time).
 
-    LLM chain: Groq → Gemini → Ollama
+    LLM chain: Groq → Gemini
     """
     session = get_session(data.file_id)
 
