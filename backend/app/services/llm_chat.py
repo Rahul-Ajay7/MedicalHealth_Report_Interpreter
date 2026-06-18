@@ -3,7 +3,7 @@ llm_chat.py  —  HealthAI chat service
 =====================================
 Features:
   1. CONVERSATION HISTORY — multi-turn memory per session (up to 10 turns)
-  2. LLM fallback chain: Groq (primary) → Gemini → Ollama (local)
+  2. LLM fallback chain: Groq (primary) → Gemini
   3. Deduplication in lifestyle recommendations
   4. Age passed into context for age-aware reference ranges
   5. MULTILINGUAL — answers in any supported language (see languages.py).
@@ -465,49 +465,15 @@ class PatientChatLLM:
             .strip()
         )
 
-    def _call_ollama(self, system_prompt: str, messages: List[Dict[str, str]]) -> str:
-        full_messages = [{"role": "system", "content": system_prompt}] + messages
-        payload = {
-            "model":       self.model,
-            "messages":    full_messages,
-            "temperature": 0.3,
-            "max_tokens":  600,
-        }
-        last_error = None
-        for attempt in range(1, self.max_retries + 1):
-            try:
-                response = requests.post(self.url, json=payload, timeout=self.timeout)
-                response.raise_for_status()
-                return (
-                    response.json()
-                    .get("choices", [{}])[0]
-                    .get("message", {})
-                    .get("content", "")
-                    .strip() or ""
-                )
-            except requests.exceptions.Timeout:
-                last_error = "timeout"
-                logger.warning(f"Ollama timeout attempt {attempt}/{self.max_retries}")
-            except requests.exceptions.ConnectionError:
-                last_error = "unreachable"
-                break
-            except Exception as e:
-                last_error = str(e)
-                break
-            if attempt < self.max_retries:
-                time.sleep(1.5 * attempt)
-        raise ConnectionError(f"Ollama failed: {last_error}")
-
     def _call_llm(
         self,
         system_prompt: str,
         messages:      List[Dict[str, str]],
     ) -> tuple[str, str]:
-        """Groq → Gemini → Ollama fallback chain."""
+        """Groq → Gemini fallback chain."""
         providers = [
             ("groq",   lambda s, m: self._call_groq(s, m)),
             ("gemini", lambda s, m: self._call_gemini(s, m)),
-            ("ollama", lambda s, m: self._call_ollama(s, m)),
         ]
         for name, caller in providers:
             try:
