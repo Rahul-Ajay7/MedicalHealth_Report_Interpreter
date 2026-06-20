@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useReport } from "@/context/ReportContext";
 import { askLLMChat, getLanguages, type Language } from "@/services/api";
-import { Send, Bot, Sparkles, AlertTriangle, ShieldAlert, Info, Mic, MicOff } from "lucide-react";
+import { Send, Bot, Sparkles, AlertTriangle, ShieldAlert, Info, Mic, MicOff, Check, X } from "lucide-react";
 
 // Map our language codes to Web Speech BCP-47 locales. Minor languages the
 // browser doesn't support fall back to en-IN (still lets the user dictate).
@@ -280,21 +280,77 @@ export default function ChatAssistant() {
         <div className={`ml-2 w-2 h-2 rounded-full ${report ? "bg-green-400" : "bg-slate-300"}`} />
       </div>
 
+      {/* ── Always-on disclaimer strip ── */}
+      <div className="flex items-start gap-2 px-5 py-2 bg-amber-50/70 border-b border-amber-100 flex-shrink-0">
+        <Info size={12} className="text-amber-500 shrink-0 mt-0.5" />
+        <p className="text-[11px] text-amber-700 leading-snug">
+          Informational only — not medical advice, diagnosis, or prescriptions.{" "}
+          <a href="/privacy" className="underline hover:text-amber-800">How your data is used</a>.
+        </p>
+      </div>
+
       {/* ── Messages ── */}
       <div
         ref={messagesContainerRef}
         className="flex-1 overflow-y-auto min-h-0 px-5 py-4 space-y-3"
       >
 
-        {/* Empty state */}
+        {/* Empty state — what the assistant can / can't do + consent */}
         {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full gap-3 text-center">
-            <div className="w-12 h-12 rounded-full bg-teal-50 flex items-center justify-center">
-              <Bot size={22} className="text-teal-400" />
+          <div className="flex flex-col gap-4 py-1">
+            <div className="flex flex-col items-center gap-2 text-center">
+              <div className="w-11 h-11 rounded-full bg-teal-50 flex items-center justify-center">
+                <Bot size={20} className="text-teal-500" />
+              </div>
+              <p className="text-sm font-semibold text-slate-700">Your Health Assistant</p>
+              <p className="text-xs text-slate-400 max-w-[230px]">
+                Upload a report, then ask me about it — in your language.
+              </p>
             </div>
-            <p className="text-sm text-slate-400 max-w-[200px]">
-              Upload a report and ask me anything about your results
-            </p>
+
+            <div className="grid grid-cols-1 gap-3">
+              <div className="rounded-xl border border-emerald-100 bg-emerald-50/50 p-3">
+                <p className="text-xs font-semibold text-emerald-700 mb-1.5">I can help with</p>
+                <ul className="space-y-1">
+                  {[
+                    "Explain what each value means, in simple words",
+                    "Tell you the normal range & if a value is low / normal / high",
+                    "General diet & lifestyle tips",
+                    "What to ask your doctor",
+                  ].map((t) => (
+                    <li key={t} className="flex items-start gap-1.5 text-[11px] text-slate-600 leading-snug">
+                      <Check size={12} className="text-emerald-500 shrink-0 mt-0.5" /> {t}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="rounded-xl border border-red-100 bg-red-50/50 p-3">
+                <p className="text-xs font-semibold text-red-700 mb-1.5">I can't do</p>
+                <ul className="space-y-1">
+                  {[
+                    "Diagnose a disease",
+                    "Prescribe medicines or doses",
+                    "Predict outcomes or survival",
+                    "Replace a doctor or handle emergencies (dial 112 / 108)",
+                  ].map((t) => (
+                    <li key={t} className="flex items-start gap-1.5 text-[11px] text-slate-600 leading-snug">
+                      <X size={12} className="text-red-400 shrink-0 mt-0.5" /> {t}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div className="rounded-xl bg-slate-50 border border-slate-100 p-3">
+              <p className="text-[11px] text-slate-500 leading-relaxed">
+                By chatting, you agree this is <span className="font-medium text-slate-600">information, not medical advice</span>.
+                Your questions and lab values are processed to generate answers — including by AI
+                providers located outside India — as described in our{" "}
+                <a href="/privacy" className="text-teal-600 underline hover:text-teal-700">Privacy Policy</a>.
+                You can delete your data anytime.
+              </p>
+            </div>
           </div>
         )}
 
