@@ -112,6 +112,7 @@ async def chat_with_llm(data: ChatRequest, request: Request, user=Depends(verify
         from app.services.llm_chat import QuestionType
         if result.question_type not in (
             QuestionType.BLOCKED,
+            QuestionType.INJECTION,
             QuestionType.SENSITIVE,
             QuestionType.GENERAL_HEALTH,
         ):
