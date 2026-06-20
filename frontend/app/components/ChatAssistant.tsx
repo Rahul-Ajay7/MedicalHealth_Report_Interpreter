@@ -3,7 +3,17 @@
 import { useState, useRef, useEffect } from "react";
 import { useReport } from "@/context/ReportContext";
 import { askLLMChat, getLanguages, type Language } from "@/services/api";
-import { Send, Bot, Sparkles, AlertTriangle, ShieldAlert, Info } from "lucide-react";
+import { Send, Bot, Sparkles, AlertTriangle, ShieldAlert, Info, Mic, MicOff } from "lucide-react";
+
+// Map our language codes to Web Speech BCP-47 locales. Minor languages the
+// browser doesn't support fall back to en-IN (still lets the user dictate).
+const SPEECH_LOCALE: Record<string, string> = {
+  en: "en-IN", hi: "hi-IN", bn: "bn-IN", te: "te-IN", mr: "mr-IN", ta: "ta-IN",
+  ur: "ur-IN", gu: "gu-IN", kn: "kn-IN", ml: "ml-IN", pa: "pa-IN", or: "or-IN",
+  as: "as-IN", ne: "ne-NP", sa: "sa-IN", kok: "kok-IN",
+  es: "es-ES", fr: "fr-FR", ar: "ar-SA", zh: "zh-CN",
+};
+const speechLocale = (code?: string) => (code && SPEECH_LOCALE[code]) || "en-IN";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -113,12 +123,49 @@ export default function ChatAssistant() {
   const [languages, setLanguages] = useState<Language[]>([]);
   const [language, setLanguage]   = useState("English");
 
+  const [listening, setListening]           = useState(false);
+  const [speechSupported, setSpeechSupported] = useState(false);
+  const recognitionRef = useRef<any>(null);
+
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
   // ── Load supported languages once ──────────────────────────────────────────
   useEffect(() => {
     getLanguages().then(setLanguages).catch(() => {});
   }, []);
+
+  // ── Set up speech-to-text (browser Web Speech API; no server, no API key) ───
+  useEffect(() => {
+    const SR =
+      typeof window !== "undefined" &&
+      ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition);
+    if (!SR) return;                       // unsupported browser → hide mic
+    setSpeechSupported(true);
+    const rec = new SR();
+    rec.continuous     = false;
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+    rec.onresult = (e: any) => {
+      const text = Array.from(e.results)
+        .map((r: any) => r[0]?.transcript ?? "")
+        .join(" ")
+        .trim();
+      if (text) setInput((prev) => (prev ? prev + " " : "") + text);
+    };
+    rec.onend   = () => setListening(false);
+    rec.onerror = () => setListening(false);
+    recognitionRef.current = rec;
+    return () => { try { rec.abort(); } catch {} };
+  }, []);
+
+  const toggleMic = () => {
+    const rec = recognitionRef.current;
+    if (!rec || !report || loading) return;
+    if (listening) { try { rec.stop(); } catch {} setListening(false); return; }
+    const code = languages.find((l) => l.name === language)?.code;
+    rec.lang = speechLocale(code);         // dictate in the selected language
+    try { rec.start(); setListening(true); } catch {}
+  };
 
   // ── Default the answer language to the one chosen at analyze time ───────────
   useEffect(() => {
@@ -316,10 +363,24 @@ export default function ChatAssistant() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Ask about neutrophils, glucose levels..."
+          placeholder={listening ? "Listening… speak now" : "Ask about neutrophils, glucose levels..."}
           rows={1}
           className="flex-1 resize-none border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400 transition"
         />
+        {speechSupported && (
+          <button
+            onClick={toggleMic}
+            disabled={!report || loading}
+            title={listening ? "Stop listening" : "Speak your question in the selected language"}
+            className={`w-10 h-10 flex items-center justify-center rounded-xl transition flex-shrink-0 disabled:bg-slate-100 disabled:text-slate-300 ${
+              listening
+                ? "bg-red-500 text-white animate-pulse"
+                : "bg-slate-100 text-slate-500 hover:bg-slate-200"
+            }`}
+          >
+            {listening ? <MicOff size={15} /> : <Mic size={15} />}
+          </button>
+        )}
         <button
           onClick={sendMessage}
           disabled={!input.trim() || !report || loading}
