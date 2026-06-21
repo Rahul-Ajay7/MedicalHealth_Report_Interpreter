@@ -454,10 +454,19 @@ class PatientChatLLM:
         if explanations:
             nlp_context = "Medical context from report:\n" + "\n".join(explanations[:5]) + "\n\n"
 
-        # Deduplicate lifestyle tips
+        # Deduplicate lifestyle tips. `lifestyle_tips` may be a flat list of
+        # strings OR the structured form [{"parameter","status","tips":[...]}].
+        # Flatten to strings first — dict.fromkeys on dicts raises TypeError.
         rec_context = ""
         if recommendations:
-            tips = list(dict.fromkeys(recommendations.get("lifestyle_tips", [])))  # dedup
+            raw_tips = recommendations.get("lifestyle_tips", []) or []
+            flat: List[str] = []
+            for t in raw_tips:
+                if isinstance(t, dict):
+                    flat.extend(str(x) for x in t.get("tips", []))
+                elif isinstance(t, str):
+                    flat.append(t)
+            tips = list(dict.fromkeys(flat))   # dedup (strings are hashable)
             if tips:
                 rec_context = "Recommendations on file:\n" + "\n".join(tips[:5]) + "\n\n"
 
