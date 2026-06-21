@@ -22,6 +22,7 @@ from app.services.audit import audit, client_ip
 from app.services.languages import normalize_language
 from app.services.llm_chat import PatientChatLLM
 from app.state.chat_sessions import get_session, set_session
+from app.supabase_client import supabase
 from app.config import LLM_BASE_URL, LLM_CHAT_ENDPOINT, LLM_MODEL, LLM_TIMEOUT
 
 logger = logging.getLogger(__name__)
@@ -29,6 +30,38 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/chat", tags=["Chat"])
 
 MAX_HISTORY_TURNS = 10   # keep last N full turns (user + assistant)
+
+
+def _rebuild_session(file_id: str, user_id: str) -> Optional[dict]:
+    """Reconstruct a chat session from Supabase when the in-memory one is gone
+    (e.g. free-tier instance slept/restarted between analyze and chat). Without
+    this, chat would 404 after any backend restart. Ownership enforced via the
+    user_id filter. gender isn't persisted (minor); language comes from the
+    request, not the session."""
+    try:
+        row = supabase.from_("reports").select(
+            "id, analysis(analysis_map, nlp_explanation), "
+            "recommendations(lifestyle_tips, non_prescription)"
+        ).eq("id", file_id).eq("user_id", user_id).single().execute()
+    except Exception as e:
+        logger.warning("Session rebuild query failed | file_id=%s | %s", file_id, e)
+        return None
+    if not row.data:
+        return None
+    a = row.data.get("analysis")
+    a = a[0] if isinstance(a, list) else a
+    rec = row.data.get("recommendations")
+    rec = rec[0] if isinstance(rec, list) else rec
+    if not a:
+        return None
+    return {
+        "user_id":         user_id,
+        "analysis":        a.get("analysis_map") or {},
+        "nlp_explanation": a.get("nlp_explanation") or [],
+        "recommendations": rec or {"lifestyle_tips": [], "non_prescription": []},
+        "gender":          None,
+        "language":        None,   # request override carries the answer language
+    }
 
 llm = PatientChatLLM(
     base_url      = LLM_BASE_URL,
@@ -68,6 +101,14 @@ async def chat_with_llm(data: ChatRequest, request: Request, user=Depends(verify
     LLM chain: Groq → Gemini
     """
     session = get_session(data.file_id)
+
+    # In-memory session can vanish on a free-tier restart — rebuild from the DB
+    # so chat survives instead of 404'ing after the report was analyzed.
+    if not session:
+        session = _rebuild_session(data.file_id, user["sub"])
+        if session:
+            set_session(data.file_id, session)
+            logger.info("Rebuilt chat session from DB | file_id=%s", data.file_id)
 
     if not session:
         raise HTTPException(
