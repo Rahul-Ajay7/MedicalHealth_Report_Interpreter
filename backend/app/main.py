@@ -108,6 +108,21 @@ def root():
     return {"status": "API is running!"}
 
 
+@app.get("/healthz")
+def healthz():
+    """Liveness + light DB touch for an external keep-alive cron — prevents
+    Render free-tier sleep AND the Supabase 7-day inactivity pause. Cheap and
+    safe: one id, limit 1, no data returned."""
+    db_ok = False
+    try:
+        from app.supabase_client import supabase
+        supabase.table("reports").select("id").limit(1).execute()
+        db_ok = True
+    except Exception as e:
+        logger.warning("healthz DB check failed: %s", e)
+    return {"status": "ok", "db": db_ok}
+
+
 @app.get("/languages")
 def languages():
     """Supported output languages for the report explanation + chat."""
