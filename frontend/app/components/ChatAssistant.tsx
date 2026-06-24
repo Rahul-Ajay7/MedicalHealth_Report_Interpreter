@@ -25,12 +25,25 @@ type QuestionType =
   | "report_based"
   | "general_health";
 
+type ResultCard = {
+  name:     string;
+  value:    number | string;
+  unit:     string;
+  status:   string;
+  critical?: boolean;
+};
+
 type Message = {
   role:           "user" | "assistant";
   content:        string;
   flagged?:       boolean;
   question_type?: QuestionType;
+  cards?:         ResultCard[];   // in-thread report result cards
 };
+
+function prettyName(key: string) {
+  return key.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -185,10 +198,16 @@ export default function ChatAssistant() {
       messages.length === 1 &&
       messages[0].content === "Analyzing your report..."
     ) {
-      setMessages([{
-        role:    "assistant",
-        content: "Here's the analysis of your report:\n\n" + nlpExplanation.join("\n\n"),
-      }]);
+      const params = report.parameters || [];
+      const flagged = params.filter((p) => p.critical || (p.status && p.status.toLowerCase() !== "normal"));
+      const intro = flagged.length
+        ? `I read ${params.length} values — ${flagged.length} need attention:`
+        : `I read ${params.length} values. They all look within range — but a normal value isn't the whole picture, so do review with your doctor.`;
+      const opening: Message[] = [{ role: "assistant", content: intro, cards: flagged.slice(0, 8) }];
+      if (nlpExplanation.length) {
+        opening.push({ role: "assistant", content: nlpExplanation.join("\n\n") });
+      }
+      setMessages(opening);
     }
   }, [nlpExplanation, report, messages]);
 
@@ -200,10 +219,10 @@ export default function ChatAssistant() {
     }
   }, [messages]);
 
-  // ── Send message ───────────────────────────────────────────────────────────
-  const sendMessage = async () => {
-    if (!input.trim() || !report || loading) return;
-    const question = input.trim();
+  // ── Send a question (from the input box or a result card) ───────────────────
+  const sendText = async (raw: string) => {
+    const question = raw.trim();
+    if (!question || !report || loading) return;
     setInput("");
     setLoading(true);
 
@@ -240,6 +259,9 @@ export default function ChatAssistant() {
     }
   };
 
+  const sendMessage = () => sendText(input);
+  const askAbout = (name: string) => sendText(`What does my ${prettyName(name)} result mean?`);
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -249,7 +271,7 @@ export default function ChatAssistant() {
 
   // ─── Render ────────────────────────────────────────────────────────────────
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 flex flex-col h-[520px]">
+    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 flex flex-col h-[78vh] min-h-[520px] max-h-[860px]">
 
       {/* ── Header ── */}
       <div className="flex items-center gap-3 px-5 py-4 border-b border-slate-100 flex-shrink-0">
@@ -375,7 +397,7 @@ export default function ChatAssistant() {
                 </div>
               )}
 
-              <div className="flex flex-col gap-1 max-w-[78%]">
+              <div className={`flex flex-col gap-1 ${msg.cards?.length ? "max-w-[90%] w-full" : "max-w-[78%]"}`}>
 
                 {/* Banner — only for emergency and blocked, NOT sensitive */}
                 {msg.flagged &&
@@ -405,6 +427,39 @@ export default function ChatAssistant() {
                     msg.content
                   )}
                 </div>
+
+                {/* In-thread result cards (abnormal values) */}
+                {msg.cards?.length ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1">
+                    {msg.cards.map((c, ci) => {
+                      const st = (c.status || "").toLowerCase();
+                      const pill = c.critical
+                        ? "bg-red-600 text-white"
+                        : st === "high"
+                        ? "bg-red-50 text-red-700"
+                        : st === "low"
+                        ? "bg-amber-50 text-amber-700"
+                        : "bg-slate-100 text-slate-600";
+                      const label = c.critical ? "Critical" : st ? st.charAt(0).toUpperCase() + st.slice(1) : "—";
+                      return (
+                        <div key={ci} className="rounded-xl border border-slate-100 bg-white p-2.5">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="text-xs font-semibold text-slate-700">{prettyName(c.name)}</span>
+                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${pill}`}>{label}</span>
+                          </div>
+                          <p className="text-xs text-slate-500 mt-1">{c.value} {c.unit}</p>
+                          <button
+                            onClick={() => askAbout(c.name)}
+                            disabled={loading}
+                            className="mt-2 inline-flex items-center gap-1 text-[11px] font-medium text-teal-600 hover:text-teal-700 disabled:text-slate-300"
+                          >
+                            <Bot size={11} /> Ask about this
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : null}
 
               </div>
             </div>

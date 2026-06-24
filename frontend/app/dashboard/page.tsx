@@ -1,15 +1,12 @@
 'use client'
 
-import { useState } from "react";
 import { useReport } from "@/context/ReportContext";
-import { ListChecks, Leaf, Plus, AlertTriangle } from "lucide-react";
+import { ListChecks, Leaf, Plus, AlertTriangle, ChevronDown } from "lucide-react";
 import UploadReport from "@/components/UploadReport";
 import AnalysisResult from "@/components/AnalysisResult";
 import ChatAssistant from "@/components/ChatAssistant";
 import LifestyleTips from "@/components/LifestyleTips";
 import NonPrescription from "@/components/NonPrescriptionInfo";
-
-type Tab = "parameters" | "recommendations";
 
 const SEVERITY_STYLE: Record<string, string> = {
   Normal:   "bg-emerald-50 text-emerald-700",
@@ -20,9 +17,8 @@ const SEVERITY_STYLE: Record<string, string> = {
 
 export default function Dashboard() {
   const { report, clearReport } = useReport();
-  const [tab, setTab] = useState<Tab>("parameters");
 
-  // ── State 1: no report yet → single, centered upload. No empty clutter. ──
+  // ── No report yet → single, centered upload. ──
   if (!report) {
     return (
       <div className="min-h-screen bg-[#F0F4F9] px-4 py-10 md:py-16">
@@ -40,68 +36,58 @@ export default function Dashboard() {
     );
   }
 
-  // ── State 2: report ready → focused results + sticky chat. ──
+  // ── Report ready → chat-first. Conversation is the hero; the full table and
+  //    recommendations live in collapsible sections below. Single column =
+  //    works the same on mobile and desktop. ──
   const severity = report.severity || "Normal";
   return (
-    <div className="min-h-screen bg-[#F0F4F9] px-4 md:px-8 py-8">
+    <div className="min-h-screen bg-[#F0F4F9] px-4 md:px-8 py-6">
+      <div className="max-w-3xl mx-auto">
 
-      {/* Header row */}
-      <div className="flex items-center justify-between mb-6 gap-3 flex-wrap">
-        <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Your Results</h1>
-          <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${SEVERITY_STYLE[severity] ?? SEVERITY_STYLE.Normal}`}>
-            {severity === "Critical" && <AlertTriangle size={12} />}
-            {severity}
-          </span>
-        </div>
-        <button
-          onClick={clearReport}
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-teal-600 hover:text-teal-700 bg-white border border-slate-200 hover:border-teal-300 rounded-xl px-4 py-2 transition"
-        >
-          <Plus size={15} /> New report
-        </button>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        {/* Main — tabbed results */}
-        <div className="lg:col-span-2 space-y-4">
-          {/* Tabs */}
-          <div className="flex gap-1 bg-white border border-slate-100 rounded-xl p-1 w-fit shadow-sm">
-            <button
-              onClick={() => setTab("parameters")}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition ${
-                tab === "parameters" ? "bg-teal-600 text-white" : "text-slate-500 hover:bg-slate-50"
-              }`}
-            >
-              <ListChecks size={15} /> Parameters
-            </button>
-            <button
-              onClick={() => setTab("recommendations")}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition ${
-                tab === "recommendations" ? "bg-teal-600 text-white" : "text-slate-500 hover:bg-slate-50"
-              }`}
-            >
-              <Leaf size={15} /> Recommendations
-            </button>
+        {/* Header row */}
+        <div className="flex items-center justify-between mb-4 gap-3 flex-wrap">
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-xl font-bold text-slate-800 tracking-tight">Your Results</h1>
+            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${SEVERITY_STYLE[severity] ?? SEVERITY_STYLE.Normal}`}>
+              {severity === "Critical" && <AlertTriangle size={12} />}
+              {severity}
+            </span>
           </div>
+          <button
+            onClick={clearReport}
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-teal-600 hover:text-teal-700 bg-white border border-slate-200 hover:border-teal-300 rounded-xl px-4 py-2 transition"
+          >
+            <Plus size={15} /> New report
+          </button>
+        </div>
 
-          {tab === "parameters" ? (
+        {/* Chat = hero */}
+        <ChatAssistant />
+
+        {/* Full detail, collapsed by default */}
+        <details className="group mt-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
+          <summary className="flex items-center gap-2 cursor-pointer list-none px-5 py-4 text-sm font-semibold text-slate-700">
+            <ListChecks size={16} className="text-teal-500" />
+            All extracted parameters
+            <ChevronDown size={16} className="ml-auto text-slate-400 transition-transform group-open:rotate-180" />
+          </summary>
+          <div className="px-4 pb-4">
             <AnalysisResult />
-          ) : (
-            <div className="space-y-6">
-              <LifestyleTips />
-              <NonPrescription />
-            </div>
-          )}
-        </div>
-
-        {/* Sticky chat */}
-        <div className="lg:col-span-1">
-          <div className="lg:sticky lg:top-6">
-            <ChatAssistant />
           </div>
-        </div>
+        </details>
+
+        <details className="group mt-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
+          <summary className="flex items-center gap-2 cursor-pointer list-none px-5 py-4 text-sm font-semibold text-slate-700">
+            <Leaf size={16} className="text-emerald-500" />
+            Lifestyle & general guidance
+            <ChevronDown size={16} className="ml-auto text-slate-400 transition-transform group-open:rotate-180" />
+          </summary>
+          <div className="px-4 pb-4 space-y-6">
+            <LifestyleTips />
+            <NonPrescription />
+          </div>
+        </details>
+
       </div>
     </div>
   );
