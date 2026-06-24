@@ -12,12 +12,12 @@ export default function AnalysisResult() {
   const abnormalCount = parameters.filter((p) => p.status !== "normal" && !p.critical).length;
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col h-[520px]">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 flex flex-col h-[520px]">
 
       {/* ── Header: fixed height, never scrolls ── */}
       <div className="flex items-center justify-between mb-4 flex-shrink-0">
         <div>
-          <h3 className="text-base font-semibold text-slate-800">Extracted Parameters</h3>
+          <h3 className="text-base font-semibold text-slate-800 dark:text-slate-100">Extracted Parameters</h3>
           {parameters.length > 0 && (
             <p className="text-xs text-slate-400 mt-0.5">{parameters.length} parameters detected</p>
           )}
@@ -71,7 +71,7 @@ export default function AnalysisResult() {
         {parameters.length > 0 && (
           <table className="w-full text-sm">
             {/* Sticky header stays visible while scrolling */}
-            <thead className="sticky top-0 bg-white z-10">
+            <thead className="sticky top-0 bg-white dark:bg-slate-800 z-10">
               <tr className="text-xs uppercase tracking-wide text-slate-400 border-b border-slate-100">
                 <th className="text-left pb-3 font-medium">Parameter</th>
                 <th className="pb-3 text-center font-medium">Value</th>

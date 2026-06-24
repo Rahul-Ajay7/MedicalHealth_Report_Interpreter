@@ -54,7 +54,7 @@ function getMessageStyle(msg: Message): {
 } {
   if (!msg.flagged || msg.role !== "assistant") {
     return {
-      bubble: "bg-slate-100 text-slate-700 rounded-bl-sm",
+      bubble: "bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-bl-sm",
       banner: null,
       icon:   null,
     };
@@ -71,7 +71,7 @@ function getMessageStyle(msg: Message): {
   // sensitive — no banner, just a warm bubble style
   if (msg.question_type === "sensitive") {
     return {
-      bubble: "bg-teal-50 text-slate-700 rounded-bl-sm",
+      bubble: "bg-teal-50 text-slate-700 dark:text-slate-200 rounded-bl-sm",
       banner: null,
       icon:   null,
     };
@@ -79,14 +79,14 @@ function getMessageStyle(msg: Message): {
 
   if (msg.question_type === "blocked") {
     return {
-      bubble: "bg-slate-100 text-slate-600 border border-slate-200 rounded-bl-sm",
+      bubble: "bg-slate-100 text-slate-600 dark:text-slate-300 border border-slate-200 rounded-bl-sm",
       banner: "bg-slate-100 text-slate-500 border border-slate-200",
       icon:   <Info size={13} className="text-slate-400 shrink-0 mt-0.5" />,
     };
   }
 
   return {
-    bubble: "bg-slate-100 text-slate-700 rounded-bl-sm",
+    bubble: "bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-bl-sm",
     banner: null,
     icon:   null,
   };
@@ -271,15 +271,15 @@ export default function ChatAssistant() {
 
   // ─── Render ────────────────────────────────────────────────────────────────
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 flex flex-col h-[78vh] min-h-[520px] max-h-[860px]">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col h-[78vh] min-h-[520px] max-h-[860px]">
 
       {/* ── Header ── */}
-      <div className="flex items-center gap-3 px-5 py-4 border-b border-slate-100 flex-shrink-0">
+      <div className="flex items-center gap-3 px-5 py-4 border-b border-slate-100 dark:border-slate-700 flex-shrink-0">
         <div className="w-8 h-8 rounded-lg bg-teal-600 flex items-center justify-center">
           <Sparkles size={15} className="text-white" />
         </div>
         <div>
-          <p className="text-sm font-semibold text-slate-800">Health Assistant</p>
+          <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">Health Assistant</p>
           <p className="text-xs text-slate-400">Ask about your results</p>
         </div>
 
@@ -289,7 +289,7 @@ export default function ChatAssistant() {
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
             title="Answer language"
-            className="ml-auto text-xs text-slate-600 border border-slate-200 rounded-lg px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/30"
+            className="ml-auto text-xs text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600 rounded-lg px-2 py-1 bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-500/30"
           >
             {languages.map((l) => (
               <option key={l.code} value={l.name}>
@@ -324,7 +324,7 @@ export default function ChatAssistant() {
               <div className="w-11 h-11 rounded-full bg-teal-50 flex items-center justify-center">
                 <Bot size={20} className="text-teal-500" />
               </div>
-              <p className="text-sm font-semibold text-slate-700">Your Health Assistant</p>
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">Your Health Assistant</p>
               <p className="text-xs text-slate-400 max-w-[230px]">
                 Upload a report, then ask me about it — in your language.
               </p>
@@ -340,7 +340,7 @@ export default function ChatAssistant() {
                     "General diet & lifestyle tips",
                     "What to ask your doctor",
                   ].map((t) => (
-                    <li key={t} className="flex items-start gap-1.5 text-[11px] text-slate-600 leading-snug">
+                    <li key={t} className="flex items-start gap-1.5 text-[11px] text-slate-600 dark:text-slate-300 leading-snug">
                       <Check size={12} className="text-emerald-500 shrink-0 mt-0.5" /> {t}
                     </li>
                   ))}
@@ -356,7 +356,7 @@ export default function ChatAssistant() {
                     "Predict outcomes or survival",
                     "Replace a doctor or handle emergencies (dial 112 / 108)",
                   ].map((t) => (
-                    <li key={t} className="flex items-start gap-1.5 text-[11px] text-slate-600 leading-snug">
+                    <li key={t} className="flex items-start gap-1.5 text-[11px] text-slate-600 dark:text-slate-300 leading-snug">
                       <X size={12} className="text-red-400 shrink-0 mt-0.5" /> {t}
                     </li>
                   ))}
@@ -366,7 +366,7 @@ export default function ChatAssistant() {
 
             <div className="rounded-xl bg-slate-50 border border-slate-100 p-3">
               <p className="text-[11px] text-slate-500 leading-relaxed">
-                By chatting, you agree this is <span className="font-medium text-slate-600">information, not medical advice</span>.
+                By chatting, you agree this is <span className="font-medium text-slate-600 dark:text-slate-300">information, not medical advice</span>.
                 Your questions and lab values are processed to generate answers — including by AI
                 providers located outside India — as described in our{" "}
                 <a href="/privacy" className="text-teal-600 underline hover:text-teal-700">Privacy Policy</a>.
@@ -439,12 +439,12 @@ export default function ChatAssistant() {
                         ? "bg-red-50 text-red-700"
                         : st === "low"
                         ? "bg-amber-50 text-amber-700"
-                        : "bg-slate-100 text-slate-600";
+                        : "bg-slate-100 text-slate-600 dark:text-slate-300";
                       const label = c.critical ? "Critical" : st ? st.charAt(0).toUpperCase() + st.slice(1) : "—";
                       return (
-                        <div key={ci} className="rounded-xl border border-slate-100 bg-white p-2.5">
+                        <div key={ci} className="rounded-xl border border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800/60 p-2.5">
                           <div className="flex items-center justify-between gap-2">
-                            <span className="text-xs font-semibold text-slate-700">{prettyName(c.name)}</span>
+                            <span className="text-xs font-semibold text-slate-700 dark:text-slate-200">{prettyName(c.name)}</span>
                             <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${pill}`}>{label}</span>
                           </div>
                           <p className="text-xs text-slate-500 mt-1">{c.value} {c.unit}</p>
@@ -469,14 +469,14 @@ export default function ChatAssistant() {
       </div>
 
       {/* ── Input ── */}
-      <div className="border-t border-slate-100 px-4 py-3 flex gap-2 items-end flex-shrink-0">
+      <div className="border-t border-slate-100 dark:border-slate-700 px-4 py-3 flex gap-2 items-end flex-shrink-0">
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={listening ? "Listening… speak now" : "Ask about neutrophils, glucose levels..."}
           rows={1}
-          className="flex-1 resize-none border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400 transition"
+          className="flex-1 resize-none border border-slate-200 dark:border-slate-600 dark:bg-slate-900 rounded-xl px-3.5 py-2.5 text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400 transition"
         />
         {speechSupported && (
           <button
@@ -486,7 +486,7 @@ export default function ChatAssistant() {
             className={`w-10 h-10 flex items-center justify-center rounded-xl transition flex-shrink-0 disabled:bg-slate-100 disabled:text-slate-300 ${
               listening
                 ? "bg-red-500 text-white animate-pulse"
-                : "bg-slate-100 text-slate-500 hover:bg-slate-200"
+                : "bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600"
             }`}
           >
             {listening ? <MicOff size={15} /> : <Mic size={15} />}

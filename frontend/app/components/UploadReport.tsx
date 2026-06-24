@@ -62,7 +62,7 @@ export default function UploadReport() {
 
   if (analyzed) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col items-center justify-center gap-3 min-h-[180px]">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 flex flex-col items-center justify-center gap-3 min-h-[180px]">
         <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center">
           <CheckCircle2 size={24} className="text-green-500" />
         </div>
@@ -76,9 +76,9 @@ export default function UploadReport() {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col gap-5">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 flex flex-col gap-5">
       <div>
-        <h3 className="text-base font-semibold text-slate-800">Upload Report</h3>
+        <h3 className="text-base font-semibold text-slate-800 dark:text-slate-100">Upload Report</h3>
         <p className="text-xs text-slate-400 mt-0.5">PDF, JPG or PNG · Max 10MB</p>
       </div>
 

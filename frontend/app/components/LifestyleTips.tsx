@@ -7,12 +7,12 @@ export default function LifestyleTips() {
   const lifestyleTips = report?.recommendations?.lifestyle_tips || [];
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
       <div className="flex items-center gap-2.5 mb-5">
         <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center">
           <Dumbbell size={16} className="text-amber-500" />
         </div>
-        <h3 className="text-base font-semibold text-slate-800">Lifestyle Suggestions</h3>
+        <h3 className="text-base font-semibold text-slate-800 dark:text-slate-100">Lifestyle Suggestions</h3>
       </div>
 
       {!lifestyleTips.length ? (

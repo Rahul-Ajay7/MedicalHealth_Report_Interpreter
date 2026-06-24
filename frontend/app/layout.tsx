@@ -21,8 +21,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} antialiased text-slate-700`}>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Set theme before paint to avoid a flash of the wrong mode */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');var d=t==='dark'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();`,
+          }}
+        />
+      </head>
+      <body className={`${inter.className} antialiased text-slate-700 dark:text-slate-200 dark:bg-slate-900`}>
         <ReportProvider>
           <LayoutWrapper>
             {children}

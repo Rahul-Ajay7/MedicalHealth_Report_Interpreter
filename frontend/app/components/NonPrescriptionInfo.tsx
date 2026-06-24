@@ -8,12 +8,12 @@ export default function NonPrescriptionInfo() {
   const disclaimer = report?.recommendations?.otc_disclaimer;
 
   return (
-    <section className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+    <section className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
       <div className="flex items-center gap-2.5 mb-1.5">
         <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
           <Leaf size={16} className="text-emerald-500" />
         </div>
-        <h3 className="text-base font-semibold text-slate-800">
+        <h3 className="text-base font-semibold text-slate-800 dark:text-slate-100">
           To Discuss With Your Doctor or Pharmacist
         </h3>
       </div>
