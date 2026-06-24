@@ -34,6 +34,3 @@ else:
 
     def delete_session(file_id: str) -> None:
         _store.pop(file_id, None)
-
-# Keep CHAT_SESSIONS dict for backward compat
-CHAT_SESSIONS: Dict[str, Any] = {}
