@@ -45,3 +45,6 @@ dist/
 build/
 
 
+# Python virtual environment
+venv/
+.venv/
